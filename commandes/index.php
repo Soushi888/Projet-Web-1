@@ -1,4 +1,3 @@
-<!-- Afficher Commandes -->
 <?php
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
@@ -14,17 +13,18 @@ $liste = listerCommandes($conn, $recherche);
 <head>
     <meta charset="UTF-8">
     <title>Listes de commandes</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
     <h1>Liste des commandes</h1>
-    <!-- <h2>Utilisateur : <?= $_SESSION["identifiant_utilisateur"] ?></h2> -->
 
     <form id="recherche" action="" method="post">
-        <label>ID, client, date ou produit</label>
-        <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="nom ou prénom du client">
-        <input type="submit" value="Recherchez">
+        <fieldset>
+            <label>Recherche par ID commande, nom client ou état commande : </label>
+            <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="ID, nom ou état">
+            <input type="submit" value="Recherchez">
+        </fieldset>
     </form>
 
     <table>
@@ -39,7 +39,10 @@ $liste = listerCommandes($conn, $recherche);
             <th>Total TTC</th>
             <th>Adresse</th>
             <th>Commentaires</th>
+            <th>État</th>
+            <th>Actions</th>
         </tr>
+
         <?php foreach ($liste as $row) :
         ?>
             <tr>
@@ -47,12 +50,14 @@ $liste = listerCommandes($conn, $recherche);
                 <td><?= $row["commande_client"] ?></td>
                 <td><?= $row["commande_date"] ?></td>
                 <td><?= implode("<br>", $row["commande_produit"]) ?></td>
-                <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_quantite"]) ?></td>
                 <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_prix"]) ?></td>
-                <td></td>
-                <td></td>
+                <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_quantite"]) ?></td>
+                <td><?= $row["commande_total_ht"] ?></td>
+                <td><?= $row["commande_total_ttc"] ?></td>
                 <td><?= $row["commande_adresse"] ?></td>
                 <td><?= $row["commande_commentaires"] ?></td>
+                <td><?= $row["commande_etat"] ?></td>
+                <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
             </tr>
         <?php endforeach; ?>
     </table>
