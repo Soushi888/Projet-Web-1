@@ -102,19 +102,19 @@ ENGINE = InnoDB;
 -- Table `musicStore`.`Commandes_Produits`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `musicStore`.`Commandes_Produits` (
-  `commande_id` INT NOT NULL,
-  `produit_id` INT NOT NULL,
+  `fk_commande_id` INT NOT NULL,
+  `fk_produit_id` INT NOT NULL,
   `commande_produit_quantite` INT NOT NULL,
-  PRIMARY KEY (`produit_id`, `commande_id`),
-  INDEX `fk_Commandes_has_Produits_Produits1_idx` (`produit_id` ASC),
-  INDEX `fk_Commandes_has_Produits_Commandes1_idx` (`commande_id` ASC),
+  PRIMARY KEY (`fk_produit_id`, `fk_commande_id`),
+  INDEX `fk_Commandes_has_Produits_Produits1_idx` (`fk_produit_id` ASC),
+  INDEX `fk_Commandes_has_Produits_Commandes1_idx` (`fk_commande_id` ASC),
   CONSTRAINT `fk_Commandes_has_Produits_Commandes1`
-    FOREIGN KEY (`commande_id`)
+    FOREIGN KEY (`fk_commande_id`)
     REFERENCES `musicStore`.`Commandes` (`commande_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Commandes_has_Produits_Produits1`
-    FOREIGN KEY (`produit_id`)
+    FOREIGN KEY (`fk_produit_id`)
     REFERENCES `musicStore`.`Produits` (`produit_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -213,3 +213,25 @@ VALUES
   (6, "2019-01-10", "3 rue Lanuit app.306", "complète", NULL),
   (1, "2019-01-10", "16 avenue Drôle", "annulée", "Erreur de livraison");
 
+-- -----------------------------------------------------
+-- Insertion de données dans la table "Commandes-Produits"
+-- -----------------------------------------------------
+INSERT INTO
+  Commandes_Produits (fk_commande_id, fk_produit_id, commande_produit_quantite)
+VALUES
+  (1, 4, 1),
+  (1, 5, 1),
+  (1, 1, 1),
+  (2, 6, 1),
+  (2, 2, 1),
+  (2, 3, 1),
+  (2, 8, 1),
+  (3, 12, 1),
+  (3, 3, 1),
+  (4, 2, 1),
+  (5, 14, 1),
+  (6, 1, 1),
+  (6, 3, 1),
+  (7, 12, 1),
+  (8, 19, 1),
+  (8, 3, 1);
