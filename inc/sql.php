@@ -10,7 +10,7 @@
  */
 function errSQL($conn)
 {
-    ?>
+?>
     <p>Erreur de requête : <?php echo mysqli_errno($conn) . " – " . mysqli_error($conn) ?></p>
 <?php
 }
@@ -92,32 +92,36 @@ function errSQL($conn)
 /** 
  * Fonction listerCommandes,
  * Auteur   : Soushi888,
- * Date     : 2019-12-16,
+ * Date     : 2020-01-17,
  * But      : Récupérer les commandes avec les données associées,
  * Input    : $conn = contexte de connexion,
- *            $recherche = chaîne de caractères pour la recherche de commande par nom de client (optionnel),
+ *            $recherche = chaîne de caractères pour la recherche de commande par nom ou prénom de client, id de commande, nom ded produit ou date (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
 function listerCommandes($conn, $recherche = "")
 {
     $recherche = "%" . $recherche . "%";
- 
+
     $req = "SELECT
     C.commande_id as 'Numéro de commande',
     CONCAT(CL.client_prenom, ' ', CL.client_nom) as 'Nom du client',
+    SUBSTRING(C.commande_date, 1, 10) as 'Date',
     P.produit_nom as 'Produit',
-    PC.produit_commande_quantite as 'Quantité'
+    CP.commande_produit_quantite as 'Quantité',
+    P.produit_prix as 'Prix',
+    C.commande_adresse_livraison as 'Adresse',
+    C.commande_commentaires as 'Commentaires'
     FROM
         commandes as C
     INNER JOIN
-        produits_commandes as PC on PC.commandes_commande_id = C.commande_id
+        commandes_produits as CP on CP.fk_commande_id = C.commande_id
     INNER JOIN
-        produits as P on P.produit_id = PC.produits_produit_id
+        produits as P on P.produit_id = CP.fk_produit_id
     INNER JOIN
-        clients as CL on CL.client_id = C.commande_client_id 
-    WHERE (CL.client_prenom LIKE '$recherche') OR (CL.client_nom LIKE '$recherche')
+        clients as CL on CL.client_id = C.fk_client_id 
+    WHERE (CL.client_prenom LIKE '$recherche') OR (CL.client_nom LIKE '$recherche') OR (C.commande_id LIKE '$recherche') OR (P.produit_nom LIKE '$recherche') OR (C.commande_date LIKE '$recherche')
     ORDER BY `Numéro de commande` ASC";
-    
+
     if ($result = mysqli_query($conn, $req, MYSQLI_STORE_RESULT)) {
         $nbResult = mysqli_num_rows($result);
         $liste = array();
@@ -125,37 +129,55 @@ function listerCommandes($conn, $recherche = "")
             mysqli_data_seek($result, 0);
             $commande_id = "";
             $commande_client = "";
+            $commande_date = "";
             $commande_produit = "";
-            $commande_quantite = "";
+            $commande_produit_quantite = "";
+            $commande_produit_prix = "";
+            $commande_adresse = "";
+            $commande_commentaires = "";
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                 if ($commande_id !== $row['Numéro de commande']) {
                     if ($commande_id !== "") {
-                        $liste [] = array(
-									'commande_id' => $commande_id,
-                                    'commande_client' => $commande_client,
-                                    'commande_produit' => $commande_produit,
-                                    'commande_quantite' => $commande_quantite,
-                                    );
+                        $liste[] = array(
+                            'commande_id' => $commande_id,
+                            'commande_client' => $commande_client,
+                            'commande_date' => $commande_date,
+                            'commande_produit' => $commande_produit,
+                            'commande_produit_quantite' => $commande_produit_quantite,
+                            'commande_produit_prix' => $commande_produit_prix,
+                            'commande_adresse' => $commande_adresse,
+                            'commande_commentaires' => $commande_commentaires
+                        );
                     }
                     $commande_id = $row['Numéro de commande'];
                     $commande_client = $row['Nom du client'];
+                    $commande_date = $row['Date'];
                     $commande_produit = [];
-                    $commande_quantite = [];
+                    $commande_produit_quantite = [];
+                    $commande_produit_prix = [];
+                    $commande_adresse = $row['Adresse'];
+                    $commande_commentaires = $row['Commentaires'];
                 }
                 $commande_produit[] = $row['Produit'];
-                $commande_quantite[] = $row['Quantité'];
+                $commande_produit_quantite[] = $row['Quantité'];
+                $commande_produit_prix[] = $row['Prix'];
             }
-            $liste [] = array(
+            $liste[] = array(
                 'commande_id' => $commande_id,
                 'commande_client' => $commande_client,
+                'commande_date' => $commande_date,
                 'commande_produit' => $commande_produit,
-                'commande_quantite' =>  $commande_quantite);
-        mysqli_free_result($result);
-        return $liste;
-    } else {
-        errSQL($conn);
-        exit;
-    }
+                'commande_produit_quantite' => $commande_produit_quantite,
+                'commande_produit_prix' => $commande_produit_prix,
+                'commande_adresse' => $commande_adresse,
+                'commande_commentaires' => $commande_commentaires
+            );
+            mysqli_free_result($result);
+            return $liste;
+        } else {
+            errSQL($conn);
+            exit;
+        }
     }
 }
 
@@ -381,7 +403,7 @@ function listerCommandes($conn, $recherche = "")
 
 //     // Création de la commande
 //     $req = "INSERT INTO commandes (commande_client_id) VALUES ($client_id);";
-        
+
 //     if ($result = mysqli_query($conn, $req)) {
 //         $row = mysqli_affected_rows($conn);
 //     } else {
@@ -409,7 +431,7 @@ function listerCommandes($conn, $recherche = "")
 
 //         // Insert les produits commandés dans la table produit_commande
 //         $req = "INSERT INTO produits_commandes (produits_produit_id, commandes_commande_id, produit_commande_quantite) VALUES (" . $c["produit"] . ", $commande_id," . $c["quantité"] . ");";
-        
+
 //         if ($result = mysqli_query($conn, $req)) {
 //             $row = mysqli_affected_rows($conn);
 //         } else {
@@ -421,7 +443,7 @@ function listerCommandes($conn, $recherche = "")
 //         // Si il y a suffisament de stock, mise à jours à jours de la quantité des produits commandés
 //         if ($c["quantité"] <= $quantite) {
 //             $req = "UPDATE produits SET produit_quantite = $nouvelleQuantite WHERE produit_id = " . $c["produit"];
-    
+
 //             if ($result = mysqli_query($conn, $req)) {
 //                 $row = mysqli_affected_rows($conn);
 //             } else {
@@ -431,31 +453,32 @@ function listerCommandes($conn, $recherche = "")
 //             }
 //         }
 //         else {
-//             mysqli_rollback($conn); ?>
+//             mysqli_rollback($conn); 
+?>
 <!-- //                 <p class="erreur">Erreure : Plus assez de stock pour le produit numéro <?= $c["produit"] ?>.</p>
 //         <?php // exit; -->
-//         }
-//     }
-//     mysqli_commit($conn);
-// }
+            //         }
+            //     }
+            //     mysqli_commit($conn);
+            // }
 
 
 
 
 
-/** 
- * Fonction creation d'un compte
- * Auteur : Samuel
- * Date   : 2019-12-04
- * But    : ajouter une ligne dans la table clients  
- * Input : $conn = contexte de connexion
- *                       $client_nom,
- *                       $client_prenom,
- *                       $client_mot_de_passe,
- *                       $client_courriel
- * Output   : 1    si ajout effectuée
- *                       0    si aucun ajout
- */
+            /** 
+             * Fonction creation d'un compte
+             * Auteur : Samuel
+             * Date   : 2019-12-04
+             * But    : ajouter une ligne dans la table clients  
+             * Input : $conn = contexte de connexion
+             *                       $client_nom,
+             *                       $client_prenom,
+             *                       $client_mot_de_passe,
+             *                       $client_courriel
+             * Output   : 1    si ajout effectuée
+             *                       0    si aucun ajout
+             */
 // function creationDeCompte($conn, $client_nom, $client_prenom, $client_mot_de_passe, $client_courriel)
 // {
 
