@@ -32,6 +32,7 @@ $liste = listerUtilisateurs($conn, $recherche);
             <th>ID</th>
             <th>Email</th>
             <th>Type</th>
+            <th>Actions</th>
         </tr>
 
         <?php foreach ($liste as $row) :

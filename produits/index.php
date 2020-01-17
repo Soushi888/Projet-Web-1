@@ -17,7 +17,7 @@ $liste = listerProduits($conn, $recherche);
 </head>
 
 <body>
-    <h1>Liste des produitss</h1>
+    <h1>Liste des produits</h1>
 
     <form id="recherche" action="" method="post">
         <fieldset>
@@ -35,6 +35,7 @@ $liste = listerProduits($conn, $recherche);
             <th>Prix</th>
             <th>Quant.</th>
             <th>Catégorie</th>
+            <th>Actions</th>
         </tr>
 
         <?php foreach ($liste as $row) :

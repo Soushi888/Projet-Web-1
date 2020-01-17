@@ -10,12 +10,12 @@ $liste = listerCategories($conn);
 
 <head>
     <meta charset="UTF-8">
-    <title>Listes des clients</title>
+    <title>Listes des catégories</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-    <h1>Liste des clients</h1>
+    <h1>Liste des catégories</h1>
 
     <form id="recherche" action="" method="post">
         <fieldset>
@@ -29,6 +29,7 @@ $liste = listerCategories($conn);
         <tr>
             <th>ID</th>
             <th>Nom de la catégorie</th>
+            <th>Actions</th>
         </tr>
 
         <?php foreach ($liste as $row) :
