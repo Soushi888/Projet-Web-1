@@ -184,5 +184,32 @@ VALUES
   ("Pearl Batterie PE2633Z", "Batterie de marque Pearl. Qualité : Professionnelle, Modèle : PE2633Z.", 4856.99, 3, 9),
   ("Mapex Batterie MP2633Z", "Batterie de marque Mapex. Qualité : Intermédiaire, Modèle : MP2633Z.", 2156.99, 3, 9);
 
+-- -----------------------------------------------------
+-- Insertion de données dans la table "Commandes"
+-- -----------------------------------------------------
+INSERT INTO
+  Clients (client_nom, client_prenom, client_telephone, client_email , client_adresse, client_ville, client_cp, client_pays)
+VALUES
+  ("Pignot", "Sacha", "514-396-4589", "sacha.pignot@gmail.com", "513 rue Regina app.12", "Verdun", "H4G 3J4", "Canada"),
+  ("Gilbert", "Josiane", "514-954-4236", "josiane.gilbert@gmail.com", "513 rue Regina app.12", "Verdun", "H4G 3J4", "Canada"),
+  ("Garneau", "Louis", "450-325-9654", "louis.garneau@gmail.com", "22 avenue Magrin", "St-Hubert", "C3F 6A5", "Canada"),
+  ("Colimbourd", "Colette", "514-555-5656", "colimbourd.colette@gmail.com", "5539 boulevard de la Mort app.666", "Laval", "G6J 6S6", "Canada"),
+  ("Bavoie", "Rose", "514-226-4419", "bavoie.rose@gmail.com", "563 rue Lejour", "Longueuil", "H3G 5V4", "Canada"),
+  ("Boulet", "Pierre", "450-392-3611", "boulet.pierre@gmail.com", "3 rue Lanuit app.306", "Montréal", "H2J 9B6", "Canada"),
+  ("Viget", "Roxane", "514-223-4596", "roxane.viget@gmail.com", "1 rue du Manoir", "Montréal", "V9E 8L2", "Canada");
 
+-- -----------------------------------------------------
+-- Insertion de données dans la table "Commandes"
+-- -----------------------------------------------------
+INSERT INTO
+  Commandes (fk_client_id, commande_date, commande_adresse_livraison, commande_etat, commande_commentaires)
+VALUES
+  (2, "2019-02-13", "513 rue Regina app.12", "complète", NULL),
+  (5, "2019-05-25", "563 rue Lejour", "en cours", NULL),
+  (1, "2019-03-09", "4021 boulevard Poli", "annulée", "Commande incomplète"),
+  (4, "2019-02-23", "5539 boulevard de la Mort app.666", "complète", NULL),
+  (3, "2019-01-10", "22 avenue Magrin", "en cours", NULL),
+  (7, "2019-01-10", "1 avenue du Manoir", "en cours", NULL),
+  (6, "2019-01-10", "3 rue Lanuit app.306", "complète", NULL),
+  (1, "2019-01-10", "16 avenue Drôle", "annulée", "Erreur de livraison");
 
