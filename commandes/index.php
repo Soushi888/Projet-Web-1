@@ -29,12 +29,12 @@ $liste = listerCommandes($conn, $recherche);
 
     <table>
         <tr>
-            <th>Numéro de commande</th>
+            <th>ID</th>
             <th>Nom du client</th>
             <th>Date</th>
-            <th>Produits commandés</th>
+            <th>Produits</th>
             <th>Prix</th>
-            <th>Quantités</th>
+            <th>Quant.</th>
             <th>Total HT</th>
             <th>Total TTC</th>
             <th>Adresse</th>

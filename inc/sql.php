@@ -66,10 +66,8 @@ function listerCommandes($conn, $recherche = "")
             $commande_commentaires = "";
             $commande_etat = "";
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                if ($commande_id !== $row['Numéro de commande']) 
-                {
-                    if ($commande_id !== "") 
-                    {
+                if ($commande_id !== $row['Numéro de commande']) {
+                    if ($commande_id !== "") {
                         $liste[] = array(
                             'commande_id' => $commande_id,
                             'commande_client' => $commande_client,
@@ -100,8 +98,7 @@ function listerCommandes($conn, $recherche = "")
 
                 $commande_total_HT = 0;
 
-                for ($i = 0; $i < count($commande_produit_prix); ++$i)
-                {
+                for ($i = 0; $i < count($commande_produit_prix); ++$i) {
                     $commande_total_HT = $commande_total_HT + $commande_produit_prix[$i];
                 }
 
@@ -127,5 +124,70 @@ function listerCommandes($conn, $recherche = "")
             errSQL($conn);
             exit;
         }
+    }
+}
+
+/**
+ * Fonction listerClients,
+ * Auteur   : soushi888,
+ * Date     : 17-01-2020,
+ * But      : Récupérer les clients avec leurs données associées,
+ * Input    : $conn = contexte de connexion,
+ *            $recherche = chaîne de caractères pour la recherche de clients (optionnel),
+ * Output   : $liste = tableau des lignes de la commande SELECT.
+ */
+function listerClients($conn, $recherche = "")
+{
+    $req = "SELECT * FROM clients AS C
+            WHERE (C.client_nom LIKE ?) OR (C.client_prenom LIKE ?)";
+
+    $stmt = mysqli_prepare($conn, $req);
+    $recherche = "%" . $recherche . "%";
+
+    mysqli_stmt_bind_param($stmt, "ss", $recherche, $recherche);
+
+    if (mysqli_stmt_execute($stmt)) {
+        $result = mysqli_stmt_get_result($stmt);
+        $nbResult = mysqli_num_rows($result);
+        $liste = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                $liste[] = $row;
+            }
+        }
+        mysqli_free_result($result);
+        return $liste;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction listerCategories,
+ * Auteur   : soushi888,
+ * Date     : 17-01-2020,
+ * But      : Récupérer la liste des categories,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $liste = tableau des lignes de la commande SELECT.
+ */
+function listerCategories($conn)
+{
+    $req = "SELECT * FROM catégories";
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $liste = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                $liste[] = $row;
+            }
+        }
+        mysqli_free_result($result);
+        return $liste;
+    } else {
+        errSQL($conn);
+        exit;
     }
 }
