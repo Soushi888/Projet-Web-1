@@ -99,11 +99,13 @@ function listerCommandes($conn, $recherche = "")
                 $commande_total_HT = 0;
 
                 for ($i = 0; $i < count($commande_produit_prix); ++$i) {
-                    $commande_total_HT = $commande_total_HT + $commande_produit_prix[$i];
+                    $commande_total_HT = $commande_total_HT + intval($commande_produit_prix[$i]);
                 }
 
+                $commande_total_TTC = $commande_total_HT * 1.15;
+
                 $commande_total_HT = $commande_total_HT . " $";
-                $commande_total_TTC = $commande_total_HT * 1.15 . " $";
+                $commande_total_TTC = $commande_total_TTC . " $";
             }
             $liste[] = array(
                 'commande_id' => $commande_id,
