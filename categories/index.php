@@ -2,7 +2,14 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
-$liste = listerCategories($conn);
+$liste = ListerCategories($conn);
+
+if (isset($_POST["categorie"])) {
+    $categorie = $_POST["categorie"];
+    ajouterCategorie($conn, $categorie);
+    $_POST["categorie"] = NULL;
+    header("Location: index.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -17,10 +24,10 @@ $liste = listerCategories($conn);
 <body>
     <h1>Liste des catégories</h1>
 
-    <form id="recherche" action="" method="post">
+    <form id="ajout_categorie" action="" method="post">
         <fieldset>
             <label>Ajouter une catégorie : </label>
-            <input type="text" name="recherche" value="">
+            <input type="text" name="categorie">
             <input type="submit" value="Ajouter">
         </fieldset>
     </form>

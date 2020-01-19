@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Fonction errSQL,
+ * Fonction ErrSQL,
  * Auteur   : soushi888,
  * Date     : 17-01-2020,
  * But      : afficher le message d'erreur de la dernière requête SQL,
  * Input    : $conn = contexte de connexion,
  * Output   : aucun.
  */
-function errSQL($conn)
+function ErrSQL($conn)
 {
 ?>
     <p>Erreur de requête : <?php echo mysqli_errno($conn) . " – " . mysqli_error($conn) ?></p>
@@ -16,15 +16,15 @@ function errSQL($conn)
 }
 
 /** 
- * Fonction listerCommandes,
+ * Fonction ListerCommandes,
  * Auteur   : Soushi888,
  * Date     : 2020-01-17,
- * But      : Récupérer les commandes avec les données associées,
+ * But      : Récupérer les commandes avec les données associées, calcule le total HT et le total TTC
  * Input    : $conn = contexte de connexion,
  *            $recherche = chaîne de caractères pour la recherche de commande par nom ou prénom de client, id de commande, nom ded produit ou date (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function listerCommandes($conn, $recherche = "")
+function ListerCommandes($conn, $recherche = "")
 {
     $recherche = "%" . $recherche . "%";
 
@@ -35,7 +35,10 @@ function listerCommandes($conn, $recherche = "")
     P.produit_nom as 'Produit',
     CP.commande_produit_quantite as 'Quantité',
     P.produit_prix as 'Prix',
-    C.commande_adresse_livraison as 'Adresse',
+    C.commande_adresse as 'Adresse',
+    C.commande_adresse2 as 'Adresse2',
+    C.commande_adresse_ville as 'Adresse_ville',
+    C.commande_adresse_cp as 'Adresse_cp',
     C.commande_commentaires as 'Commentaires',
     C.commande_etat as 'État'
     FROM
@@ -63,6 +66,9 @@ function listerCommandes($conn, $recherche = "")
             $commande_total_HT = "";
             $commande_total_TTC = "";
             $commande_adresse = "";
+            $commande_adresse2 = "";
+            $commande_adresse_ville = "";
+            $commande_adresse_cp = "";
             $commande_commentaires = "";
             $commande_etat = "";
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -78,6 +84,9 @@ function listerCommandes($conn, $recherche = "")
                             'commande_total_ht' => $commande_total_HT,
                             'commande_total_ttc' => $commande_total_TTC,
                             'commande_adresse' => $commande_adresse,
+                            'commande_adresse2' => $commande_adresse2,
+                            'commande_adresse_ville' => $commande_adresse_ville,
+                            'commande_adresse_cp' => $commande_adresse_cp,
                             'commande_commentaires' => $commande_commentaires,
                             'commande_etat' => $commande_etat
                         );
@@ -89,6 +98,9 @@ function listerCommandes($conn, $recherche = "")
                     $commande_produit_prix = [];
                     $commande_produit_quantite = [];
                     $commande_adresse = $row['Adresse'];
+                    $commande_adresse2 = $row['Adresse2'];
+                    $commande_adresse_ville = $row['Adresse_ville'];
+                    $commande_adresse_cp = $row['Adresse_cp'];
                     $commande_commentaires = $row['Commentaires'];
                     $commande_etat = $row['État'];
                 }
@@ -117,6 +129,9 @@ function listerCommandes($conn, $recherche = "")
                 'commande_total_ht' => $commande_total_HT,
                 'commande_total_ttc' => $commande_total_TTC,
                 'commande_adresse' => $commande_adresse,
+                'commande_adresse2' => $commande_adresse,
+                'commande_adresse_ville' => $commande_adresse,
+                'commande_adresse_cp' => $commande_adresse,
                 'commande_commentaires' => $commande_commentaires,
                 'commande_etat' => $commande_etat
             );
@@ -130,7 +145,7 @@ function listerCommandes($conn, $recherche = "")
 }
 
 /**
- * Fonction listerClients,
+ * Fonction ListerClients,
  * Auteur   : soushi888,
  * Date     : 17-01-2020,
  * But      : Récupérer les clients avec leurs données associées,
@@ -138,7 +153,7 @@ function listerCommandes($conn, $recherche = "")
  *            $recherche = chaîne de caractères pour la recherche de clients (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function listerClients($conn, $recherche = "")
+function ListerClients($conn, $recherche = "")
 {
     $req = "SELECT * FROM clients AS C
             WHERE (C.client_nom LIKE ?) OR (C.client_prenom LIKE ?)";
@@ -167,16 +182,16 @@ function listerClients($conn, $recherche = "")
 }
 
 /**
- * Fonction listerCategories,
+ * Fonction ListerCategories,
  * Auteur   : soushi888,
  * Date     : 17-01-2020,
  * But      : Récupérer la liste des categories,
  * Input    : $conn = contexte de connexion,
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function listerCategories($conn)
+function ListerCategories($conn)
 {
-    $req = "SELECT * FROM catégories";
+    $req = "SELECT * FROM categories";
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
         $liste = array();
@@ -195,7 +210,7 @@ function listerCategories($conn)
 }
 
 /**
- * Fonction listerProduits,
+ * Fonction ListerProduits,
  * Auteur   : soushi888,
  * Date     : 17-01-2020,
  * But      : Récupérer les produits et les données associées,
@@ -203,7 +218,7 @@ function listerCategories($conn)
  *            $recherche = chaîne de caractères pour la recherche de produits (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function listerProduits($conn, $recherche = "")
+function ListerProduits($conn, $recherche = "")
 {
     $req = "SELECT 
                 P.*,
@@ -238,7 +253,7 @@ function listerProduits($conn, $recherche = "")
 }
 
 /**
- * Fonction listerProduits,
+ * Fonction ListerProduits,
  * Auteur   : soushi888,
  * Date     : 17-01-2020,
  * But      : Récupérer les produits et les données associées,
@@ -246,18 +261,18 @@ function listerProduits($conn, $recherche = "")
  *            $recherche = chaîne de caractères pour la recherche de produits (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function listerUtilisateurs($conn, $recherche = "")
+function ListerUtilisateurs($conn, $recherche = "")
 {
     $req = "SELECT
 	            U.*
             FROM
                 utilisateurs as U
-            WHERE U.utilisateur_email LIKE ?";
+            WHERE (U.utilisateur_nom LIKE ?) OR (U.utilisateur_prenom LIKE ?)";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . $recherche . "%";
 
-    mysqli_stmt_bind_param($stmt, "s", $recherche);
+    mysqli_stmt_bind_param($stmt, "ss", $recherche, $recherche);
 
     if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);
@@ -276,3 +291,52 @@ function listerUtilisateurs($conn, $recherche = "")
         exit;
     }
 }
+
+/** 
+ * Fonction AjouterCategorie
+ * Auteur : Sacha
+ * Date   : 2020-01-19
+ * But    : ajouter une ligne dans la table catégories  
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $categorie = Catégorie à ajouter à la table
+ * Valeurs de retour   : 1    si ajout effectuée
+ *                       0    si aucun ajout
+ */
+function AjouterCategorie($conn, $categorie)
+{
+    $req = "INSERT INTO categories (categorie_nom)
+    VALUES (?)";
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "s", $categorie);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction AjouterClient
+ * Auteur   : Sacha
+ * Date     : 2020-01-19
+ * But      : ajouter une ligne dans la table client  
+ * Input    : $conn = contexte de connexion
+ *            $client = tableau contenant les informations sur le clients à ajouter à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function AjouterClient($conn, $client)
+{
+    $req = "INSERT INTO clients (client_nom, client_prenom, client_email, client_telephone, client_adresse, client_adresse2, client_ville, client_cp)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "ssssssss", $client["nom"], $client["prenom"], $client["email"], $client["telephone"], $client["adresse"], $client["adresse2"], $client["ville"], $client["cp"]);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+

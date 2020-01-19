@@ -54,7 +54,10 @@ $liste = listerCommandes($conn, $recherche);
                 <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_quantite"]) ?></td>
                 <td><?= $row["commande_total_ht"] ?></td>
                 <td><?= $row["commande_total_ttc"] ?></td>
-                <td><?= $row["commande_adresse"] ?></td>
+                <td><?php echo $row["commande_adresse"];
+                    echo isset($row["commande_adresse2"]) ? "<br>" . $row["commande_adresse2"] : "";
+                    echo "<br>" . $row["commande_adresse_ville"] . ", " . $row["commande_adresse_cp"] . 
+                    "<br>Québec, Canada" ?></td>
                 <td><?= $row["commande_commentaires"] ?></td>
                 <td><?= $row["commande_etat"] ?></td>
                 <td><a href="#">modifier</a> <a href="#">supprimer</a></td>

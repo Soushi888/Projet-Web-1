@@ -22,8 +22,9 @@ $liste = listerClients($conn, $recherche);
     <form id="recherche" action="" method="post">
         <fieldset>
             <label>Recherche nom client ou prénom du client : </label>
-            <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="ID, nom ou état">
+            <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="nom ou prenom">
             <input type="submit" value="Recherchez">
+            <button class="ajout"><a href="ajout.php">Ajouter</a></button>
         </fieldset>
     </form>
 
@@ -34,9 +35,6 @@ $liste = listerClients($conn, $recherche);
             <th>Email</th>
             <th>Telephone</th>
             <th>Adresse</th>
-            <th>Ville</th>
-            <th>Code Postal</th>
-            <th>Pays</th>
             <th>Actions</th>
         </tr>
 
@@ -47,10 +45,10 @@ $liste = listerClients($conn, $recherche);
                 <td><?= $row["client_nom"] . ", " . $row["client_prenom"] ?></td>
                 <td><?= $row["client_email"] ?></td>
                 <td><?= $row["client_telephone"] ?></td>
-                <td><?= $row["client_adresse"] ?></td>
-                <td><?= $row["client_ville"] ?></td>
-                <td><?= $row["client_cp"] ?></td>
-                <td><?= $row["client_pays"] ?></td>
+                <td><?php echo $row["client_adresse"];
+                    echo isset($row["client_adresse2"]) ? "<br>" . $row["client_adresse2"] : "";
+                    echo "<br>" . $row["client_ville"] . ", " . $row["client_cp"] . 
+                    "<br>Québec, Canada" ?></td>
                 <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
             </tr>
         <?php endforeach; ?>

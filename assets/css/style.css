@@ -11,6 +11,15 @@ a:visited {
     color: #9c09a1;
 }
 
+button a {
+    text-decoration: none;
+    color: black;
+}
+
+button a:visited {
+    color: black;
+}
+
 form {
     margin-bottom: 20px;
 }
@@ -25,6 +34,10 @@ table,th, td {
 
 th, td {
     padding: 5px;
+}
+
+.ajout {
+    margin-left: 450px;
 }
 
 /* td {
