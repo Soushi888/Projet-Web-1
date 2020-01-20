@@ -44,7 +44,7 @@ $liste = listerProduits($conn, $recherche);
                 <td style="text-align: center;"><?= $row["produit_id"] ?></td>
                 <td><?= $row["produit_nom"] ?></td>
                 <td><?= $row["produit_description"] ?></td>
-                <td><?= $row["produit_prix"] ?></td>
+                <td><?= $row["produit_prix"] ?> $</td>
                 <td><?= $row["produit_quantite"] ?></td>
                 <td><?= $row["categorie_nom"] ?></td>
                 <td><a href="#">modifier</a> <a href="#">supprimer</a></td>

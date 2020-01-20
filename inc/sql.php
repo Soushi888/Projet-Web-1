@@ -226,7 +226,7 @@ function ListerProduits($conn, $recherche = "")
             FROM
                 produits AS P
             INNER JOIN
-                catégories AS C ON C.categorie_id = P.fk_categorie_id
+                categories AS C ON C.categorie_id = P.fk_categorie_id
             WHERE P.produit_nom LIKE ?";
 
     $stmt = mysqli_prepare($conn, $req);
