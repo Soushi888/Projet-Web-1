@@ -294,7 +294,7 @@ function ListerUtilisateurs($conn, $recherche = "")
 
 /** 
  * Fonction AjouterCategorie
- * Auteur : Sacha
+ * Auteur : Soushi888
  * Date   : 2020-01-19
  * But    : ajouter une ligne dans la table catégories  
  * Arguments en entrée : $conn = contexte de connexion
@@ -318,11 +318,11 @@ function AjouterCategorie($conn, $categorie)
 
 /** 
  * Fonction AjouterClient
- * Auteur   : Sacha
+ * Auteur   : Soushi888
  * Date     : 2020-01-19
  * But      : ajouter une ligne dans la table client  
  * Input    : $conn = contexte de connexion
- *            $client = tableau contenant les informations sur le clients à ajouter à la BDD
+ *            $client = tableau contenant les informations sur le client à ajouter à la BDD
  * Output   : 1 si ajout effectuée
  *            0 si aucun ajout
  */
@@ -340,3 +340,51 @@ function AjouterClient($conn, $client)
     }
 }
 
+/** 
+ * Fonction AjouterProduit
+ * Auteur   : Soushi888
+ * Date     : 2020-01-20
+ * But      : ajouter une ligne dans la table produits  
+ * Input    : $conn = contexte de connexion
+ *            $produit = tableau contenant les informations sur le produit à ajouter à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function AjouterProduit($conn, $produit)
+{
+    $req = "INSERT INTO produits (produit_nom, produit_description, produit_prix, produit_quantite, fk_categorie_id)
+    VALUES (?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "sssss", $produit["nom"], $produit["description"], $produit["prix"], $produit["quantite"], $produit["categorie"]);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction AjouterUtilisateur
+ * Auteur   : Soushi888
+ * Date     : 2020-01-20
+ * But      : ajouter une ligne dans la table utilisateurs  
+ * Input    : $conn = contexte de connexion
+ *            $utilisateur = tableau contenant les informations sur le utilisateur à ajouter à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function AjouterUtilisateur($conn, $utilisateur)
+{
+    $req = "INSERT INTO utilisateurs (utilisateur_nom, utilisateur_prenom, utilisateur_email, utilisateur_mdp, utilisateur_type)
+    VALUES (?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $req);
+    $utilisateur["mdp"] = hash("sha256", $utilisateur["mdp"]);
+    mysqli_stmt_bind_param($stmt, "sssss", $utilisateur["nom"], $utilisateur["prenom"], $utilisateur["email"], $utilisateur["mdp"], $utilisateur["type"]);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}

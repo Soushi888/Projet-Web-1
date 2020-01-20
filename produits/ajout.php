@@ -2,46 +2,48 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
-if (isset($_POST["envoi"])) {
-    $_POST["adresse2"] = trim($_POST["adresse2"]);
-    if ($_POST["adresse2"] == "") { // Si il n'y a pas d'adresse 2, alors adresse 2 est NULL
-        $_POST["adresse2"] = NULL;
-    }
+$categories = ListerCategories($conn);
 
-    AjouterClient($conn, $_POST);
+if (isset($_POST["envoi"])) {
+    AjouterProduit($conn, $_POST);
     header("Location: index.php");
 } ?>
-   
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
-    <title>Ajouter un client</title>
+    <title>Ajouter un produit</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-    <h1>Ajout d'un client</h1>
+    <h1>Ajout d'un produit</h1>
 
     <form action="" method="post">
         <label for="nom">Nom : </label>
         <input type="text" name="nom" required><br>
-        <label for="prenom">Prénom : </label>
-        <input type="text" name="prenom" required><br>
-        <label for="email">Email : </label>
-        <input type="text" name="email" required><br>
-        <label for="telephone">Téléphone : </label>
-        <input type="text" name="telephone" required><br>
-        <label for="adresse">Adresse : </label>
-        <input type="text" name="adresse" required><br>        
-        <label for="adresse2">Adresse 2 (optionnel) :</label>
-        <input type="text" name="adresse2"><br>
-        <label for="ville">Ville : </label>
-        <input type="text" name="ville" required><br>
-        <label for="cp">Code Postal : </label>
-        <input type="text" name="cp" required><br>
-        <input type="submit" name="envoi" value="Ajouter !">
+        <label for="description">Description : </label>
+        <input type="text" name="description" required><br>
+        <label for="prix">Prix : </label>
+        <input type="text" name="prix" required><br>
+        <label for="quantite">Quantité : </label>
+        <input type="number" name="quantite" required><br>
+        <table>
+            <?php if (count($categories) > 0) : ?>
+                <label>Categorie du produit</label>
+                <select name="categorie">
+                    <?php foreach ($categories as $row) : ?>
+                        <option value="<?= $row["categorie_id"] ?>"><?= $row["categorie_nom"] ?></option>
+                    <?php endforeach; ?>
+                </select>
+        </table>
+    <?php else : ?>
+        <p class="erreur">Aucune categorie trouvé.</p>
+    <?php endif; ?>
+
+    <input type="submit" name="envoi" value="Ajouter !">
     </form>
 </body>
 

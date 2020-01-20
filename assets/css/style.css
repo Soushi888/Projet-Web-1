@@ -40,6 +40,6 @@ th, td {
     margin-left: 450px;
 }
 
-/* td {
-    max-width: 150px;
-} */
+.erreur {
+    background-color: darkred;
+}

@@ -24,6 +24,7 @@ $liste = listerProduits($conn, $recherche);
             <label>Recherche produit : </label>
             <input type="text" name="recherche" value="<?= $recherche ?>">
             <input type="submit" value="Recherchez">
+            <button class="ajout"><a href="ajout.php">Ajouter</a></button>
         </fieldset>
     </form>
 
