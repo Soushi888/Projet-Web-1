@@ -388,3 +388,79 @@ function AjouterUtilisateur($conn, $utilisateur)
         exit;
     }
 }
+
+/**
+ * Fonction EnregistrerCommande
+ * Auteur : Soushi888
+ * Date   : 2020-01-20
+ * But    : ajout de ligne dans les tables commande et produit_commande 
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $commande = tableau contenant les id et les quantités des produits commandés
+ * Valeurs de retour   : aucune
+ */
+function EnregistrerCommande($conn, array $commande, $client_id) {
+    mysqli_begin_transaction($conn); // Début de la transaction
+
+    // Création de la commande
+    $req = "INSERT INTO commandes(fk_client_id, commande_date, commande_adresse, commande_adresse2, commande_adresse_ville, commande_adresse_cp, commande_etat, commande_commentaires)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
+     
+     $stmt = mysqli_prepare($conn, $req);
+     mysqli_stmt_bind_param($stmt, "ssssssss", $commande["client_id"], $commande["date"], $commande["adresse"], $commande["adresse2"], $commande["ville"], $commande["cp"], $commande["etat"], $commande["commentaires"]);
+
+    if ($result = mysqli_stmt_execute($stmt)) {
+        $row = mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        mysqli_rollback($conn);
+        exit;
+    }
+
+    $commande_id = mysqli_insert_id($conn);
+
+    foreach($commande as $c) { // Pour chaque prodruit commandé
+        // Récupération de la quantité actuelle des produits commandés
+        $req = "SELECT produit_quantite FROM produits WHERE produit_id = ". $c["produit"];
+
+        if ($result = mysqli_query($conn, $req)) {
+            $row = mysqli_fetch_row($result);
+            $quantite = $row[0]; 
+        } else {
+            errSQL($conn);
+            mysqli_rollback($conn);
+            exit;
+        }
+
+        $nouvelleQuantite = $quantite - $c["quantité"]; // La quantié commandée est soustraite à la quantité actuelle du même produit
+
+        // Insert les produits commandés dans la table produit_commande
+        $req = "INSERT INTO commandes_produits (produit_id, commande_id, commande_produit_quantite) VALUES (" . $c["produit"] . ", $commande_id," . $c["quantité"] . ");";
+        
+        if ($result = mysqli_query($conn, $req)) {
+            $row = mysqli_affected_rows($conn);
+        } else {
+            errSQL($conn);
+            mysqli_rollback($conn);
+            exit;
+        }
+
+        // Si il y a suffisament de stock, mise à jours à jours de la quantité des produits commandés
+        if ($c["quantité"] <= $quantite) {
+            $req = "UPDATE produits SET produit_quantite = $nouvelleQuantite WHERE produit_id = " . $c["produit"];
+    
+            if ($result = mysqli_query($conn, $req)) {
+                $row = mysqli_affected_rows($conn);
+            } else {
+                errSQL($conn);
+                mysqli_rollback($conn);
+                exit;
+            }
+        }
+        else {
+            mysqli_rollback($conn); ?>
+                <p class="erreur">Erreure : Plus assez de stock pour le produit numéro <?= $c["produit"] ?>.</p>
+        <?php  exit;
+        }
+    }
+    mysqli_commit($conn);
+}
