@@ -15,13 +15,14 @@ if (isset($_POST["envoi"])) :
         "client_adresse" => $_POST["client_adresse"],
         "client_adresse2" => $_POST["client_adresse2"],
         "client_ville" => $_POST["client_ville"],
-        "client_cp" => $_POST["client_cp"]
+        "client_cp" => $_POST["client_cp"],
+        "commande_commentaires" => $_POST["commande_commentaires"]
     );
 
     foreach ($_POST as $produit => $quantite) {
         // ++$i;
         if ($quantite != "" && $quantite != 0 &&  is_numeric($produit)) {
-            $_SESSION["commande"][] = ["produit" => $produit, "quantité" => $quantite];
+            $_SESSION["commande"]["info_commande"][] = ["produit" => $produit, "quantité" => $quantite];
         }
     }
     // EnregistrerCommande($conn, $_SESSION["commande"], $client_id);
@@ -88,15 +89,69 @@ if (isset($_POST["envoi"])) :
             <label for="client_adresse">Adresse :
                 <input name="client_adresse" id="client_adresse" type="text" required></label>
             <label for="client_adresse2">Adresse2 :
-                <input name="client_adresse2" id="client_adresse2" type="text" required></label>
+                <input name="client_adresse2" id="client_adresse2" type="text"></label>
             <label for="client_ville">Ville :
                 <input name="client_ville" id="client_ville" type="text" required></label>
             <label for="client_cp">Code postal :
-                <input name="client_cp" id="client_cp" type="text" required></label>
+                <input name="client_cp" id="client_cp" type="text" required></label><br>
         </fieldset>
-
+        <fieldset>
+            <legend>Information commande</legend>
+            <label for="commande_commentaire">Commentaires : </label>
+            <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10"></textarea>
+        </fieldset>
         <button form="commande" type="submit" name="envoi">Commander</button>
     </form>
+
+    <!-- Tableau récapitulatif de la commande -->
+    <?php if (isset($_SESSION["commande"]["info_commande"])) : ?>
+        <section class="tableau-commande">
+            <h2>Confirmez la commande ?</h2>
+            <table>
+                <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                </tr>
+                <?php
+                $i = 0;
+                foreach ($_SESSION["commande"]["info_commande"] as $commande) :
+                    $produit = LireProduit($conn, $commande["produit"]);
+                ?>
+                    <tr>
+                        <td><?= $produit["produit_nom"] ?></td>
+                        <td><?= $commande["quantité"] ?></td>
+                        <?php $prix[] = $commande["quantité"] * $produit["produit_prix"]; ?>
+                        <td><?= $prix[$i] ?> $</td>
+                    </tr>
+                <?php
+                    $i++;
+                endforeach; ?>
+            </table>
+            <p class="total">Sous-total =
+                <?php
+                $sous_total = 0;
+                for ($i = 0; $i < count($prix); ++$i) {
+                    $sous_total += $prix[$i];
+                }
+                echo $sous_total . " $"; ?>
+                <br>Total =
+                <?php
+                $total = $sous_total * 1.15;
+                echo $total . " $";
+                ?>
+            </p>
+            <section>
+                <form action="" method="post">
+                    <input type="submit" name="confirme" value="OUI">
+                    <input type="submit" name="confirme" value="NON">
+                </form>
+            </section>
+        </section>
+    <?php else : ?>
+        <p class="erreur">Veuillez selectionner au moins un produit.</p>
+    <?php endif;
+    ?>
 
 </body>
 

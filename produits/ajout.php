@@ -25,7 +25,7 @@ if (isset($_POST["envoi"])) {
         <label for="nom">Nom : </label>
         <input type="text" name="nom" required><br>
         <label for="description">Description : </label>
-        <input type="text" name="description" required><br>
+        <textarea name="description" id="description" cols="50" rows="3"></textarea><br>
         <label for="prix">Prix : </label>
         <input type="text" name="prix" required><br>
         <label for="quantite">Quantité : </label>

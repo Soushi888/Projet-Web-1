@@ -22,8 +22,8 @@ button a:visited {
 }
 
 button[form="commande"] {
-    margin-top: 20px;
-    margin-left: 50px;
+    margin-left: 20px;
+    margin-TOP: 20px;
 }
 
 form {
@@ -47,6 +47,8 @@ th, td {
 }
 
 .erreur {
+    display: inline;
+    padding: 3px;
     background-color: darkred;
 }
 
