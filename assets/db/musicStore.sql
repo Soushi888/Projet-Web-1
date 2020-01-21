@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `musicStore`.`Commandes` (
   `commande_adresse2` VARCHAR(255) NULL,
   `commande_adresse_ville` VARCHAR(255) NOT NULL,
   `commande_adresse_cp` VARCHAR(255) NOT NULL,
-  `commande_etat` VARCHAR(255) NOT NULL,
+  `commande_etat` VARCHAR(255) NOT NULL DEFAULT "en cours",
   `commande_commentaires` VARCHAR(255) NULL,
   `fk_client_id` INT NOT NULL,
   PRIMARY KEY (`commande_id`),

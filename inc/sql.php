@@ -227,12 +227,12 @@ function ListerProduits($conn, $recherche = "")
                 produits AS P
             INNER JOIN
                 categories AS C ON C.categorie_id = P.fk_categorie_id
-            WHERE P.produit_nom LIKE ?";
+            WHERE (P.produit_nom LIKE ?) OR (C.categorie_nom LIKE ?)";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . $recherche . "%";
 
-    mysqli_stmt_bind_param($stmt, "s", $recherche);
+    mysqli_stmt_bind_param($stmt, "ss", $recherche, $recherche);
 
     if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);
@@ -463,4 +463,89 @@ function EnregistrerCommande($conn, array $commande, $client_id) {
         }
     }
     mysqli_commit($conn);
+}
+
+/**
+ * Fonction LireProduit
+ * Auteur : Sacha
+ * Date   : 2020-01-21
+ * But    : Récupérer le produit par son identifiant clé primaire
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $id   = clé primaire
+ * Valeurs de retour   : $row  = ligne correspondant à la clé primaire,
+ *                               tableau vide si non trouvée.
+ */
+function LireProduit($conn, $id)
+{
+
+    $req = "SELECT * FROM produits WHERE produit_id=" . $id;
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $row = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        }
+        mysqli_free_result($result);
+        return $row;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction lireClientID
+ * Auteur   : Sacha
+ * Date     : 2019-12-16
+ * But      : Récupérer le ID d'un client à partir de son identifiant 
+ * Input    : $conn = contexte de connexion
+ *            $identifiant = adresse email  du client
+ * Output   : $row  = ligne correspondant à l'identifiant du client
+ *                    tableau vide si non trouvée     
+ */
+function lireClientID($conn, $identifiant)
+{
+
+    $req = "SELECT * FROM clients WHERE client_courriel ='$identifiant'";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $row = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result);
+        }
+        mysqli_free_result($result);
+        $id = $row['client_id'];
+        return $id;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction produitLastId,
+ * Auteur   : Soushi888,
+ * Date     : 2019-11-26,
+ * But      : Récupérer le dernier id de la table produit,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $last_id = dernier id de la table.
+ */
+function produitLastId($conn)
+{
+    $req = "SELECT MAX(produit_id) FROM produits";
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $last_id = "";
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $last_id = mysqli_fetch_row($result);
+            $last_id = $last_id[0];
+        }
+        mysqli_free_result($result);
+        return $last_id;
+    }
 }

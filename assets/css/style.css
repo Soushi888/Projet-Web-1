@@ -1,6 +1,7 @@
 body {
     background-color: #181a1b;
     color: white;
+    padding-bottom: 200px;
 }
 
 a {
@@ -18,6 +19,11 @@ button a {
 
 button a:visited {
     color: black;
+}
+
+button[form="commande"] {
+    margin-top: 20px;
+    margin-left: 50px;
 }
 
 form {
@@ -42,4 +48,8 @@ th, td {
 
 .erreur {
     background-color: darkred;
+}
+
+.succes {
+    background-color: darkgreen;
 }

@@ -3,6 +3,7 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
 $liste = ListerCategories($conn);
+$recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
 if (isset($_POST["categorie"])) {
     $categorie = $_POST["categorie"];
@@ -48,6 +49,7 @@ if (isset($_POST["categorie"])) {
             </tr>
         <?php endforeach; ?>
     </table>
+    
 </body>
 
 </html>
