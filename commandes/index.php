@@ -24,6 +24,7 @@ $liste = listerCommandes($conn, $recherche);
             <label>Recherche par ID commande, nom client ou état commande : </label>
             <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="ID, nom ou état">
             <input type="submit" value="Recherchez">
+            <button class="ajout"><a href="ajout.php">Ajouter</a></button>
         </fieldset>
     </form>
 

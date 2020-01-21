@@ -12,12 +12,12 @@ $liste = listerProduits($conn, $recherche);
 
 <head>
     <meta charset="UTF-8">
-    <title>Listes des produits</title>
+    <title>Catalogue de ventes</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-    <h1>Liste des produits</h1>
+    <h1>Catalogue du vendeur</h1>
 
     <form id="recherche" action="" method="post">
         <fieldset>
