@@ -38,7 +38,6 @@ endif; ?>
 </head>
 
 <body>
-    <pre><?= print_r($_SESSION) ?></pre>
 
     <h1>Catalogue de ventes</h1>
 
@@ -168,21 +167,22 @@ endif; ?>
         </section>
         <?php
         if (isset($_POST["confirme"])) : ?>
-            <pre><?= print_r($_POST) ?></pre>
             <?php if ($_POST["confirme"] == "OUI") :
-                EnregistrerCommande($conn, $_SESSION["commande"]);
-                unset($_SESSION["commande"]); ?>
+                EnregistrerCommande($conn, $_SESSION["commande"]); ?>
                 <p class="succes">Commande effectuée avec succès !</p>
-            <?php
-            elseif ($_POST["confirme"] == "NON") :
-                unset($_SESSION["commande"]); ?>
+            <?php unset($_SESSION["commande"]);
+
+            elseif ($_POST["confirme"] == "NON") : ?>
                 <p class="erreur">Commande non effectuée !</p>
-        <?php endif;
+        <?php unset($_SESSION["commande"]);
+            endif;
         endif;
     elseif (isset($_SESSION["commande"]) && !isset($_SESSION["commande"]["info_commande"])) :
         unset($_SESSION["commande"]); ?>
         <p class="erreur">Veuillez selectionner au moins un produit.</p>
-    <?php endif;
+    <?php else :
+        unset($_SESSION["commande"]);
+    endif;
     ?>
 
 </body>

@@ -53,6 +53,7 @@ th, td {
 }
 
 .succes {
+    display: inline;
     background-color: darkgreen;
 }
 
