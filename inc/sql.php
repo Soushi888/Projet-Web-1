@@ -398,7 +398,7 @@ function AjouterUtilisateur($conn, $utilisateur)
  *                       $commande = tableau contenant les id et les quantités des produits commandés
  * Valeurs de retour   : aucune
  */
-function EnregistrerCommande($conn, array $commande, $client_id) {
+function EnregistrerCommande($conn, array $commande) {
     mysqli_begin_transaction($conn); // Début de la transaction
 
     // Création de la commande
