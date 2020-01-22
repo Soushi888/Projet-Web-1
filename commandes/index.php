@@ -4,7 +4,7 @@ require_once("../inc/sql.php");
 
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
-$liste = listerCommandes($conn, $recherche);
+$liste = ListerCommandes($conn, $recherche);
 ?>
 
 <!DOCTYPE html>

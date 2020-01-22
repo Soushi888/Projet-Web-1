@@ -12,7 +12,7 @@ function ErrSQL($conn)
 {
 ?>
     <p>Erreur de requête : <?php echo mysqli_errno($conn) . " – " . mysqli_error($conn) ?></p>
-<?php
+    <?php
 }
 
 /** 
@@ -29,18 +29,18 @@ function ListerCommandes($conn, $recherche = "")
     $recherche = "%" . $recherche . "%";
 
     $req = "SELECT
-    C.commande_id as 'Numéro de commande',
-    CONCAT(CL.client_prenom, ' ', CL.client_nom) as 'Nom du client',
-    SUBSTRING(C.commande_date, 1, 10) as 'Date',
-    P.produit_nom as 'Produit',
-    CP.commande_produit_quantite as 'Quantité',
-    P.produit_prix as 'Prix',
-    C.commande_adresse as 'Adresse',
-    C.commande_adresse2 as 'Adresse2',
-    C.commande_adresse_ville as 'Adresse_ville',
-    C.commande_adresse_cp as 'Adresse_cp',
-    C.commande_commentaires as 'Commentaires',
-    C.commande_etat as 'État'
+    C.commande_id as 'commande_id',
+    CONCAT(CL.client_prenom, ' ', CL.client_nom) as 'client_nom',
+    SUBSTRING(C.commande_date, 1, 10) as 'date',
+    P.produit_nom as 'produit',
+    CP.commande_produit_quantite as 'quantite',
+    P.produit_prix as 'prix',
+    C.commande_adresse as 'adresse',
+    C.commande_adresse2 as 'adresse2',
+    C.commande_adresse_ville as 'adresse_ville',
+    C.commande_adresse_cp as 'adresse_cp',
+    C.commande_commentaires as 'commentaires',
+    C.commande_etat as 'etat'
     FROM
         commandes as C
     INNER JOIN
@@ -50,7 +50,8 @@ function ListerCommandes($conn, $recherche = "")
     INNER JOIN
         clients as CL on CL.client_id = C.fk_client_id 
     WHERE (CL.client_prenom LIKE '$recherche') OR (CL.client_nom LIKE '$recherche') OR (C.commande_id LIKE '$recherche') OR (C.commande_etat LIKE '$recherche')
-    ORDER BY `Numéro de commande` ASC";
+    ORDER BY `commande_id` ASC";
+    // die($req); 
 
     if ($result = mysqli_query($conn, $req, MYSQLI_STORE_RESULT)) {
         $nbResult = mysqli_num_rows($result);
@@ -72,7 +73,7 @@ function ListerCommandes($conn, $recherche = "")
             $commande_commentaires = "";
             $commande_etat = "";
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                if ($commande_id !== $row['Numéro de commande']) {
+                if ($commande_id !== $row['commande_id']) {
                     if ($commande_id !== "") {
                         $liste[] = array(
                             'commande_id' => $commande_id,
@@ -91,22 +92,22 @@ function ListerCommandes($conn, $recherche = "")
                             'commande_etat' => $commande_etat
                         );
                     }
-                    $commande_id = $row['Numéro de commande'];
-                    $commande_client = $row['Nom du client'];
-                    $commande_date = $row['Date'];
+                    $commande_id = $row['commande_id'];
+                    $commande_client = $row['client_nom'];
+                    $commande_date = $row['date'];
                     $commande_produit = [];
                     $commande_produit_prix = [];
                     $commande_produit_quantite = [];
-                    $commande_adresse = $row['Adresse'];
-                    $commande_adresse2 = $row['Adresse2'];
-                    $commande_adresse_ville = $row['Adresse_ville'];
-                    $commande_adresse_cp = $row['Adresse_cp'];
-                    $commande_commentaires = $row['Commentaires'];
-                    $commande_etat = $row['État'];
+                    $commande_adresse = $row['adresse'];
+                    $commande_adresse2 = $row['adresse2'];
+                    $commande_adresse_ville = $row['adresse_ville'];
+                    $commande_adresse_cp = $row['adresse_cp'];
+                    $commande_commentaires = $row['commentaires'];
+                    $commande_etat = $row['etat'];
                 }
-                $commande_produit[] = $row['Produit'];
-                $commande_produit_prix[] = $row['Prix'] . " $";
-                $commande_produit_quantite[] = $row['Quantité'];
+                $commande_produit[] = $row['produit'];
+                $commande_produit_prix[] = $row['prix'] . " $";
+                $commande_produit_quantite[] = $row['quantite'];
 
                 $commande_total_HT = 0;
 
@@ -398,16 +399,17 @@ function AjouterUtilisateur($conn, $utilisateur)
  *                       $commande = tableau contenant les id et les quantités des produits commandés
  * Valeurs de retour   : aucune
  */
-function EnregistrerCommande($conn, array $commande) {
+function EnregistrerCommande($conn, array $commande)
+{
     mysqli_begin_transaction($conn); // Début de la transaction
 
     // Création de la commande
     $req = "INSERT INTO commandes (fk_client_id, commande_adresse, commande_adresse2, commande_adresse_ville, commande_adresse_cp, commande_commentaires)
     VALUES (?, ?, ?, ?, ?, ?);";
-     
-     $stmt = mysqli_prepare($conn, $req);
 
-     mysqli_stmt_bind_param($stmt, "isssss", $commande["info_client"]["client_id"], $commande["info_client"]["client_adresse"], $commande["info_client"]["client_adresse2"], $commande["info_client"]["client_ville"], $commande["info_client"]["client_cp"], $commande["info_client"]["commande_commentaires"]);
+    $stmt = mysqli_prepare($conn, $req);
+
+    mysqli_stmt_bind_param($stmt, "isssss", $commande["info_client"]["client_id"], $commande["info_client"]["client_adresse"], $commande["info_client"]["client_adresse2"], $commande["info_client"]["client_ville"], $commande["info_client"]["client_cp"], $commande["info_client"]["commande_commentaires"]);
 
     if ($result = mysqli_stmt_execute($stmt)) {
         $row = mysqli_stmt_affected_rows($stmt);
@@ -419,13 +421,13 @@ function EnregistrerCommande($conn, array $commande) {
 
     $commande_id = mysqli_insert_id($conn);
 
-    foreach($commande["info_commande"] as $c) { // Pour chaque prodruit commandé
+    foreach ($commande["info_commande"] as $c) { // Pour chaque prodruit commandé
         // Récupération de la quantité actuelle des produits commandés
-        $req = "SELECT produit_quantite FROM produits WHERE produit_id = ". $c["produit"];
+        $req = "SELECT produit_quantite FROM produits WHERE produit_id = " . $c["produit"];
 
         if ($result = mysqli_query($conn, $req)) {
             $row = mysqli_fetch_row($result);
-            $quantite = $row[0]; 
+            $quantite = $row[0];
         } else {
             errSQL($conn);
             mysqli_rollback($conn);
@@ -436,7 +438,7 @@ function EnregistrerCommande($conn, array $commande) {
 
         // Insert les produits commandés dans la table produit_commande
         $req = "INSERT INTO commandes_produits (fk_produit_id, fk_commande_id, commande_produit_quantite) VALUES (" . $c["produit"] . ", $commande_id," . $c["quantité"] . ");";
-        
+
         if ($result = mysqli_query($conn, $req)) {
             $row = mysqli_affected_rows($conn);
         } else {
@@ -448,7 +450,7 @@ function EnregistrerCommande($conn, array $commande) {
         // Si il y a suffisament de stock, mise à jours à jours de la quantité des produits commandés
         if ($c["quantité"] <= $quantite) {
             $req = "UPDATE produits SET produit_quantite = $nouvelleQuantite WHERE produit_id = " . $c["produit"];
-    
+
             if ($result = mysqli_query($conn, $req)) {
                 $row = mysqli_affected_rows($conn);
             } else {
@@ -456,11 +458,10 @@ function EnregistrerCommande($conn, array $commande) {
                 mysqli_rollback($conn);
                 exit;
             }
-        }
-        else {
+        } else {
             mysqli_rollback($conn); ?>
-                <p class="erreur">Erreure : Plus assez de stock pour le produit numéro <?= $c["produit"] ?>.</p>
-        <?php  exit;
+            <p class="erreur">Erreure : Plus assez de stock pour le produit numéro <?= $c["produit"] ?>.</p>
+<?php exit;
         }
     }
     mysqli_commit($conn);

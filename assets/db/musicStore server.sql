@@ -89,7 +89,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `e1995655`.`Commandes_Produits`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e1995655`.`commandes_Produits` (
+CREATE TABLE IF NOT EXISTS `e1995655`.`commandes_produits` (
   `fk_commande_id` INT NOT NULL,
   `fk_produit_id` INT NOT NULL,
   `commande_produit_quantite` INT NOT NULL,
@@ -199,7 +199,7 @@ VALUES
 -- Insertion de données dans la table "Commandes-Produits"
 -- -----------------------------------------------------
 INSERT INTO
-  commandes_Produits (fk_commande_id, fk_produit_id, commande_produit_quantite)
+  commandes_produits (fk_commande_id, fk_produit_id, commande_produit_quantite)
 VALUES
   (1, 4, 1),
   (1, 5, 1),
