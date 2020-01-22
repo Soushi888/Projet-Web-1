@@ -85,7 +85,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `musicStore`.`Commandes` (
   `commande_id` INT NOT NULL AUTO_INCREMENT,
-  `commande_date` DATE NOT NULL,
+  `commande_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `commande_adresse` VARCHAR(255) NOT NULL,
   `commande_adresse2` VARCHAR(255) NULL,
   `commande_adresse_ville` VARCHAR(255) NOT NULL,

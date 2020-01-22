@@ -402,11 +402,12 @@ function EnregistrerCommande($conn, array $commande) {
     mysqli_begin_transaction($conn); // Début de la transaction
 
     // Création de la commande
-    $req = "INSERT INTO commandes(fk_client_id, commande_date, commande_adresse, commande_adresse2, commande_adresse_ville, commande_adresse_cp, commande_etat, commande_commentaires)
-    VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
+    $req = "INSERT INTO commandes (fk_client_id, commande_adresse, commande_adresse2, commande_adresse_ville, commande_adresse_cp, commande_commentaires)
+    VALUES (?, ?, ?, ?, ?, ?);";
      
      $stmt = mysqli_prepare($conn, $req);
-     mysqli_stmt_bind_param($stmt, "ssssssss", $commande["client_id"], $commande["date"], $commande["adresse"], $commande["adresse2"], $commande["ville"], $commande["cp"], $commande["etat"], $commande["commentaires"]);
+
+     mysqli_stmt_bind_param($stmt, "isssss", $commande["info_client"]["client_id"], $commande["info_client"]["client_adresse"], $commande["info_client"]["client_adresse2"], $commande["info_client"]["client_ville"], $commande["info_client"]["client_cp"], $commande["info_client"]["commande_commentaires"]);
 
     if ($result = mysqli_stmt_execute($stmt)) {
         $row = mysqli_stmt_affected_rows($stmt);
@@ -418,7 +419,7 @@ function EnregistrerCommande($conn, array $commande) {
 
     $commande_id = mysqli_insert_id($conn);
 
-    foreach($commande as $c) { // Pour chaque prodruit commandé
+    foreach($commande["info_commande"] as $c) { // Pour chaque prodruit commandé
         // Récupération de la quantité actuelle des produits commandés
         $req = "SELECT produit_quantite FROM produits WHERE produit_id = ". $c["produit"];
 
@@ -434,7 +435,7 @@ function EnregistrerCommande($conn, array $commande) {
         $nouvelleQuantite = $quantite - $c["quantité"]; // La quantié commandée est soustraite à la quantité actuelle du même produit
 
         // Insert les produits commandés dans la table produit_commande
-        $req = "INSERT INTO commandes_produits (produit_id, commande_id, commande_produit_quantite) VALUES (" . $c["produit"] . ", $commande_id," . $c["quantité"] . ");";
+        $req = "INSERT INTO commandes_produits (fk_produit_id, fk_commande_id, commande_produit_quantite) VALUES (" . $c["produit"] . ", $commande_id," . $c["quantité"] . ");";
         
         if ($result = mysqli_query($conn, $req)) {
             $row = mysqli_affected_rows($conn);

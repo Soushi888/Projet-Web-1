@@ -2,9 +2,11 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
+session_start();
+
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
-$liste = listerProduits($conn, $recherche);
+$liste = ListerProduits($conn, $recherche);
 
 $client_id = "";
 
@@ -20,15 +22,11 @@ if (isset($_POST["envoi"])) :
     );
 
     foreach ($_POST as $produit => $quantite) {
-        // ++$i;
         if ($quantite != "" && $quantite != 0 &&  is_numeric($produit)) {
             $_SESSION["commande"]["info_commande"][] = ["produit" => $produit, "quantité" => $quantite];
         }
     }
-    // EnregistrerCommande($conn, $_SESSION["commande"], $client_id);
-?>
-    <pre><?= print_r($_SESSION) ?></pre>
-<?php endif; ?>
+endif; ?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -40,6 +38,8 @@ if (isset($_POST["envoi"])) :
 </head>
 
 <body>
+    <pre><?= print_r($_SESSION) ?></pre>
+
     <h1>Catalogue de ventes</h1>
 
     <nav id="main_menu">
@@ -166,7 +166,20 @@ if (isset($_POST["envoi"])) :
                 </form>
             </section>
         </section>
-    <?php elseif (isset($_SESSION["commande"]) && !isset($_SESSION["commande"]["info_commande"])) :
+        <?php
+        if (isset($_POST["confirme"])) : ?>
+            <pre><?= print_r($_POST) ?></pre>
+            <?php if ($_POST["confirme"] == "OUI") :
+                EnregistrerCommande($conn, $_SESSION["commande"]);
+                unset($_SESSION["commande"]); ?>
+                <p class="succes">Commande effectuée avec succès !</p>
+            <?php
+            elseif ($_POST["confirme"] == "NON") :
+                unset($_SESSION["commande"]); ?>
+                <p class="erreur">Commande non effectuée !</p>
+        <?php endif;
+        endif;
+    elseif (isset($_SESSION["commande"]) && !isset($_SESSION["commande"]["info_commande"])) :
         unset($_SESSION["commande"]); ?>
         <p class="erreur">Veuillez selectionner au moins un produit.</p>
     <?php endif;
