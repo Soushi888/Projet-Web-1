@@ -21,6 +21,24 @@ if (isset($_POST["envoi"])) {
         <h1>Ajout d'un utilisateur</h1>
     </header>
 
+    <nav id="main_menu">
+        <fieldset>
+            <legend>Navigation</legend>
+            <fieldset>
+                <legend>Vendeur</legend>
+                <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
+            </fieldset>
+            <fieldset>
+                <legend>Gestionnaire</legend>
+                <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
+            </fieldset>
+            <fieldset>
+                <legend>Administrateur</legend>
+                <a href="../utilisateurs/index.php">Utilisateurs</a>
+            </fieldset>
+        </fieldset>
+    </nav>
+
     <main>
         <form action="" method="post">
             <label for="nom">Nom :</label>

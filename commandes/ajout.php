@@ -42,6 +42,24 @@ if (isset($_POST["envoi"])) :
 <body>
     <h1>Catalogue de ventes</h1>
 
+    <nav id="main_menu">
+        <fieldset>
+            <legend>Navigation</legend>
+            <fieldset>
+                <legend>Vendeur</legend>
+                <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
+            </fieldset>
+            <fieldset>
+                <legend>Gestionnaire</legend>
+                <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
+            </fieldset>
+            <fieldset>
+                <legend>Administrateur</legend>
+                <a href="../utilisateurs/index.php">Utilisateurs</a>
+            </fieldset>
+        </fieldset>
+    </nav>
+
     <form id="recherche_form" action="" method="get">
         <fieldset>
             <legend>Recherche</legend>

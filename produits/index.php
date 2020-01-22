@@ -19,6 +19,24 @@ $liste = listerProduits($conn, $recherche);
 <body>
     <h1>Catalogue du vendeur</h1>
 
+    <nav id="main_menu">
+        <fieldset>
+            <legend>Navigation</legend>
+            <fieldset>
+                <legend>Vendeur</legend>
+                <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
+            </fieldset>
+            <fieldset>
+                <legend>Gestionnaire</legend>
+                <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
+            </fieldset>
+            <fieldset>
+                <legend>Administrateur</legend>
+                <a href="../utilisateurs/index.php">Utilisateurs</a>
+            </fieldset>
+        </fieldset>
+    </nav>
+
     <form id="recherche" action="" method="post">
         <fieldset>
             <label>Recherche produit : </label>

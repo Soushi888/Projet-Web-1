@@ -4,6 +4,10 @@ body {
     padding-bottom: 200px;
 }
 
+fieldset {
+    margin-bottom: 20px;
+}
+
 a {
     color: #0066a4;
 }
@@ -42,10 +46,6 @@ th, td {
     padding: 5px;
 }
 
-.ajout {
-    margin-left: 450px;
-}
-
 .erreur {
     display: inline;
     padding: 3px;
@@ -54,4 +54,16 @@ th, td {
 
 .succes {
     background-color: darkgreen;
+}
+
+#main_menu fieldset {
+    display: inline;
+}
+
+#main_menu fieldset > fieldset {
+    margin-bottom: 0px;
+}
+
+#main_menu a {
+    padding-right: 20px;
 }
