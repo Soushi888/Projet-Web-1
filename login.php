@@ -4,22 +4,16 @@ require_once("inc/sql.php");
 
 if (isset($_POST['envoi'])) {
 
-    $identifiant = trim(strtolower($_POST['identifiant'])); // Trim et met tout les caractères en minuscule
-    $mot_de_passe = trim($_POST['mot_de_passe']);
+    $email = trim(strtolower($_POST['email'])); // Trim et met tout les caractères en minuscule
+    $mot_de_passe = trim($_POST['mdp']);
 
 
-    if (controlerUtilisateur($conn, $identifiant, $mot_de_passe) === 1) {
+    if (controlerUtilisateur($conn, $email, $mot_de_passe) === 1) {
         session_start();
-        $_SESSION['identifiant_utilisateur'] = $identifiant;
-        $_SESSION['id_utilisateur'] = lireClientID($conn, $identifiant);
-        // Si l'utilisateur est l'admin, redirige vers le dashboard
-        if ($_SESSION['identifiant_utilisateur'] == "admin@magasin.com")
-            header('Location: admin/index.php');
-        // Sinon, redirige vers le catalogue
-        else
-            header('Location: index.php');
+        $_SESSION['utilisateur'] = LireUtilisateur($conn, $email);
+        header("Location: commandes/index.php");
     } else {
-        $erreur = "Identifiant ou mot de passe incorrect.";
+        $erreur = "<p class='erreur'>email ou mot de passe incorrect.</p>";
     }
 }
 
@@ -31,7 +25,7 @@ if (isset($_POST['envoi'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Authentification">
-    <title>Music Store&trade</title>
+    <title>Music Store&trade;</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -41,17 +35,17 @@ if (isset($_POST['envoi'])) {
     </header>
     <main>
         <p>Veuillez vous connecter pour pouvoir accéderà la plateforme : </p>
-        <form id="authentification" action="authentification.php" method="post">
+        <form id="authentification" action="" method="post">
             <fieldset>
                 <legend>Authentification</legend>
-            <label for="identifiant">Adresse courriel : </label>
-                        <input type="text" id="identifiant" name="identifiant" value="" required><br>
+            <label for="email">Adresse courriel : </label>
+                        <input type="text" id="email" name="email" value="" required><br>
             <label>Mot de passe : </label>
                         <input type="password" id="mpd" name="mdp" value="" required><br>
                 <input type="submit" name="envoi" value="Se connecter">
             </fieldset>
         </form>
-        <!-- <p class="erreur"><?= isset($erreur) ? $erreur : "&nbsp;" ?></p> -->
+        <?= isset($erreur) ? $erreur : "&nbsp;" ?>
     </main>
 </body>
 

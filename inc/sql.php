@@ -15,6 +15,115 @@ function ErrSQL($conn)
     <?php
 }
 
+/**
+ * Fonction ControlerUtilisateur,
+ * Auteur   : Soushi888,
+ * Date     : 23-01-2020,
+ * But      : Contrôler l'authentification de l'utilisateur dans la table utilisateurs,
+ * Input    : $conn = contexte de connexion,
+ *                       $utilisateur_courriel,
+ *                       $utilisateur_mot_de_passe,
+ * Output   : 1 si utilisateur avec $utilisateur_courriel et $utilisateur_mot_de_passe trouvé sinon 0.
+ */
+function controlerUtilisateur($conn, $utilisateur_email, $utilisateur_mdp)
+{
+    $req = "SELECT * FROM utilisateurs
+            WHERE utilisateur_email=? AND utilisateur_mdp = SHA2(?, 256)";
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "ss", $utilisateur_email, $utilisateur_mdp);
+    if (mysqli_stmt_execute($stmt)) {
+        $result = mysqli_stmt_get_result($stmt);
+        return mysqli_num_rows($result);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction LireUtilisateur
+ * Auteur : Sacha
+ * Date   : 2020-01-23
+ * But    : Récupérer l'utilisateur par son identifiant email unique
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $id   = email unique
+ * Valeurs de retour   : $row  = tableau de la ligne correspondant à l'email unique,
+ *                               tableau vide si non trouvée.
+ */
+function LireUtilisateur($conn, $email)
+{
+
+    $req = "SELECT * FROM utilisateurs WHERE utilisateur_email='" . $email . "'";
+    // die($req);
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $row = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        }
+        mysqli_free_result($result);
+        return $row;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction LireProduit
+ * Auteur : Sacha
+ * Date   : 2020-01-21
+ * But    : Récupérer le produit par son identifiant clé primaire
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $id   = clé primaire
+ * Valeurs de retour   : $row  = ligne correspondant à la clé primaire,
+ *                               tableau vide si non trouvée.
+ */
+function LireProduit($conn, $id)
+{
+
+    $req = "SELECT * FROM produits WHERE produit_id=" . $id;
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $row = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        }
+        mysqli_free_result($result);
+        return $row;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction produitLastId,
+ * Auteur   : Soushi888,
+ * Date     : 2019-11-26,
+ * But      : Récupérer le dernier id de la table produit,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $last_id = dernier id de la table.
+ */
+function produitLastId($conn)
+{
+    $req = "SELECT MAX(produit_id) FROM produits";
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $last_id = "";
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $last_id = mysqli_fetch_row($result);
+            $last_id = $last_id[0];
+        }
+        mysqli_free_result($result);
+        return $last_id;
+    }
+}
+
 /** 
  * Fonction ListerCommandes,
  * Auteur   : Soushi888,
@@ -467,87 +576,3 @@ function EnregistrerCommande($conn, array $commande)
     mysqli_commit($conn);
 }
 
-/**
- * Fonction LireProduit
- * Auteur : Sacha
- * Date   : 2020-01-21
- * But    : Récupérer le produit par son identifiant clé primaire
- * Arguments en entrée : $conn = contexte de connexion
- *                       $id   = clé primaire
- * Valeurs de retour   : $row  = ligne correspondant à la clé primaire,
- *                               tableau vide si non trouvée.
- */
-function LireProduit($conn, $id)
-{
-
-    $req = "SELECT * FROM produits WHERE produit_id=" . $id;
-
-    if ($result = mysqli_query($conn, $req)) {
-        $nbResult = mysqli_num_rows($result);
-        $row = array();
-        if ($nbResult) {
-            mysqli_data_seek($result, 0);
-            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        }
-        mysqli_free_result($result);
-        return $row;
-    } else {
-        errSQL($conn);
-        exit;
-    }
-}
-
-/**
- * Fonction lireClientID
- * Auteur   : Sacha
- * Date     : 2019-12-16
- * But      : Récupérer le ID d'un client à partir de son identifiant 
- * Input    : $conn = contexte de connexion
- *            $identifiant = adresse email  du client
- * Output   : $row  = ligne correspondant à l'identifiant du client
- *                    tableau vide si non trouvée     
- */
-function lireClientID($conn, $identifiant)
-{
-
-    $req = "SELECT * FROM clients WHERE client_courriel ='$identifiant'";
-
-    if ($result = mysqli_query($conn, $req)) {
-        $nbResult = mysqli_num_rows($result);
-        $row = array();
-        if ($nbResult) {
-            mysqli_data_seek($result, 0);
-            $row = mysqli_fetch_array($result);
-        }
-        mysqli_free_result($result);
-        $id = $row['client_id'];
-        return $id;
-    } else {
-        errSQL($conn);
-        exit;
-    }
-}
-
-/**
- * Fonction produitLastId,
- * Auteur   : Soushi888,
- * Date     : 2019-11-26,
- * But      : Récupérer le dernier id de la table produit,
- * Input    : $conn = contexte de connexion,
- * Output   : $last_id = dernier id de la table.
- */
-function produitLastId($conn)
-{
-    $req = "SELECT MAX(produit_id) FROM produits";
-    if ($result = mysqli_query($conn, $req)) {
-        $nbResult = mysqli_num_rows($result);
-        $last_id = "";
-        if ($nbResult) {
-            mysqli_data_seek($result, 0);
-            $last_id = mysqli_fetch_row($result);
-            $last_id = $last_id[0];
-        }
-        mysqli_free_result($result);
-        return $last_id;
-    }
-}

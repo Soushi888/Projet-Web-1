@@ -2,6 +2,8 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
+session_start();
+
 $liste = ListerCategories($conn);
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
@@ -24,6 +26,7 @@ if (isset($_POST["categorie"])) {
 
 <body>
     <h1>Liste des catégories</h1>
+    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
 
     <nav id="main_menu">
         <fieldset>

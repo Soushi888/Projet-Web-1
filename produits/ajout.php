@@ -2,6 +2,8 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
+session_start();
+
 $categories = ListerCategories($conn);
 
 if (isset($_POST["envoi"])) {
@@ -20,6 +22,7 @@ if (isset($_POST["envoi"])) {
 
 <body>
     <h1>Ajout d'un produit</h1>
+    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
 
     <nav id="main_menu">
         <fieldset>

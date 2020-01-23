@@ -2,6 +2,8 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
+session_start();
+
 if (isset($_POST["envoi"])) {
     $_POST["adresse2"] = trim($_POST["adresse2"]);
     if ($_POST["adresse2"] == "") { // Si il n'y a pas d'adresse 2, alors adresse 2 est NULL
@@ -23,6 +25,7 @@ if (isset($_POST["envoi"])) {
 
 <body>
     <h1>Ajout d'un client</h1>
+    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
 
     <nav id="main_menu">
         <fieldset>

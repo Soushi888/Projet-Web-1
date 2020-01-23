@@ -2,6 +2,8 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
+session_start();
+
 if (isset($_POST["envoi"])) {
     AjouterUtilisateur($conn, $_POST);
     header("Location: index.php");
@@ -19,6 +21,9 @@ if (isset($_POST["envoi"])) {
 <body>
     <header>
         <h1>Ajout d'un utilisateur</h1>
+        <h2>Utilisateur :
+            <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre>
+        </h2>
     </header>
 
     <nav id="main_menu">

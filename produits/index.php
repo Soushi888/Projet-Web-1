@@ -2,6 +2,8 @@
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 
+session_start();
+
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
 $liste = listerProduits($conn, $recherche);
@@ -18,6 +20,7 @@ $liste = listerProduits($conn, $recherche);
 
 <body>
     <h1>Catalogue du vendeur</h1>
+    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
 
     <nav id="main_menu">
         <fieldset>

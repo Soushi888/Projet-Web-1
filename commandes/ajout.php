@@ -40,7 +40,8 @@ endif; ?>
 <body>
 
     <h1>Catalogue de ventes</h1>
-
+    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
+    
     <nav id="main_menu">
         <fieldset>
             <legend>Navigation</legend>
