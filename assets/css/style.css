@@ -4,8 +4,8 @@ body {
     padding-bottom: 200px;
 }
 
-fieldset {
-    margin-bottom: 20px;
+h1 {
+    color: #F7941D;
 }
 
 a {
@@ -27,11 +27,21 @@ button a:visited {
 
 button[form="commande"] {
     margin-left: 20px;
-    margin-TOP: 20px;
+    margin-top: 20px;
 }
 
 form {
     margin-bottom: 20px;
+}
+
+input[type="submit"] {
+    margin: 10px 0 0 30%;
+}
+
+fieldset {
+    display: inline;
+    border-radius: 5px;
+    border-color: #F7941D ;
 }
 
 table {
@@ -55,10 +65,6 @@ th, td {
 .succes {
     display: inline;
     background-color: darkgreen;
-}
-
-#main_menu fieldset {
-    display: inline;
 }
 
 #main_menu fieldset > fieldset {

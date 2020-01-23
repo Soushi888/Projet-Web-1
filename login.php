@@ -31,27 +31,27 @@ if (isset($_POST['envoi'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Authentification">
-    <title>Authentification</title>
+    <title>Music Store&trade</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
     <header>
-        <h1>Authentification</h1>
+        <h1>Music Store&trade;</h1>
     </header>
     <main>
+        <p>Veuillez vous connecter pour pouvoir accéderà la plateforme : </p>
         <form id="authentification" action="authentification.php" method="post">
-            <p><label>Adresse courriel
-                    <input type="text" name="identifiant" value="" required></label></p>
-            <p><label>Mot de passe
-                    <input type="password" name="mot_de_passe" value="" required></label></p>
-            <input type="submit" name="envoi" value="Envoyez">
+            <fieldset>
+                <legend>Authentification</legend>
+            <label for="identifiant">Adresse courriel : </label>
+                        <input type="text" id="identifiant" name="identifiant" value="" required><br>
+            <label>Mot de passe : </label>
+                        <input type="password" id="mpd" name="mdp" value="" required><br>
+                <input type="submit" name="envoi" value="Se connecter">
+            </fieldset>
         </form>
-        <p class="erreur"><?= isset($erreur) ? $erreur : "&nbsp;" ?></p>
-        <p class="menu">
-            <a href="creationCompteClient.php">Créer un compte</a><br>
-            <a href="index.php">Retourner au catalogue</a>
-        </p>
+        <!-- <p class="erreur"><?= isset($erreur) ? $erreur : "&nbsp;" ?></p> -->
     </main>
 </body>
 
