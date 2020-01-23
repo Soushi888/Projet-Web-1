@@ -51,7 +51,8 @@ if (isset($_POST["envoi"])) {
         </fieldset>
     </nav>
 
-    <?php if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
+    <?php
+    if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
         <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
     <?php exit;
     endif; ?>

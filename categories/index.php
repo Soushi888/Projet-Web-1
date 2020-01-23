@@ -13,6 +13,11 @@ if (isset($_POST["categorie"])) {
     $_POST["categorie"] = NULL;
     header("Location: index.php");
 }
+
+if (isset($_POST["id"])) {
+    
+    SupprimerCategorie($conn, $_POST["id"]);
+}
 ?>
 
 <!DOCTYPE html>
@@ -37,7 +42,7 @@ if (isset($_POST["categorie"])) {
                 <legend>Vendeur</legend>
                 <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
             </fieldset>
-            <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "gestionnaire" || $_SESSION['utilisateur']["utilisateur_type"] == "administrateur" ) : ?>
+            <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "gestionnaire" || $_SESSION['utilisateur']["utilisateur_type"] == "administrateur") : ?>
                 <fieldset>
                     <legend>Gestionnaire</legend>
                     <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
@@ -78,7 +83,12 @@ if (isset($_POST["categorie"])) {
             <tr>
                 <td style="text-align: center;"><?= $row["categorie_id"] ?></td>
                 <td><?= $row["categorie_nom"] ?></td>
-                <td><a href="#">supprimer</a></td>
+                <td>
+                    <form action="" method="post">
+                    <input type="hidden" name="id" value="<?= $row["categorie_id"] ?>">    
+                    <input type="submit" value="supprimer">
+                </form>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>

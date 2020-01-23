@@ -576,3 +576,23 @@ function EnregistrerCommande($conn, array $commande)
     mysqli_commit($conn);
 }
 
+/**
+ * Fonction SupprimerCategorie
+ * Auteur : Soushi888
+ * Date   : 2020-01-23
+ * But    : supprimer une ligne de la table categorie  
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $categorie_id   = valeur de la clé primaire 
+ * Valeurs de retour   : 1    si suppression effectuée
+ *                       0    si aucune suppression
+ */
+function SupprimerCategorie($conn, $id)
+{
+    $req = "DELETE FROM categories WHERE categorie_id=" . $id;
+    if (mysqli_query($conn, $req)) {
+        return mysqli_affected_rows($conn);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}

@@ -30,10 +30,6 @@ button[form="commande"] {
     margin-top: 20px;
 }
 
-form {
-    margin-bottom: 20px;
-}
-
 fieldset {
     display: inline;
     border-radius: 5px;

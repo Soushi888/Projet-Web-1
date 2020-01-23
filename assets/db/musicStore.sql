@@ -63,20 +63,18 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `musicStore`.`Produits`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `musicStore`.`Produits` (
+CREATE TABLE IF NOT EXISTS `musicStore`.`produits` (
   `produit_id` INT NOT NULL AUTO_INCREMENT,
   `produit_nom` VARCHAR(255) NOT NULL,
   `produit_description` VARCHAR(255) NOT NULL,
   `produit_prix` DECIMAL(8,2) NOT NULL,
   `produit_quantite` INT NOT NULL,
-  `fk_categorie_id` INT NOT NULL,
+  `fk_categorie_id` INT,
   PRIMARY KEY (`produit_id`),
   INDEX `fk_Produits_Catégories1_idx` (`fk_categorie_id` ASC),
   CONSTRAINT `fk_Produits_Catégories1`
     FOREIGN KEY (`fk_categorie_id`)
-    REFERENCES `musicStore`.`Categories` (`categorie_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `musicStore`.`Categories` (`categorie_id`))
 ENGINE = InnoDB;
 
 
