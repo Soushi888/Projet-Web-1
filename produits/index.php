@@ -4,6 +4,9 @@ require_once("../inc/sql.php");
 
 session_start();
 
+if (empty($_SESSION)) 
+    header("Location: ../login.php");
+
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
 $liste = listerProduits($conn, $recherche);
@@ -31,7 +34,7 @@ $liste = listerProduits($conn, $recherche);
                 <legend>Vendeur</legend>
                 <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
             </fieldset>
-            <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "gestionnaire") : ?>
+            <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "gestionnaire" || $_SESSION['utilisateur']["utilisateur_type"] == "administrateur") : ?>
                 <fieldset>
                     <legend>Gestionnaire</legend>
                     <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
