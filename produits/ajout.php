@@ -22,7 +22,9 @@ if (isset($_POST["envoi"])) {
 
 <body>
     <h1>Ajout d'un produit</h1>
-    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
+    <h2>
+        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
+    </h2>
 
     <nav id="main_menu">
         <fieldset>
@@ -31,16 +33,26 @@ if (isset($_POST["envoi"])) {
                 <legend>Vendeur</legend>
                 <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
             </fieldset>
-            <fieldset>
-                <legend>Gestionnaire</legend>
-                <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
-            </fieldset>
-            <fieldset>
-                <legend>Administrateur</legend>
-                <a href="../utilisateurs/index.php">Utilisateurs</a>
-            </fieldset>
+            <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "gestionnaire") : ?>
+                <fieldset>
+                    <legend>Gestionnaire</legend>
+                    <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
+                </fieldset>
+                <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "administrateur") : ?>
+                <?php endif; ?>
+                <fieldset>
+                    <legend>Administrateur</legend>
+                    <a href="../utilisateurs/index.php">Utilisateurs</a>
+                </fieldset>
+            <?php endif; ?>
+            <button><a href="../deconnexion.php">Déconnexion</a></button>
         </fieldset>
     </nav>
+
+    <?php if (($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") && ($_SESSION["utilisateur"]["utilisateur_type"] !== "gestionnaire")) : ?>
+        <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
+    <?php exit;
+    endif; ?>
 
     <form action="" method="post">
         <label for="nom">Nom : </label>

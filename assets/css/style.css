@@ -67,6 +67,10 @@ th, td {
     background-color: darkgreen;
 }
 
+#main_menu {
+    margin-bottom: 20px;
+}
+
 #main_menu fieldset > fieldset {
     margin-bottom: 0px;
 }

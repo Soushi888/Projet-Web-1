@@ -13,7 +13,7 @@ if (isset($_POST["envoi"])) {
     AjouterClient($conn, $_POST);
     header("Location: index.php");
 } ?>
-   
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -25,7 +25,9 @@ if (isset($_POST["envoi"])) {
 
 <body>
     <h1>Ajout d'un client</h1>
-    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
+    <h2>
+        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
+    </h2>
 
     <nav id="main_menu">
         <fieldset>
@@ -34,14 +36,19 @@ if (isset($_POST["envoi"])) {
                 <legend>Vendeur</legend>
                 <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
             </fieldset>
-            <fieldset>
-                <legend>Gestionnaire</legend>
-                <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
-            </fieldset>
-            <fieldset>
-                <legend>Administrateur</legend>
-                <a href="../utilisateurs/index.php">Utilisateurs</a>
-            </fieldset>
+            <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "gestionnaire") : ?>
+                <fieldset>
+                    <legend>Gestionnaire</legend>
+                    <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
+                </fieldset>
+            <?php endif;
+            if ($_SESSION['utilisateur']["utilisateur_type"] == "administrateur") : ?>
+                <fieldset>
+                    <legend>Administrateur</legend>
+                    <a href="../utilisateurs/index.php">Utilisateurs</a>
+                </fieldset>
+            <?php endif; ?>
+            <button><a href="../deconnexion.php">Déconnexion</a></button>
         </fieldset>
     </nav>
 
@@ -55,7 +62,7 @@ if (isset($_POST["envoi"])) {
         <label for="telephone">Téléphone : </label>
         <input type="text" name="telephone" required><br>
         <label for="adresse">Adresse : </label>
-        <input type="text" name="adresse" required><br>        
+        <input type="text" name="adresse" required><br>
         <label for="adresse2">Adresse 2 (optionnel) :</label>
         <input type="text" name="adresse2"><br>
         <label for="ville">Ville : </label>

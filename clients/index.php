@@ -20,7 +20,9 @@ $liste = listerClients($conn, $recherche);
 
 <body>
     <h1>Liste des clients</h1>
-    <h2>Utilisateur : <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] ?></pre></h2>
+    <h2>
+        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
+    </h2>
 
     <nav id="main_menu">
         <fieldset>
@@ -29,14 +31,18 @@ $liste = listerClients($conn, $recherche);
                 <legend>Vendeur</legend>
                 <a href="../clients/index.php">Clients</a><a href="../commandes/index.php">Commandes</a>
             </fieldset>
-            <fieldset>
-                <legend>Gestionnaire</legend>
-                <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
-            </fieldset>
-            <fieldset>
-                <legend>Administrateur</legend>
-                <a href="../utilisateurs/index.php">Utilisateurs</a>
-            </fieldset>
+            <?php if ($_SESSION['utilisateur']["utilisateur_type"] == "gestionnaire") : ?>
+                <fieldset>
+                    <legend>Gestionnaire</legend>
+                    <a href="../produits/index.php">Produits</a><a href="../categories/index.php">Catégories</a>
+                </fieldset>
+            <?php endif;
+            if ($_SESSION['utilisateur']["utilisateur_type"] == "administrateur") : ?> <fieldset>
+                    <legend>Administrateur</legend>
+                    <a href="../utilisateurs/index.php">Utilisateurs</a>
+                </fieldset>
+            <?php endif; ?>
+            <button><a href="../deconnexion.php">Déconnexion</a></button>
         </fieldset>
     </nav>
 
@@ -68,8 +74,8 @@ $liste = listerClients($conn, $recherche);
                 <td><?= $row["client_telephone"] ?></td>
                 <td><?php echo $row["client_adresse"];
                     echo isset($row["client_adresse2"]) ? "<br>" . $row["client_adresse2"] : "";
-                    echo "<br>" . $row["client_ville"] . ", " . $row["client_cp"] . 
-                    "<br>Québec, Canada" ?></td>
+                    echo "<br>" . $row["client_ville"] . ", " . $row["client_cp"] .
+                        "<br>Québec, Canada" ?></td>
                 <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
             </tr>
         <?php endforeach; ?>
