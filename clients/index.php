@@ -1,11 +1,8 @@
 <?php
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
+require_once("../inc/connectSession.php");
 
-session_start();
-
-if (empty($_SESSION)) 
-    header("Location: ../login.php");
 
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 

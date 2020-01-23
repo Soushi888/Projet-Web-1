@@ -1,11 +1,8 @@
 <?php
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
+require_once("../inc/connectSession.php");
 
-session_start();
-
-if (empty($_SESSION)) 
-    header("Location: ../login.php");
 
 $liste = ListerCategories($conn);
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";

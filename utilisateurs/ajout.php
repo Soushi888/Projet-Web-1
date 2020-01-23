@@ -1,11 +1,7 @@
 <?php
 require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
-
-session_start();
-
-if (empty($_SESSION)) 
-    header("Location: ../login.php");
+require_once("../inc/connectSession.php");
 
 if (isset($_POST["envoi"])) {
     AjouterUtilisateur($conn, $_POST);
