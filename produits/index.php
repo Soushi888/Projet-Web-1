@@ -6,6 +6,17 @@ require_once("../inc/connectSession.php");
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
 $liste = listerProduits($conn, $recherche);
+
+if (isset($_POST["confirme"])) :
+    if ($_POST["confirme"] == "OUI") :
+        SupprimerProduit($conn, $_SESSION["suppression"]["produit_id"]);
+        unset($_SESSION["suppression"]);
+        header("Location: index.php");
+    elseif ($_POST["confirme"] == "NON") :
+        echo "<p class='erreur'>Suppression non effectuée !</p>";
+        unset($_SESSION["suppression"]);
+    endif;
+endif;
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +50,8 @@ $liste = listerProduits($conn, $recherche);
         </fieldset>
     </form>
 
+    <p><i>* Seuls les clients qui n'ont pas encore commandé peuvent être supprimé.<br><span class="margin_left">Veuillez supprimer les commandes associées à un client pour pouvoir le supprimer.</span></i></p>
+
     <table>
         <tr>
             <th>ID</th>
@@ -47,22 +60,37 @@ $liste = listerProduits($conn, $recherche);
             <th>Prix</th>
             <th>Quant.</th>
             <th>Catégorie</th>
+            <th>Nbr de fois commandé</th>
             <th>Actions</th>
         </tr>
 
-        <?php foreach ($liste as $row) :
-        ?>
+        <?php foreach ($liste as $row) : ?>
             <tr>
-                <td style="text-align: center;"><?= $row["produit_id"] ?></td>
+                <td class="txtcenter"><?= $row["produit_id"] ?></td>
                 <td><?= $row["produit_nom"] ?></td>
                 <td><?= $row["produit_description"] ?></td>
                 <td><?= $row["produit_prix"] ?> $</td>
                 <td><?= $row["produit_quantite"] ?></td>
                 <td><?= $row["categorie_nom"] ?></td>
-                <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
+                <td class="txtcenter"><?= $row["nbr_commandes"] ?></td>
+                <td><?php if ($row["nbr_commandes"] == 0) : ?>
+                        <form action="" method="post">
+                            <input type="hidden" name="supprimer" value="<?= $row["produit_id"] ?>">
+                            <input type="submit" value="Supprimer">
+                        </form>
+                    <?php endif; ?>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>
+    <?php if (isset($_POST["supprimer"])) :
+        $_SESSION["suppression"] = LireProduit($conn, $_POST["supprimer"]); ?>
+        <form action="" method="post">
+            <h2>Confirmer la suppression du produit numéro <?= $_SESSION["suppression"]["produit_id"] . " - " . $_SESSION["suppression"]["produit_nom"] ?> ?</h2>
+            <input type="submit" name="confirme" value="OUI">
+            <input type="submit" name="confirme" value="NON">
+        </form>
+    <?php endif; ?>
 </body>
 
 </html>

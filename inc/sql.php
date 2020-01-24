@@ -461,14 +461,21 @@ function ListerCategories($conn)
  */
 function ListerProduits($conn, $recherche = "")
 {
-    $req = "SELECT 
+    $req = "SELECT
                 P.*,
-                C.categorie_nom
+                C.categorie_nom,
+                COUNT(CO.fk_commande_id) AS 'nbr_commandes'
             FROM
                 produits AS P
-            INNER JOIN
-                categories AS C ON C.categorie_id = P.fk_categorie_id
-            WHERE (P.produit_nom LIKE ?) OR (C.categorie_nom LIKE ?)";
+            INNER JOIN categories AS C
+            ON
+                C.categorie_id = P.fk_categorie_id
+            LEFT JOIN commandes_produits AS CO
+            ON
+                CO.fk_produit_id = P.produit_id
+            WHERE
+                (P.produit_nom LIKE ?) OR(C.categorie_nom LIKE ?)
+            GROUP BY P.produit_id";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . $recherche . "%";
