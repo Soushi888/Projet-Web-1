@@ -131,6 +131,36 @@ function LireProduit($conn, $id)
 }
 
 /**
+ * Fonction LireCommande
+ * Auteur : Soushi888
+ * Date   : 2020-01-21
+ * But    : Récupérer le commande par son identifiant clé primaire
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $id   = clé primaire
+ * Valeurs de retour   : $row  = ligne correspondant à la clé primaire,
+ *                               tableau vide si non trouvée.
+ */
+function LireCommande($conn, $id)
+{
+
+    $req = "SELECT * FROM commandes WHERE commande_id=" . $id;
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $row = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        }
+        mysqli_free_result($result);
+        return $row;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
  * Fonction ProduitLastId,
  * Auteur   : Soushi888,
  * Date     : 2020-01-24,
@@ -320,10 +350,10 @@ function ListerCommandes($conn, $recherche = "")
 function ListerClients($conn, $recherche = "")
 {
     $req = "SELECT * FROM clients AS C
-            WHERE (C.client_nom LIKE ?) OR (C.client_prenom LIKE ?)";
+    WHERE (C.client_nom LIKE ?) OR (C.client_prenom LIKE ?)";
 
     $stmt = mysqli_prepare($conn, $req);
-    $recherche = "%" . $recherche . "%";
+    $recherche = "%" . trim($recherche) . "%";
 
     mysqli_stmt_bind_param($stmt, "ss", $recherche, $recherche);
 
@@ -341,6 +371,7 @@ function ListerClients($conn, $recherche = "")
         return $liste;
     } else {
         errSQL($conn);
+        // die($req);
         exit;
     }
 }
@@ -356,8 +387,7 @@ function ListerClients($conn, $recherche = "")
 function ListerCategories($conn)
 {
     $req = "SELECT
-            C.categorie_id,
-            C.categorie_nom,
+            C.*,
             COUNT(P.produit_id) AS 'Nombre de produits'
         FROM
             categories AS C
@@ -367,6 +397,7 @@ function ListerCategories($conn)
             P.fk_categorie_id = C.categorie_id
         GROUP BY
             C.categorie_id";
+
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
         $liste = array();
@@ -653,6 +684,20 @@ function EnregistrerCommande($conn, array $commande)
  */
 function SupprimerCategorie($conn, $id)
 {
+    $liste = ListerProduits($conn);
+
+    foreach ($liste as $p) {
+        if ($p["fk_categorie_id"] == $id) {
+            $req = " UPDATE produits 
+                SET fk_categorie_id = NULL 
+                WHERE fk_categorie_id=" . $id;
+            if (!mysqli_query($conn, $req)) {
+                errSQL($conn);
+                exit;
+            }
+        }
+    }
+
     $req = "DELETE FROM categories WHERE categorie_id=" . $id;
     if (mysqli_query($conn, $req)) {
         return mysqli_affected_rows($conn);
@@ -660,8 +705,9 @@ function SupprimerCategorie($conn, $id)
         errSQL($conn);
         exit;
     }
+}
 
-}/**
+/**
  * Fonction SupprimerUtilisateur
  * Auteur : Soushi888
  * Date   : 2020-01-23
@@ -674,6 +720,60 @@ function SupprimerCategorie($conn, $id)
 function SupprimerUtilisateur($conn, $id)
 {
     $req = "DELETE FROM utilisateurs WHERE utilisateur_id=" . $id;
+    if (mysqli_query($conn, $req)) {
+        return mysqli_affected_rows($conn);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction SupprimerCommande
+ * Auteur : Soushi888
+ * Date   : 2020-01-24
+ * But    : supprimer une ligne de la table commandes et toutes les lignes associées dans la table commandes_produits
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $commande_id   = valeur de la clé primaire 
+ * Valeurs de retour   : 1    si suppression effectuée
+ *                       0    si aucune suppression
+ */
+function SupprimerCommande($conn, $id)
+{
+    $liste = ListerCommandes($conn);
+
+    foreach ($liste as $c) {
+        if ($c["commande_id"] == $id) {
+            $req = "DELETE FROM commandes_produits WHERE fk_commande_id=" . $id;
+            if (!mysqli_query($conn, $req)) {
+                errSQL($conn);
+                exit;
+            }
+        }
+    }
+
+    $req = "DELETE FROM commandes WHERE commande_id=" . $id;
+    if (mysqli_query($conn, $req)) {
+        return mysqli_affected_rows($conn);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction SupprimerClient
+ * Auteur : Soushi888
+ * Date   : 2020-01-23
+ * But    : supprimer une ligne de la table client  
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $client_id   = valeur de la clé primaire 
+ * Valeurs de retour   : 1    si suppression effectuée
+ *                       0    si aucune suppression
+ */
+function SupprimerClient($conn, $id)
+{
+    $req = "DELETE FROM clients WHERE client_id=" . $id;
     if (mysqli_query($conn, $req)) {
         return mysqli_affected_rows($conn);
     } else {

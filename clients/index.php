@@ -6,7 +6,7 @@ require_once("../inc/connectSession.php");
 
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
-$liste = listerClients($conn, $recherche);
+$liste = ListerClients($conn, $recherche);
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +35,8 @@ $liste = listerClients($conn, $recherche);
         </fieldset>
     </form>
 
+    <p><i>* Seuls les clients qui n'ont pas encore commandé peuvent être supprimé.</i></p>
+
     <table>
         <tr>
             <th>ID</th>
@@ -42,13 +44,14 @@ $liste = listerClients($conn, $recherche);
             <th>Email</th>
             <th>Telephone</th>
             <th>Adresse</th>
+            <th>Nbr. commandes</th>
             <th>Actions</th>
         </tr>
 
         <?php foreach ($liste as $row) :
         ?>
             <tr>
-                <td style="text-align: center;"><?= $row["client_id"] ?></td>
+                <td class="txtcenter"><?= $row["client_id"] ?></td>
                 <td><?= $row["client_nom"] . ", " . $row["client_prenom"] ?></td>
                 <td><?= $row["client_email"] ?></td>
                 <td><?= $row["client_telephone"] ?></td>
@@ -56,6 +59,7 @@ $liste = listerClients($conn, $recherche);
                     echo isset($row["client_adresse2"]) ? "<br>" . $row["client_adresse2"] : "";
                     echo "<br>" . $row["client_ville"] . ", " . $row["client_cp"] .
                         "<br>Québec, Canada" ?></td>
+                <td class="txtcenter"><?= $row["Nombre de commandes"] ?></td>
                 <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
             </tr>
         <?php endforeach; ?>

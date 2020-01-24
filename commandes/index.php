@@ -6,6 +6,18 @@ require_once("../inc/connectSession.php");
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
 $liste = ListerCommandes($conn, $recherche);
+
+if (isset($_POST["confirme"])) :
+    if ($_POST["confirme"] == "OUI") :
+        SupprimerCommande($conn, $_SESSION["suppression"]["commande_id"]);
+        unset($_SESSION["suppression"]);
+        header("Location: index.php");
+    elseif ($_POST["confirme"] == "NON") :
+        echo "<p class='erreur'>Suppression non effectuée !</p>";
+        unset($_SESSION["suppression"]);
+    endif;
+endif;
+
 ?>
 
 <!DOCTYPE html>
@@ -67,10 +79,23 @@ $liste = ListerCommandes($conn, $recherche);
                         "<br>Québec, Canada" ?></td>
                 <td><?= $row["commande_commentaires"] ?></td>
                 <td><?= $row["commande_etat"] ?></td>
-                <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
+                <td>
+                    <form action="" method="post">
+                        <input type="hidden" name="supprimer" value="<?= $row["commande_id"] ?>">
+                        <input type="submit" value="Supprimer">
+                    </form>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>
+    <?php if (isset($_POST["supprimer"])) :
+        $_SESSION["suppression"] = LireCommande($conn, $_POST["supprimer"]); ?>
+        <form action="" method="post">
+            <h2>Confirmer la suppression de la commande numéro <?= $_SESSION["suppression"]["commande_id"] ?> ?</h2>
+            <input type="submit" name="confirme" value="OUI">
+            <input type="submit" name="confirme" value="NON">
+        </form>
+    <?php endif; ?>
 </body>
 
 </html>

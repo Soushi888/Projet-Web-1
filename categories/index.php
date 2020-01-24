@@ -16,11 +16,12 @@ if (isset($_POST["categorie"])) {
 
 if (isset($_POST["confirme"])) :
     if ($_POST["confirme"] == "OUI") :
-        SupprimerCategorie($conn, $_SESSION["categorie_suppression"]["categorie_id"]);
+        SupprimerCategorie($conn, $_SESSION["suppression"]["categorie_id"]);
+        unset($_SESSION["suppression"]);
         header("Location: index.php");
     elseif ($_POST["confirme"] == "NON") :
         echo "<p class='erreur'>Suppression non effectuée !</p>";
-        unset($_SESSION["id_suppression"]);
+        unset($_SESSION["suppression"]);
     endif;
 endif;
 ?>
@@ -55,8 +56,6 @@ endif;
         </fieldset>
     </form>
 
-    <p><i>* Seules les catégories qui n'ont été assignées a aucun produit peuvent être supprimée.</i></p>
-
     <table>
         <tr>
             <th>ID</th>
@@ -71,12 +70,12 @@ endif;
                 <td style="text-align: center;"><?= $row["categorie_id"] ?></td>
                 <td><?= $row["categorie_nom"] ?></td>
                 <td class="txtcenter"><?= $row["Nombre de produits"] ?></td>
-                <td><?php if ($row["Nombre de produits"] == 0) : ?>
-                        <form action="" method="post">
-                            <input type="hidden" name="supprimer" value="<?= $row["categorie_id"] ?>">
-                            <input type="submit" value="Supprimer">
-                        </form>
-                    <?php endif; ?>
+                <td>
+                    <form action="" method="post">
+                        <input type="hidden" name="supprimer" value="<?= $row["categorie_id"] ?>">
+                        <input type="submit" value="Supprimer">
+                    </form>
+
                     <form action="" method="post">
                         <input type="hidden" name="modifier" value="<?= $row["categorie_id"] ?>">
                         <input type="submit" value="Modifier">
@@ -86,12 +85,9 @@ endif;
         <?php endforeach; ?>
     </table>
     <?php if (isset($_POST["supprimer"])) :
-        $_SESSION["categorie_suppression"] = LireCategorie($conn, $_POST["supprimer"]);
-
-    ?>
-
+        $_SESSION["suppression"] = LireCategorie($conn, $_POST["supprimer"]); ?>
         <form action="" method="post">
-            <h2>Confirmer la suppression de la catégorie numéro <?= $_SESSION["categorie_suppression"]["categorie_id"] . " - " . $_SESSION["categorie_suppression"]["categorie_nom"] ?> ?</h2>
+            <h2>Confirmer la suppression de la catégorie numéro <?= $_SESSION["suppression"]["categorie_id"] . " - " . $_SESSION["suppression"]["categorie_nom"] ?> ?</h2>
             <input type="submit" name="confirme" value="OUI">
             <input type="submit" name="confirme" value="NON">
         </form>
