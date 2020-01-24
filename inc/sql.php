@@ -307,7 +307,7 @@ function ListerCategories($conn)
             COUNT(P.produit_id) AS 'Nombre de produits'
         FROM
             categories AS C
-        INNER JOIN 
+        LEFT JOIN 
             produits AS P
         ON
             P.fk_categorie_id = C.categorie_id
