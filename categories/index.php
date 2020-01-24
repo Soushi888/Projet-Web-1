@@ -15,8 +15,8 @@ if (isset($_POST["categorie"])) {
 }
 
 if (isset($_POST["id"])) {
-    
     SupprimerCategorie($conn, $_POST["id"]);
+    header("Location: index.php");
 }
 ?>
 
@@ -75,6 +75,7 @@ if (isset($_POST["id"])) {
         <tr>
             <th>ID</th>
             <th>Nom de la catégorie</th>
+            <th>Nombre de produits</th>
             <th>Actions</th>
         </tr>
 
@@ -83,11 +84,12 @@ if (isset($_POST["id"])) {
             <tr>
                 <td style="text-align: center;"><?= $row["categorie_id"] ?></td>
                 <td><?= $row["categorie_nom"] ?></td>
+                <td class="txtcenter"><?= $row["Nombre de produits"] ?></td>
                 <td>
                     <form action="" method="post">
-                    <input type="hidden" name="id" value="<?= $row["categorie_id"] ?>">    
-                    <input type="submit" value="supprimer">
-                </form>
+                        <input type="hidden" name="id" value="<?= $row["categorie_id"] ?>">
+                        <input type="submit" value="supprimer">
+                    </form>
                 </td>
             </tr>
         <?php endforeach; ?>

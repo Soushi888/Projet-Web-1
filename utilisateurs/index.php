@@ -3,10 +3,21 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
-$liste = listerUtilisateurs($conn, $recherche);
-?>
+$liste = ListerUtilisateurs($conn, $recherche);
+
+if (isset($_POST["confirme"])) :
+    if ($_POST["confirme"] == "OUI") :
+        SupprimerUtilisateur($conn, $_SESSION["id_suppression"]);
+        header("Location: index.php");
+    elseif ($_POST["confirme"] == "NON") :
+        echo "<p class='erreur'>Suppression non effectuée !</p>";
+        unset($_SESSION["id_suppression"]);
+    endif;
+endif; ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -22,6 +33,7 @@ $liste = listerUtilisateurs($conn, $recherche);
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
     </h2>
+    <?= isset($_SESSION["message"]) ? $_SESSION["message"] : ""; ?>
 
 
     <nav id="main_menu">
@@ -79,10 +91,29 @@ $liste = listerUtilisateurs($conn, $recherche);
                 <td><?= $row["utilisateur_prenom"] ?></td>
                 <td><?= $row["utilisateur_email"] ?></td>
                 <td><?= $row["utilisateur_type"] ?></td>
-                <td><a href="#">modifier</a> <a href="#">supprimer</a></td>
+                <td>
+                    <form action="" method="post">
+                        <input type="hidden" name="id" value="<?= $row["utilisateur_id"] ?>">
+                        <input type="hidden" name="email" value="<?= $row["utilisateur_email"] ?>">
+                        <input type="submit" value="Supprimer">
+                    </form>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>
+    <?php if (isset($_POST["id"])) :
+        $_SESSION["id_suppression"] = $_POST["id"];
+        $utilisateur_supression = LireUtilisateur($conn, $_POST["email"]);
+    ?>
+
+        <form action="" method="post">
+            <h2>Confirmer suppression de l'utilisateur <?= $utilisateur_supression["utilisateur_nom"] . " " . $utilisateur_supression["utilisateur_prenom"] . " de type " . $utilisateur_supression["utilisateur_type"] ?> ?</h2>
+            <input type="submit" name="confirme" value="OUI">
+            <input type="submit" name="confirme" value="NON">
+        </form>
+
+    <?php endif; ?>
+
 </body>
 
 </html>

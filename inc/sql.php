@@ -301,7 +301,18 @@ function ListerClients($conn, $recherche = "")
  */
 function ListerCategories($conn)
 {
-    $req = "SELECT * FROM categories";
+    $req = "SELECT
+            C.categorie_id,
+            C.categorie_nom,
+            COUNT(P.produit_id) AS 'Nombre de produits'
+        FROM
+            categories AS C
+        INNER JOIN 
+            produits AS P
+        ON
+            P.fk_categorie_id = C.categorie_id
+        GROUP BY
+            C.categorie_id";
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
         $liste = array();
@@ -589,6 +600,26 @@ function EnregistrerCommande($conn, array $commande)
 function SupprimerCategorie($conn, $id)
 {
     $req = "DELETE FROM categories WHERE categorie_id=" . $id;
+    if (mysqli_query($conn, $req)) {
+        return mysqli_affected_rows($conn);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+
+}/**
+ * Fonction SupprimerUtilisateur
+ * Auteur : Soushi888
+ * Date   : 2020-01-23
+ * But    : supprimer une ligne de la table utilisateur  
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $utilisateur_id   = valeur de la clé primaire 
+ * Valeurs de retour   : 1    si suppression effectuée
+ *                       0    si aucune suppression
+ */
+function SupprimerUtilisateur($conn, $id)
+{
+    $req = "DELETE FROM utilisateurs WHERE utilisateur_id=" . $id;
     if (mysqli_query($conn, $req)) {
         return mysqli_affected_rows($conn);
     } else {

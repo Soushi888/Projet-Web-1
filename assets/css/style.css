@@ -59,6 +59,10 @@ th, td {
     background-color: darkgreen;
 }
 
+.txtcenter {
+    text-align: center;
+}
+
 #main_menu {
     margin-bottom: 20px;
 }
