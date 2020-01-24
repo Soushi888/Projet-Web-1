@@ -42,7 +42,7 @@ function controlerUtilisateur($conn, $utilisateur_email, $utilisateur_mdp)
 
 /**
  * Fonction LireUtilisateur
- * Auteur : Sacha
+ * Auteur : Soushi888
  * Date   : 2020-01-23
  * But    : Récupérer l'utilisateur par son identifiant email unique
  * Arguments en entrée : $conn = contexte de connexion
@@ -71,8 +71,38 @@ function LireUtilisateur($conn, $email)
 }
 
 /**
+ * Fonction LireCategorie
+ * Auteur : Soushi888
+ * Date   : 2020-01-23
+ * But    : Récupérer la categorie par son identifiant clé primaire
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $id   = clé primaire
+ * Valeurs de retour   : $row  = tableau de la ligne correspondant à l'clé primaire,
+ *                               tableau vide si non trouvée.
+ */
+function LireCategorie($conn, $id)
+{
+
+    $req = "SELECT * FROM categories WHERE categorie_id='" . $id . "'";
+    // die($req);
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $row = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        }
+        mysqli_free_result($result);
+        return $row;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
  * Fonction LireProduit
- * Auteur : Sacha
+ * Auteur : Soushi888
  * Date   : 2020-01-21
  * But    : Récupérer le produit par son identifiant clé primaire
  * Arguments en entrée : $conn = contexte de connexion
@@ -101,16 +131,40 @@ function LireProduit($conn, $id)
 }
 
 /**
- * Fonction produitLastId,
+ * Fonction ProduitLastId,
  * Auteur   : Soushi888,
- * Date     : 2019-11-26,
+ * Date     : 2020-01-24,
  * But      : Récupérer le dernier id de la table produit,
  * Input    : $conn = contexte de connexion,
  * Output   : $last_id = dernier id de la table.
  */
-function produitLastId($conn)
+function ProduitLastId($conn)
 {
     $req = "SELECT MAX(produit_id) FROM produits";
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $last_id = "";
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $last_id = mysqli_fetch_row($result);
+            $last_id = $last_id[0];
+        }
+        mysqli_free_result($result);
+        return $last_id;
+    }
+}
+
+/**
+ * Fonction CategorieLastId,
+ * Auteur   : Soushi888,
+ * Date     : 2020-01-24,
+ * But      : Récupérer le dernier id de la table categorie,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $last_id = dernier id de la table.
+ */
+function CategorieLastId($conn)
+{
+    $req = "SELECT MAX(categorie_id) FROM categories";
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
         $last_id = "";
@@ -256,7 +310,7 @@ function ListerCommandes($conn, $recherche = "")
 
 /**
  * Fonction ListerClients,
- * Auteur   : soushi888,
+ * Auteur   : Soushi888,,
  * Date     : 17-01-2020,
  * But      : Récupérer les clients avec leurs données associées,
  * Input    : $conn = contexte de connexion,
@@ -293,7 +347,7 @@ function ListerClients($conn, $recherche = "")
 
 /**
  * Fonction ListerCategories,
- * Auteur   : soushi888,
+ * Auteur   : Soushi888,,
  * Date     : 17-01-2020,
  * But      : Récupérer la liste des categories,
  * Input    : $conn = contexte de connexion,
@@ -332,7 +386,7 @@ function ListerCategories($conn)
 
 /**
  * Fonction ListerProduits,
- * Auteur   : soushi888,
+ * Auteur   : Soushi888,,
  * Date     : 17-01-2020,
  * But      : Récupérer les produits et les données associées,
  * Input    : $conn = contexte de connexion,
@@ -375,7 +429,7 @@ function ListerProduits($conn, $recherche = "")
 
 /**
  * Fonction ListerProduits,
- * Auteur   : soushi888,
+ * Auteur   : Soushi888,,
  * Date     : 17-01-2020,
  * But      : Récupérer les produits et les données associées,
  * Input    : $conn = contexte de connexion,
@@ -415,13 +469,13 @@ function ListerUtilisateurs($conn, $recherche = "")
 
 /** 
  * Fonction AjouterCategorie
- * Auteur : Soushi888
- * Date   : 2020-01-19
- * But    : ajouter une ligne dans la table catégories  
- * Arguments en entrée : $conn = contexte de connexion
- *                       $categorie = Catégorie à ajouter à la table
- * Valeurs de retour   : 1    si ajout effectuée
- *                       0    si aucun ajout
+ * Auteur : Soushi888,
+ * Date   : 2020-01-19,
+ * But    : ajouter une ligne dans la table catégories,
+ * Arguments en entrée : $conn = contexte de connexion,
+ *                       $categorie = Catégorie à ajouter à la table,
+ * Valeurs de retour   : 1    si ajout effectuée,
+ *                       0    si aucun ajout.
  */
 function AjouterCategorie($conn, $categorie)
 {

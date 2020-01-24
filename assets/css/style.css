@@ -34,6 +34,7 @@ fieldset {
     display: inline;
     border-radius: 5px;
     border-color: #F7941D ;
+    margin-bottom: 20px;
 }
 
 table {
@@ -61,10 +62,6 @@ th, td {
 
 .txtcenter {
     text-align: center;
-}
-
-#main_menu {
-    margin-bottom: 20px;
 }
 
 #main_menu fieldset > fieldset {
