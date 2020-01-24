@@ -64,6 +64,10 @@ th, td {
     text-align: center;
 }
 
+.margin_left {
+    margin-left: 20px;
+}
+
 #main_menu fieldset > fieldset {
     margin-bottom: 0px;
 }

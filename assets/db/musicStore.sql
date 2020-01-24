@@ -198,7 +198,8 @@ VALUES
   ("Colimbourd", "Colette", "514-555-5656", "colimbourd.colette@gmail.com", "5539 boulevard de la Mort", "app.666", "Laval", "G6J 6S6"),
   ("Bavoie", "Rose", "514-226-4419", "bavoie.rose@gmail.com", "563 rue Lejour", NULL, "Longueuil", "H3G 5V4"),
   ("Boulet", "Pierre", "450-392-3611", "boulet.pierre@gmail.com", "3 rue Lanuit", "app.306", "Montréal", "H2J 9B6"),
-  ("Viget", "Roxane", "514-223-4596", "roxane.viget@gmail.com", "1 rue du Manoir", NULL, "Montréal", "V9E 8L2");
+  ("Viget", "Roxane", "514-223-4596", "roxane.viget@gmail.com", "1 rue du Manoir", NULL, "Montréal", "V9E 8L2"),
+  ("Testitos", "Jean", "514-853-6596", "jean.testitos@gmail.com", "2 rue de la Beauté", NULL, "Longueuil", "V9L 6N2");
 
 -- -----------------------------------------------------
 -- Insertion de données dans la table "Commandes"

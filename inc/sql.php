@@ -101,6 +101,36 @@ function LireCategorie($conn, $id)
 }
 
 /**
+ * Fonction LireClient
+ * Auteur : Soushi888
+ * Date   : 2020-01-24
+ * But    : Récupérer la client par son identifiant clé primaire
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $id   = clé primaire
+ * Valeurs de retour   : $row  = tableau de la ligne correspondant à l'clé primaire,
+ *                               tableau vide si non trouvée.
+ */
+function LireClient($conn, $id)
+{
+
+    $req = "SELECT * FROM clients WHERE client_id='" . $id . "'";
+    // die($req);
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        $row = array();
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        }
+        mysqli_free_result($result);
+        return $row;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
  * Fonction LireProduit
  * Auteur : Soushi888
  * Date   : 2020-01-21
@@ -349,8 +379,13 @@ function ListerCommandes($conn, $recherche = "")
  */
 function ListerClients($conn, $recherche = "")
 {
-    $req = "SELECT * FROM clients AS C
-    WHERE (C.client_nom LIKE ?) OR (C.client_prenom LIKE ?)";
+    $req = "SELECT CL.*, COUNT(CO.commande_id) AS 'nbr_commandes'
+    FROM clients AS CL
+    LEFT JOIN
+        commandes AS CO ON CL.client_id = CO.fk_client_id
+    WHERE (CL.client_nom LIKE ?) OR (CL.client_prenom LIKE ?)
+    GROUP BY
+        CL.client_id";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . trim($recherche) . "%";
@@ -389,14 +424,14 @@ function ListerCategories($conn)
     $req = "SELECT
             C.*,
             COUNT(P.produit_id) AS 'Nombre de produits'
-        FROM
-            categories AS C
-        LEFT JOIN 
-            produits AS P
-        ON
-            P.fk_categorie_id = C.categorie_id
-        GROUP BY
-            C.categorie_id";
+            FROM
+                categories AS C
+            LEFT JOIN 
+                produits AS P
+            ON
+                P.fk_categorie_id = C.categorie_id
+            GROUP BY
+                C.categorie_id";
 
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
@@ -720,6 +755,27 @@ function SupprimerCategorie($conn, $id)
 function SupprimerUtilisateur($conn, $id)
 {
     $req = "DELETE FROM utilisateurs WHERE utilisateur_id=" . $id;
+    if (mysqli_query($conn, $req)) {
+        return mysqli_affected_rows($conn);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction SupprimerProduit
+ * Auteur : Soushi888
+ * Date   : 2020-01-24
+ * But    : supprimer une ligne de la table produits
+ * Arguments en entrée : $conn = contexte de connexion
+ *                       $produit_id = valeur de la clé primaire 
+ * Valeurs de retour   : 1    si suppression effectuée
+ *                       0    si aucune suppression
+ */
+function SupprimerProduit($conn, $id)
+{
+    $req = "DELETE FROM produits WHERE produit_id=" . $id;
     if (mysqli_query($conn, $req)) {
         return mysqli_affected_rows($conn);
     } else {
