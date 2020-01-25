@@ -112,14 +112,14 @@ ENGINE = InnoDB;
 INSERT INTO 
   utilisateurs (utilisateur_nom, utilisateur_prenom, utilisateur_email, utilisateur_mdp, utilisateur_type)
 VALUES
-  ("Pignot", "Sacha", "admin@sachicxu_musicstore.com", SHA2('admin', 256), "administrateur"),
+  ("Pignot", "Sacha", "admin@musicstore.com", SHA2('admin', 256), "administrateur"),
 
-  ("Marc", "Jean", "Jean@sachicxu_musicstore.com", SHA2('jean', 256), "gestionnaire"),
-  ("Mazi", "Jeanne", "Jeanne@sachicxu_musicstore.com", SHA2('jeanne', 256), "gestionnaire"),
+  ("Marc", "Jean", "Jean@musicstore.com", SHA2('jean', 256), "gestionnaire"),
+  ("Mazi", "Jeanne", "Jeanne@musicstore.com", SHA2('jeanne', 256), "gestionnaire"),
 
-  ("Lopez", "Carlos", "Carlos@sachicxu_musicstore.com", SHA2('carle', 256), "vendeur"),
-  ("Laza", "Clara", "Clara@sachicxu_musicstore.com", SHA2('clara', 256), "vendeur"),
-  ("Ledragon", "Elliotte", "Elliotte@sachicxu_musicstore.com", SHA2('elliotte', 256), "vendeur");
+  ("Lopez", "Carlos", "Carlos@musicstore.com", SHA2('carle', 256), "vendeur"),
+  ("Laza", "Clara", "Clara@musicstore.com", SHA2('clara', 256), "vendeur"),
+  ("Ledragon", "Elliotte", "Elliotte@musicstore.com", SHA2('elliotte', 256), "vendeur");
 
 -- -----------------------------------------------------
 -- Insertion de données dans la table "categories"
