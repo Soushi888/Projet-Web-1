@@ -24,6 +24,18 @@ if (isset($_POST["confirme"])) :
         unset($_SESSION["suppression"]);
     endif;
 endif;
+
+if (isset($_POST["confirmeMod"])) :
+    if ($_POST["confirmeMod"] == "OK") : 
+        $_POST["id"] = $_SESSION["modification"]["categorie_id"];
+        ModifierCategorie($conn, $_POST);
+        unset($_SESSION["modification"]);
+        header("Location: index.php");
+    elseif ($_POST["confirmeMod"] == "NON") :
+        echo "<p class='erreur'>modification non effectuée !</p>";
+        unset($_SESSION["modification"]);
+    endif;
+endif;
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +102,15 @@ endif;
             <h2>Confirmer la suppression de la catégorie numéro <?= $_SESSION["suppression"]["categorie_id"] . " - " . $_SESSION["suppression"]["categorie_nom"] ?> ?</h2>
             <input type="submit" name="confirme" value="OUI">
             <input type="submit" name="confirme" value="NON">
+        </form>
+    <?php endif;
+    if (isset($_POST["modifier"])) :
+        $_SESSION["modification"] = LireCategorie($conn, $_POST["modifier"]); ?>
+        <form action="" method="post">
+            <h2>Modification de la catégorie <?= $_SESSION["modification"]["categorie_id"] . " - " . $_SESSION["modification"]["categorie_nom"] ?></h2>
+            <p>Nouveau nom : </p><input type="text" name="nouveau_nom"><br>
+            <input type="submit" name="confirmeMod" value="OK">
+            <input type="submit" name="confirmeMod" value="NON">
         </form>
     <?php endif; ?>
 

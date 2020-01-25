@@ -86,8 +86,8 @@ endif; ?>
         </fieldset>
 
         <fieldset>
-            <legend>Informations client</legend>
-            <label for="client_id">ID :
+            <legend>Informations livraison</legend>
+            <label for="client_id">ID client :
                 <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required></label>
             <label for="client_adresse">Adresse :
                 <input name="client_adresse" id="client_adresse" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_adresse"] : "" ?>" required></label>

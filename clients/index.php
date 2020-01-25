@@ -18,6 +18,11 @@ if (isset($_POST["confirme"])) :
         unset($_SESSION["suppression"]);
     endif;
 endif;
+
+if (isset($_POST["modifier"])) :
+    $_SESSION["modification"] = LireClient($conn, $_POST["modifier"]);
+    header("Location: modification.php");
+endif;
 ?>
 
 <!DOCTYPE html>
@@ -77,6 +82,10 @@ endif;
                             <input type="submit" value="Supprimer">
                         </form>
                     <?php endif; ?>
+                    <form action="" method="post">
+                        <input type="hidden" name="modifier" value="<?= $row["client_id"] ?>">
+                        <input type="submit" value="Modifier">
+                    </form>
                 </td>
             </tr>
         <?php endforeach; ?>

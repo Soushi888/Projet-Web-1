@@ -5,6 +5,7 @@ require_once("../inc/connectSession.php");
 
 if (isset($_POST["envoi"])) {
     ModifierUtilisateur($conn, $_POST);
+    unset($_SESSION["modification"]);
     header("Location: index.php");
 }
 
@@ -20,7 +21,7 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <pre><?php print_r($_SESSION) ?></pre>
+    <!-- <pre><?php print_r($_SESSION) ?></pre> -->
 
     <h1>Modifier un utilisateur</h1>
     <h2>
@@ -37,12 +38,13 @@ if (isset($_POST["envoi"])) {
 
     <main>
         <form action="" method="post">
+            <label for="email">Email :</label>
+            <input type="text" id="email" name="email" value="<?= $_SESSION["modification"]["utilisateur_email"] ?>" disabled><br>
+            <input type="hidden" id="email" name="email" value="<?= $_SESSION["modification"]["utilisateur_email"] ?>"><br>
             <label for="nom">Nom :</label>
             <input type="text" id="nom" name="nom" value="<?= $_SESSION["modification"]["utilisateur_nom"] ?>" required><br>
             <label for="prenom">Prenom :</label>
             <input type="text" id="prenom" name="prenom" value="<?= $_SESSION["modification"]["utilisateur_prenom"] ?>" required><br>
-            <label for="email">Email :</label>
-            <input type="text" id="email" name="email" value="<?= $_SESSION["modification"]["utilisateur_email"] ?>" required><br>
             <label for="mdp">Mot de passe :</label>
             <input type="password" id="mdp" name="mdp" required><br>
             <label for="confirmation_mdp">Confirmer mot de passe :</label><!-- À valider -->
@@ -53,7 +55,7 @@ if (isset($_POST["envoi"])) {
                 <option value="gestionnaire" <?= $_SESSION["modification"]["utilisateur_type"] == "gestionnaire" ? "selected" : "" ?>>Gestionnaire</option>
                 <option value="administrateur" <?= $_SESSION["modification"]["utilisateur_type"] == "administrateur" ? "selected" : "" ?>>Administrateur</option>
             </select><br>
-            <input type="submit" id="envoi" value="Modifier !">
+            <input type="submit" id="envoi" name="envoi" value="Modifier !">
         </form>
     </main>
 

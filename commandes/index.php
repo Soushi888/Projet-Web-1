@@ -18,6 +18,11 @@ if (isset($_POST["confirme"])) :
     endif;
 endif;
 
+if (isset($_POST["modifier"])) :
+    $_SESSION["modification"] = LireCommande($conn, $_POST["modifier"]);
+    header("Location: modification.php");
+endif;
+
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +88,10 @@ endif;
                     <form action="" method="post">
                         <input type="hidden" name="supprimer" value="<?= $row["commande_id"] ?>">
                         <input type="submit" value="Supprimer">
+                    </form>
+                    <form action="" method="post">
+                        <input type="hidden" name="modifier" value="<?= $row["commande_id"] ?>">
+                        <input type="submit" value="Modifier">
                     </form>
                 </td>
             </tr>

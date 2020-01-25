@@ -848,7 +848,7 @@ function SupprimerClient($conn, $id)
 /** 
  * Fonction ModifierUtilisateur
  * Auteur   : Soushi888
- * Date     : 2020-01-20
+ * Date     : 2020-01-24
  * But      : modifier une ligne dans la table utilisateurs  
  * Input    : $conn = contexte de connexion
  *            $utilisateur = tableau contenant les informations sur le utilisateur à modifier à la BDD
@@ -860,10 +860,141 @@ function ModifierUtilisateur($conn, $utilisateur)
     $req = "UPDATE 
                 utilisateurs 
             SET 
-                utilisateur_nom= ?, utilisateur_prenom = ?, utilisateur_email = ?, utilisateur_mdp = ?, utilisateur_type = ?";
+                utilisateur_nom= ?, utilisateur_prenom = ?, utilisateur_email = ?, utilisateur_mdp = ?, utilisateur_type = ?
+            WHERE utilisateur_email = ?";
     $stmt = mysqli_prepare($conn, $req);
     $utilisateur["mdp"] = hash("sha256", $utilisateur["mdp"]);
-    mysqli_stmt_bind_param($stmt, "sssss", $utilisateur["nom"], $utilisateur["prenom"], $utilisateur["email"], $utilisateur["mdp"], $utilisateur["type"]);
+    mysqli_stmt_bind_param($stmt, "ssssss", $utilisateur["nom"], $utilisateur["prenom"], $utilisateur["email"], $utilisateur["mdp"], $utilisateur["type"], $utilisateur["email"]);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction ModifierCategorie
+ * Auteur   : Soushi888
+ * Date     : 2020-01-25
+ * But      : modifier une ligne dans la table categories  
+ * Input    : $conn = contexte de connexion
+ *            $categorie = tableau contenant les informations sur le categorie à modifier à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function ModifierCategorie($conn, $categorie)
+{
+    $req = "UPDATE 
+                categories 
+            SET 
+                categorie_nom = ?
+            WHERE categorie_id = ?";
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "si", $categorie["nouveau_nom"], $categorie["id"]);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction ModifierProduit
+ * Auteur   : Soushi888
+ * Date     : 2020-01-25
+ * But      : modifier une ligne dans la table produits  
+ * Input    : $conn = contexte de connexion
+ *            $produit = tableau contenant les informations sur le produit à modifier à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function ModifierProduit($conn, $produit)
+{
+    $req = "UPDATE 
+                produits 
+            SET 
+                produit_nom = ?,
+                produit_description = ?,
+                produit_prix = ?,
+                produit_quantite = ?,
+                fk_categorie_id = ?
+            WHERE produit_id = ?";
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "sssssi", $produit["nom"], $produit["description"], $produit["prix"], $produit["quantite"], $produit["categorie"], $produit["id"]);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction ModifierClient
+ * Auteur   : Soushi888
+ * Date     : 2020-01-25
+ * But      : modifier une ligne dans la table clients  
+ * Input    : $conn = contexte de connexion
+ *            $client = tableau contenant les informations sur le client à modifier à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function ModifierClient($conn, $client)
+{
+    $req = "UPDATE 
+                clients 
+            SET 
+                client_nom = ?,
+                client_prenom = ?,
+                client_email = ?,
+                client_telephone = ?,
+                client_adresse = ?,
+                client_adresse2 = ?,
+                client_ville = ?,
+                client_cp = ?
+            WHERE client_id = ?";
+
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "ssssssssi", $client["nom"], $client["prenom"], $client["email"], $client["telephone"], $client["adresse"], $client["adresse2"], $client["ville"], $client["cp"], $client["id"]);
+
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction ModifierCommande
+ * Auteur   : Soushi888
+ * Date     : 2020-01-25
+ * But      : modifier une ligne dans la table commandes  
+ * Input    : $conn = contexte de connexion
+ *            $commande = tableau contenant les informations sur le commande à modifier à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function ModifierCommande($conn, $commande)
+{
+    $req = "UPDATE 
+                commandes
+            SET 
+                commande_date = ?,
+                commande_adresse = ?,
+                commande_adresse2 = ?,
+                commande_adresse_ville = ?,
+                commande_adresse_cp = ?,
+                commande_etat = ?,
+                commande_commentaires = ?,
+                fk_client_id = ?
+            WHERE commande_id = ?";
+
+    $stmt = mysqli_prepare($conn, $req);
+    mysqli_stmt_bind_param($stmt, "sssssssii", $commande["date"], $commande["adresse"], $commande["adresse2"], $commande["ville"], $commande["cp"], $commande["etat"], $commande["commentaires"], $commande["client_id"], $commande["id"]);
+
     if (mysqli_stmt_execute($stmt)) {
         return mysqli_stmt_affected_rows($stmt);
     } else {
