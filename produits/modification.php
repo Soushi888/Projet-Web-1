@@ -31,7 +31,7 @@ if (isset($_POST["envoi"])) {
 
     include("../menu.php");
 
-    if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
+    if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur" && ($_SESSION["utilisateur"]["utilisateur_type"] !== "gestionnaire")) : ?>
         <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
     <?php exit;
     endif; ?>

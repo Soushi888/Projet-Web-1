@@ -29,11 +29,7 @@ if (isset($_POST["envoi"])) {
     <?= isset($_SESSION["message"]) ? $_SESSION["message"] : "";
 
     include("../menu.php");
-
-    if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
-        <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
-    <?php exit;
-    endif; ?>
+    ?>
 
     <main>
         <form action="" method="post">

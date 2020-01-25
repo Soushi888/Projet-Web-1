@@ -29,11 +29,8 @@ endif;
     <?= isset($_SESSION["message"]) ? $_SESSION["message"] : "";
 
     include("../menu.php");
+    ?>
 
-    if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
-        <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
-    <?php exit;
-    endif; ?>
 
     <main>
         <form id="commande" action="" method="post">
