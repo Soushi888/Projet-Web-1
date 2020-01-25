@@ -1,9 +1,9 @@
-USE `e1995655` ;
+USE `sachicxu_musicstore` ;
 
 -- -----------------------------------------------------
--- Table `e1995655`.`Utilisateurs`
+-- Table `sachicxu_musicstore`.`utilisateurs`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e1995655`.`utilisateurs` (
+CREATE TABLE IF NOT EXISTS `sachicxu_musicstore`.`utilisateurs` (
   `utilisateur_id` INT NOT NULL AUTO_INCREMENT,
   `utilisateur_nom` VARCHAR(255) NOT NULL,
   `utilisateur_prenom` VARCHAR(255) NOT NULL,
@@ -16,9 +16,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e1995655`.`Clients`
+-- Table `sachicxu_musicstore`.`clients`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e1995655`.`clients` (
+CREATE TABLE IF NOT EXISTS `sachicxu_musicstore`.`clients` (
   `client_id` INT NOT NULL AUTO_INCREMENT,
   `client_nom` VARCHAR(255) NOT NULL,
   `client_prenom` VARCHAR(255) NOT NULL,
@@ -34,9 +34,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e1995655`.`Categories`
+-- Table `sachicxu_musicstore`.`Categories`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e1995655`.`categories` (
+CREATE TABLE IF NOT EXISTS `sachicxu_musicstore`.`categories` (
   `categorie_id` INT NOT NULL AUTO_INCREMENT,
   `categorie_nom` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`categorie_id`))
@@ -44,29 +44,27 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e1995655`.`Produits`
+-- Table `sachicxu_musicstore`.`Produits`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e1995655`.`produits` (
+CREATE TABLE IF NOT EXISTS `sachicxu_musicstore`.`produits` (
   `produit_id` INT NOT NULL AUTO_INCREMENT,
   `produit_nom` VARCHAR(255) NOT NULL,
   `produit_description` VARCHAR(255) NOT NULL,
   `produit_prix` DECIMAL(8,2) NOT NULL,
   `produit_quantite` INT NOT NULL,
-  `fk_categorie_id` INT NOT NULL,
+  `fk_categorie_id` INT,
   PRIMARY KEY (`produit_id`),
-  INDEX `fk_Produits_Catégories1_idx` (`fk_categorie_id` ASC),
-  CONSTRAINT `fk_Produits_Catégories1`
+  INDEX `fk_produits_catégories1_idx` (`fk_categorie_id` ASC),
+  CONSTRAINT `fk_produits_catégories1`
     FOREIGN KEY (`fk_categorie_id`)
-    REFERENCES `e1995655`.`categories` (`categorie_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `sachicxu_musicstore`.`categories` (`categorie_id`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e1995655`.`Commandes`
+-- Table `sachicxu_musicstore`.`Commandes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e1995655`.`commandes` (
+CREATE TABLE IF NOT EXISTS `sachicxu_musicstore`.`commandes` (
   `commande_id` INT NOT NULL AUTO_INCREMENT,
   `commande_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `commande_adresse` VARCHAR(255) NOT NULL,
@@ -77,33 +75,33 @@ CREATE TABLE IF NOT EXISTS `e1995655`.`commandes` (
   `commande_commentaires` VARCHAR(255) NULL,
   `fk_client_id` INT NOT NULL,
   PRIMARY KEY (`commande_id`),
-  INDEX `fk_Commandes_Clients_idx` (`fk_client_id` ASC),
-  CONSTRAINT `fk_Commandes_Clients`
+  INDEX `fk_commandes_clients_idx` (`fk_client_id` ASC),
+  CONSTRAINT `fk_commandes_clients`
     FOREIGN KEY (`fk_client_id`)
-    REFERENCES `e1995655`.`clients` (`client_id`)
+    REFERENCES `sachicxu_musicstore`.`clients` (`client_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e1995655`.`Commandes_Produits`
+-- Table `sachicxu_musicstore`.`Commandes_Produits`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e1995655`.`commandes_produits` (
+CREATE TABLE IF NOT EXISTS `sachicxu_musicstore`.`commandes_produits` (
   `fk_commande_id` INT NOT NULL,
   `fk_produit_id` INT NOT NULL,
   `commande_produit_quantite` INT NOT NULL,
   PRIMARY KEY (`fk_produit_id`, `fk_commande_id`),
-  INDEX `fk_Commandes_has_Produits_Produits1_idx` (`fk_produit_id` ASC),
-  INDEX `fk_Commandes_has_Produits_Commandes1_idx` (`fk_commande_id` ASC),
-  CONSTRAINT `fk_Commandes_has_Produits_Commandes1`
+  INDEX `fk_commandes_has_produits_produits1_idx` (`fk_produit_id` ASC),
+  INDEX `fk_commandes_has_produits_Commandes1_idx` (`fk_commande_id` ASC),
+  CONSTRAINT `fk_commandes_has_produits_commandes1`
     FOREIGN KEY (`fk_commande_id`)
-    REFERENCES `e1995655`.`commandes` (`commande_id`)
+    REFERENCES `sachicxu_musicstore`.`commandes` (`commande_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Commandes_has_Produits_Produits1`
+  CONSTRAINT `fk_commandes_has_produits_produits1`
     FOREIGN KEY (`fk_produit_id`)
-    REFERENCES `e1995655`.`produits` (`produit_id`)
+    REFERENCES `sachicxu_musicstore`.`produits` (`produit_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -114,14 +112,14 @@ ENGINE = InnoDB;
 INSERT INTO 
   utilisateurs (utilisateur_nom, utilisateur_prenom, utilisateur_email, utilisateur_mdp, utilisateur_type)
 VALUES
-  ("Pignot", "Sacha", "admin@e1995655.com", SHA2('admin', 256), "administrateur"),
+  ("Pignot", "Sacha", "admin@sachicxu_musicstore.com", SHA2('admin', 256), "administrateur"),
 
-  ("Marc", "Jean", "Jean@e1995655.com", SHA2('jean', 256), "gestionnaire"),
-  ("Mazi", "Jeanne", "Jeanne@e1995655.com", SHA2('jeanne', 256), "gestionnaire"),
+  ("Marc", "Jean", "Jean@sachicxu_musicstore.com", SHA2('jean', 256), "gestionnaire"),
+  ("Mazi", "Jeanne", "Jeanne@sachicxu_musicstore.com", SHA2('jeanne', 256), "gestionnaire"),
 
-  ("Lopez", "Carlos", "Carlos@e1995655.com", SHA2('carle', 256), "vendeur"),
-  ("Laza", "Clara", "Clara@e1995655.com", SHA2('clara', 256), "vendeur"),
-  ("Ledragon", "Elliotte", "Elliotte@e1995655.com", SHA2('elliotte', 256), "vendeur");
+  ("Lopez", "Carlos", "Carlos@sachicxu_musicstore.com", SHA2('carle', 256), "vendeur"),
+  ("Laza", "Clara", "Clara@sachicxu_musicstore.com", SHA2('clara', 256), "vendeur"),
+  ("Ledragon", "Elliotte", "Elliotte@sachicxu_musicstore.com", SHA2('elliotte', 256), "vendeur");
 
 -- -----------------------------------------------------
 -- Insertion de données dans la table "categories"
@@ -178,7 +176,8 @@ VALUES
   ("Colimbourd", "Colette", "514-555-5656", "colimbourd.colette@gmail.com", "5539 boulevard de la Mort", "app.666", "Laval", "G6J 6S6"),
   ("Bavoie", "Rose", "514-226-4419", "bavoie.rose@gmail.com", "563 rue Lejour", NULL, "Longueuil", "H3G 5V4"),
   ("Boulet", "Pierre", "450-392-3611", "boulet.pierre@gmail.com", "3 rue Lanuit", "app.306", "Montréal", "H2J 9B6"),
-  ("Viget", "Roxane", "514-223-4596", "roxane.viget@gmail.com", "1 rue du Manoir", NULL, "Montréal", "V9E 8L2");
+  ("Viget", "Roxane", "514-223-4596", "roxane.viget@gmail.com", "1 rue du Manoir", NULL, "Montréal", "V9E 8L2"),
+  ("Testitos", "Jean", "514-853-6596", "jean.testitos@gmail.com", "2 rue de la Beauté", NULL, "Longueuil", "V9L 6N2");
 
 -- -----------------------------------------------------
 -- Insertion de données dans la table "Commandes"

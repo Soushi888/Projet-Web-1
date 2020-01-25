@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema musicStore
+-- Schema musicstore
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema musicStore
+-- Schema musicstore
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `musicStore` DEFAULT CHARACTER SET utf8 ;
-USE `musicStore` ;
+CREATE SCHEMA IF NOT EXISTS `musicstore` DEFAULT CHARACTER SET utf8 ;
+USE `musicstore` ;
 
 -- -----------------------------------------------------
--- Table `musicStore`.`Utilisateurs`
+-- Table `musicstore`.`utilisateurs`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `musicStore`.`Utilisateurs` (
+CREATE TABLE IF NOT EXISTS `musicstore`.`utilisateurs` (
   `utilisateur_id` INT NOT NULL AUTO_INCREMENT,
   `utilisateur_nom` VARCHAR(255) NOT NULL,
   `utilisateur_prenom` VARCHAR(255) NOT NULL,
@@ -33,9 +33,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `musicStore`.`Clients`
+-- Table `musicstore`.`clients`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `musicStore`.`Clients` (
+CREATE TABLE IF NOT EXISTS `musicstore`.`clients` (
   `client_id` INT NOT NULL AUTO_INCREMENT,
   `client_nom` VARCHAR(255) NOT NULL,
   `client_prenom` VARCHAR(255) NOT NULL,
@@ -51,9 +51,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `musicStore`.`Categories`
+-- Table `musicstore`.`Categories`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `musicStore`.`Categories` (
+CREATE TABLE IF NOT EXISTS `musicstore`.`categories` (
   `categorie_id` INT NOT NULL AUTO_INCREMENT,
   `categorie_nom` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`categorie_id`))
@@ -61,9 +61,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `musicStore`.`Produits`
+-- Table `musicstore`.`Produits`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `musicStore`.`produits` (
+CREATE TABLE IF NOT EXISTS `musicstore`.`produits` (
   `produit_id` INT NOT NULL AUTO_INCREMENT,
   `produit_nom` VARCHAR(255) NOT NULL,
   `produit_description` VARCHAR(255) NOT NULL,
@@ -71,17 +71,17 @@ CREATE TABLE IF NOT EXISTS `musicStore`.`produits` (
   `produit_quantite` INT NOT NULL,
   `fk_categorie_id` INT,
   PRIMARY KEY (`produit_id`),
-  INDEX `fk_Produits_Catégories1_idx` (`fk_categorie_id` ASC),
-  CONSTRAINT `fk_Produits_Catégories1`
+  INDEX `fk_produits_catégories1_idx` (`fk_categorie_id` ASC),
+  CONSTRAINT `fk_produits_catégories1`
     FOREIGN KEY (`fk_categorie_id`)
-    REFERENCES `musicStore`.`Categories` (`categorie_id`))
+    REFERENCES `musicstore`.`categories` (`categorie_id`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `musicStore`.`Commandes`
+-- Table `musicstore`.`Commandes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `musicStore`.`Commandes` (
+CREATE TABLE IF NOT EXISTS `musicstore`.`commandes` (
   `commande_id` INT NOT NULL AUTO_INCREMENT,
   `commande_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `commande_adresse` VARCHAR(255) NOT NULL,
@@ -92,33 +92,33 @@ CREATE TABLE IF NOT EXISTS `musicStore`.`Commandes` (
   `commande_commentaires` VARCHAR(255) NULL,
   `fk_client_id` INT NOT NULL,
   PRIMARY KEY (`commande_id`),
-  INDEX `fk_Commandes_Clients_idx` (`fk_client_id` ASC),
-  CONSTRAINT `fk_Commandes_Clients`
+  INDEX `fk_commandes_clients_idx` (`fk_client_id` ASC),
+  CONSTRAINT `fk_commandes_clients`
     FOREIGN KEY (`fk_client_id`)
-    REFERENCES `musicStore`.`Clients` (`client_id`)
+    REFERENCES `musicstore`.`clients` (`client_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `musicStore`.`Commandes_Produits`
+-- Table `musicstore`.`Commandes_Produits`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `musicStore`.`Commandes_produits` (
+CREATE TABLE IF NOT EXISTS `musicstore`.`commandes_produits` (
   `fk_commande_id` INT NOT NULL,
   `fk_produit_id` INT NOT NULL,
   `commande_produit_quantite` INT NOT NULL,
   PRIMARY KEY (`fk_produit_id`, `fk_commande_id`),
-  INDEX `fk_Commandes_has_Produits_Produits1_idx` (`fk_produit_id` ASC),
-  INDEX `fk_Commandes_has_Produits_Commandes1_idx` (`fk_commande_id` ASC),
-  CONSTRAINT `fk_Commandes_has_Produits_Commandes1`
+  INDEX `fk_commandes_has_produits_produits1_idx` (`fk_produit_id` ASC),
+  INDEX `fk_commandes_has_produits_Commandes1_idx` (`fk_commande_id` ASC),
+  CONSTRAINT `fk_commandes_has_produits_commandes1`
     FOREIGN KEY (`fk_commande_id`)
-    REFERENCES `musicStore`.`Commandes` (`commande_id`)
+    REFERENCES `musicstore`.`commandes` (`commande_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Commandes_has_Produits_Produits1`
+  CONSTRAINT `fk_commandes_has_produits_produits1`
     FOREIGN KEY (`fk_produit_id`)
-    REFERENCES `musicStore`.`Produits` (`produit_id`)
+    REFERENCES `musicstore`.`produits` (`produit_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -132,7 +132,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- Insertion de données dans la table "utilisateurs"
 -- -----------------------------------------------------
 INSERT INTO 
-  Utilisateurs (utilisateur_nom, utilisateur_prenom, utilisateur_email, utilisateur_mdp, utilisateur_type)
+  utilisateurs (utilisateur_nom, utilisateur_prenom, utilisateur_email, utilisateur_mdp, utilisateur_type)
 VALUES
   ("Pignot", "Sacha", "admin@musicstore.com", SHA2('admin', 256), "administrateur"),
 
@@ -147,7 +147,7 @@ VALUES
 -- Insertion de données dans la table "categories"
 -- -----------------------------------------------------
 INSERT INTO
-  Categories (categorie_nom)
+  categories (categorie_nom)
 VALUES
   ("Accessoires"),
   ("Partitions"),
@@ -163,7 +163,7 @@ VALUES
 -- Insertion de données dans la table "produits"
 -- -----------------------------------------------------
 INSERT INTO
-  Produits (produit_nom, produit_description, produit_prix, produit_quantite, fk_categorie_id)
+  produits (produit_nom, produit_description, produit_prix, produit_quantite, fk_categorie_id)
 VALUES
   ("Bec Vandoren 4AO25", "Bec Vendoren, 25mm d'ouverture, parfait pour étudiants.", 149.99, 32, 1),
   ("Bec Yamaha 4C", "Bec standard, parfait pour débutants.", 43.99, 20, 1),
@@ -190,7 +190,7 @@ VALUES
 -- Insertion de données dans la table "Commandes"
 -- -----------------------------------------------------
 INSERT INTO
-  Clients (client_nom, client_prenom, client_telephone, client_email , client_adresse, client_adresse2, client_ville, client_cp)
+  clients (client_nom, client_prenom, client_telephone, client_email , client_adresse, client_adresse2, client_ville, client_cp)
 VALUES
   ("Pignot", "Sacha", "514-396-4589", "sacha.pignot@gmail.com", "513 rue Regina", "app.12", "Verdun", "H4G 3J4"),
   ("Gilbert", "Josiane", "514-954-4236", "josiane.gilbert@gmail.com", "513 rue Regina", "app.12", "Verdun", "H4G 3J4"),
@@ -205,7 +205,7 @@ VALUES
 -- Insertion de données dans la table "Commandes"
 -- -----------------------------------------------------
 INSERT INTO
-  Commandes (fk_client_id, commande_date, commande_adresse, commande_adresse2, commande_adresse_ville, commande_adresse_cp, commande_etat, commande_commentaires)
+  commandes (fk_client_id, commande_date, commande_adresse, commande_adresse2, commande_adresse_ville, commande_adresse_cp, commande_etat, commande_commentaires)
 VALUES
   (2, "2019-02-13", "513 rue Regina", "app.12", "Verdun", "H4G 3J4", "complète", NULL),
   (5, "2019-05-25", "563 rue Lejour", NULL, "Longueuil", "V9E 8L2", "en cours", NULL),
@@ -220,7 +220,7 @@ VALUES
 -- Insertion de données dans la table "Commandes-Produits"
 -- -----------------------------------------------------
 INSERT INTO
-  Commandes_produits (fk_commande_id, fk_produit_id, commande_produit_quantite)
+  commandes_produits (fk_commande_id, fk_produit_id, commande_produit_quantite)
 VALUES
   (1, 4, 1),
   (1, 5, 1),
