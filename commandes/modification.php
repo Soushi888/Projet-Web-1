@@ -5,12 +5,11 @@ require_once("../inc/connectSession.php");
 
 $categories = ListerCategories($conn);
 
-if (isset($_POST["envoi"])) {
+if (isset($_POST["envoi"])) :
     ModifierCommande($conn, $_POST);
     unset($_SESSION["modification"]);
     header("Location: index.php");
-}
-
+endif;
 ?>
 
 <!DOCTYPE html>
@@ -23,8 +22,6 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <pre><?php print_r($_SESSION) ?></pre>
-
     <h1>Modifier un utilisateur</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
@@ -42,21 +39,22 @@ if (isset($_POST["envoi"])) {
         <form id="commande" action="" method="post">
             <fieldset>
                 <legend>Informations livraison</legend>
+                <input type="hidden" name="id" value="<?= $_SESSION["modification"]["commande_id"] ?>">
                 <label for="client_id">ID client :
                     <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= $_SESSION["modification"]["fk_client_id"] ?>" required></label>
-                <label for="client_adresse">Adresse :
-                    <input name="client_adresse" id="client_adresse" type="text" value="<?= $_SESSION["modification"]["commande_adresse"] ?>" required></label>
-                <label for="client_adresse2">Adresse2 :
-                    <input name="client_adresse2" id="client_adresse2" type="text" value="<?= $_SESSION["modification"]["commande_adresse2"] ?>"></label>
-                <label for="client_ville">Ville :
-                    <input name="client_ville" id="client_ville" type="text" value="<?= $_SESSION["modification"]["commande_adresse_ville"] ?>" required></label>
-                <label for="client_cp">Code postal :
-                    <input name="client_cp" id="client_cp" type="text" value="<?= $_SESSION["modification"]["commande_adresse_cp"]?>" required></label><br>
+                <label for="adresse">Adresse :
+                    <input name="adresse" id="adresse" type="text" value="<?= $_SESSION["modification"]["commande_adresse"] ?>" required></label>
+                <label for="adresse2">Adresse2 :
+                    <input name="adresse2" id="adresse2" type="text" value="<?= $_SESSION["modification"]["commande_adresse2"] ?>"></label>
+                <label for="ville">Ville :
+                    <input name="ville" id="ville" type="text" value="<?= $_SESSION["modification"]["commande_adresse_ville"] ?>" required></label>
+                <label for="cp">Code postal :
+                    <input name="cp" id="cp" type="text" value="<?= $_SESSION["modification"]["commande_adresse_cp"] ?>" required></label><br>
             </fieldset>
             <fieldset>
                 <legend>Information commande</legend>
                 <label for="commande_date">Date (au format "YYYY-MM-DD hh:mm:ss")</label>
-                <input type="text" value="<?= $_SESSION["modification"]["commande_date"]?>">
+                <input type="text" id="commande_date" name="date" value="<?= $_SESSION["modification"]["commande_date"] ?>">
                 <label for="commande_etat">État de la commande</label>
                 <select name="etat" id="commande_etat">
                     <option value="en cours">En cours</option>
@@ -64,7 +62,7 @@ if (isset($_POST["envoi"])) {
                     <option value="annulée">Annulée</option>
                 </select><br><br>
                 <label for="commande_commentaire">Commentaires : </label>
-                <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10"><?= $_SESSION["modification"]["commande_commentaires"]?></textarea>
+                <textarea name="commentaires" id="commande_commentaires" cols="100" rows="10"><?= $_SESSION["modification"]["commande_commentaires"] ?></textarea>
             </fieldset>
             <input type="submit" name="envoi" value="Modifier !">
         </form>

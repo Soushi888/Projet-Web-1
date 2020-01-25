@@ -101,7 +101,7 @@ endif; ?>
         <fieldset>
             <legend>Information commande</legend>
             <label for="commande_commentaire">Commentaires : </label>
-            <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["commande_commentaires"] : "" ?>"></textarea>
+            <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10"><?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["commande_commentaires"] : "" ?></textarea>
         </fieldset>
         <button form="commande" type="submit" name="envoi">Commander</button>
     </form>

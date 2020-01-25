@@ -23,8 +23,6 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <pre><?php print_r($_SESSION) ?></pre>
-
     <h1>Modifier un utilisateur</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
