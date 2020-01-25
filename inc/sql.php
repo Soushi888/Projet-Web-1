@@ -467,7 +467,7 @@ function ListerProduits($conn, $recherche = "")
                 COUNT(CO.fk_commande_id) AS 'nbr_commandes'
             FROM
                 produits AS P
-            INNER JOIN categories AS C
+            LEFT JOIN categories AS C
             ON
                 C.categorie_id = P.fk_categorie_id
             LEFT JOIN commandes_produits AS CO
@@ -839,6 +839,33 @@ function SupprimerClient($conn, $id)
     $req = "DELETE FROM clients WHERE client_id=" . $id;
     if (mysqli_query($conn, $req)) {
         return mysqli_affected_rows($conn);
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction ModifierUtilisateur
+ * Auteur   : Soushi888
+ * Date     : 2020-01-20
+ * But      : modifier une ligne dans la table utilisateurs  
+ * Input    : $conn = contexte de connexion
+ *            $utilisateur = tableau contenant les informations sur le utilisateur à modifier à la BDD
+ * Output   : 1 si ajout effectuée
+ *            0 si aucun ajout
+ */
+function ModifierUtilisateur($conn, $utilisateur)
+{
+    $req = "UPDATE 
+                utilisateurs 
+            SET 
+                utilisateur_nom= ?, utilisateur_prenom = ?, utilisateur_email = ?, utilisateur_mdp = ?, utilisateur_type = ?";
+    $stmt = mysqli_prepare($conn, $req);
+    $utilisateur["mdp"] = hash("sha256", $utilisateur["mdp"]);
+    mysqli_stmt_bind_param($stmt, "sssss", $utilisateur["nom"], $utilisateur["prenom"], $utilisateur["email"], $utilisateur["mdp"], $utilisateur["type"]);
+    if (mysqli_stmt_execute($stmt)) {
+        return mysqli_stmt_affected_rows($stmt);
     } else {
         errSQL($conn);
         exit;

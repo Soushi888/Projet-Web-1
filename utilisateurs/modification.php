@@ -4,7 +4,7 @@ require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
 if (isset($_POST["envoi"])) {
-    AjouterUtilisateur($conn, $_POST);
+    ModifierUtilisateur($conn, $_POST);
     header("Location: index.php");
 }
 
@@ -53,7 +53,7 @@ if (isset($_POST["envoi"])) {
                 <option value="gestionnaire" <?= $_SESSION["modification"]["utilisateur_type"] == "gestionnaire" ? "selected" : "" ?>>Gestionnaire</option>
                 <option value="administrateur" <?= $_SESSION["modification"]["utilisateur_type"] == "administrateur" ? "selected" : "" ?>>Administrateur</option>
             </select><br>
-            <input type="submit" id="envoi" value="Ajouter !">
+            <input type="submit" id="envoi" value="Modifier !">
         </form>
     </main>
 
