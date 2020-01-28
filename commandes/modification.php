@@ -3,8 +3,6 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
-$categories = ListerCategories($conn);
-
 if (isset($_POST["envoi"])) :
     ModifierCommande($conn, $_POST);
     unset($_SESSION["modification"]);

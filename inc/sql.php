@@ -501,12 +501,12 @@ function ListerProduits($conn, $recherche = "")
 }
 
 /**
- * Fonction ListerProduits,
+ * Fonction ListerUtilisateur,
  * Auteur   : Soushi888,,
  * Date     : 17-01-2020,
- * But      : Récupérer les produits et les données associées,
+ * But      : Récupérer les utilisateur et les données associées,
  * Input    : $conn = contexte de connexion,
- *            $recherche = chaîne de caractères pour la recherche de produits (optionnel),
+ *            $recherche = chaîne de caractères pour la recherche de utilisateur (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
 function ListerUtilisateurs($conn, $recherche = "")

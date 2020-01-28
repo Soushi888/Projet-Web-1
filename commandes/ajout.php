@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+unset($_SESSION["commande"]);
+
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
 $liste = ListerProduits($conn, $recherche);
@@ -37,6 +39,7 @@ endif; ?>
 </head>
 
 <body>
+    <pre style="font-size: 1.2rem;"><?= isset($_SESSION["commande"]) ? var_dump($_SESSION["commande"]) : "" ?></pre>
 
     <h1>Catalogue de ventes</h1>
     <h2>
@@ -123,7 +126,7 @@ endif; ?>
                 ?>
                     <tr>
                         <td><?= $produit["produit_nom"] ?></td>
-                        <td><?= $commande["quantité"] ?></td>
+                        <td class="txtcenter"><?= $commande["quantité"] ?></td>
                         <?php $prix[] = $commande["quantité"] * $produit["produit_prix"]; ?>
                         <td><?= $prix[$i] ?> $</td>
                     </tr>
@@ -141,7 +144,7 @@ endif; ?>
                 <br>Total =
                 <?php
                 $total = $sous_total * 1.15;
-                echo $total . " $";
+                echo round($total, 2 ) . " $";
                 ?>
             </p>
             <section>
