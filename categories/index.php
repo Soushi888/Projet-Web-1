@@ -26,12 +26,6 @@ if (isset($_POST["categorie"])) {
         $erreurs['categorie'] = "<p class='erreur margin_lef'>Categorie incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
     }
 
-    //-----------------Validation---Modification---Catégorie---------------
-    $nouveau_nom = trim($_POST['nouveau_nom']);
-    if (!preg_match("/^[a-zA-Z\sàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]+$/u", $categorie)) {
-        $erreurs['nouveau_nom'] = "<p class='erreur margin_lef'>Categorie incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
-    }
-
     if (count($erreurs['categorie']) === 0) {
         ajouterCategorie($conn, $categorie);
         $_POST["categorie"] = NULL;
@@ -54,6 +48,12 @@ endif;
 
 if (isset($_POST["confirmeMod"])) :
     if ($_POST["confirmeMod"] == "OK") :
+        //-----------------Validation---Modification---Catégorie---------------
+        $nouveau_nom = trim($_POST['nouveau_nom']);
+        if (!preg_match("/^[a-zA-Z\sàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]+$/u", $nouveau_nom)) {
+            $erreurs['nouveau_nom'] = "<p class='erreur'>Categorie incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
+        }
+
         if (count($erreurs['nouveau_nom']) === 0) :
             $_POST["id"] = $_SESSION["modification"]["categorie_id"];
             ModifierCategorie($conn, $_POST);

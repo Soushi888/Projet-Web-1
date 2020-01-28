@@ -75,7 +75,7 @@ endif;
                 <td><?= $row["produit_nom"] ?></td>
                 <td><?= $row["produit_description"] ?></td>
                 <td><?= $row["produit_prix"] ?> $</td>
-                <td><?= $row["produit_quantite"] ?></td>
+                <td class="txtcenter"><?= $row["produit_quantite"] ?></td>
                 <td><?= $row["categorie_nom"] ?></td>
                 <td class="txtcenter"><?= $row["nbr_commandes"] ?></td>
                 <td><?php if ($row["nbr_commandes"] == 0) : ?>
