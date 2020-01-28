@@ -7,11 +7,38 @@ require_once("../inc/connectSession.php");
 $liste = ListerCategories($conn);
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
+
+
+
+
+
 if (isset($_POST["categorie"])) {
-    $categorie = $_POST["categorie"];
-    ajouterCategorie($conn, $categorie);
-    $_POST["categorie"] = NULL;
-    header("Location: index.php");
+
+    // contrôles des champs saisis
+    // ---------------------------
+
+    $erreurs = array();
+
+
+    //-----------------Validation---Ajout---Catégorie---------------
+    $categorie = trim($_POST['categorie']);
+    if (!preg_match("/^[a-zA-Z\sàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]+$/u", $categorie)) {
+        $erreurs['categorie'] = "<p class='erreur margin_lef'>Categorie incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
+    }
+
+    //-----------------Validation---Modification---Catégorie---------------
+    $nouveau_nom = trim($_POST['nouveau_nom']);
+    if (!preg_match("/^[a-zA-Z\sàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]+$/u", $categorie)) {
+        $erreurs['nouveau_nom'] = "<p class='erreur margin_lef'>Categorie incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
+    }
+
+    if (count($erreurs['categorie']) === 0) {
+        ajouterCategorie($conn, $categorie);
+        $_POST["categorie"] = NULL;
+        header("Location: index.php");
+    } else {
+        $retSQL = "<p class='erreur'>Ajout non effectué.</p>";
+    }
 }
 
 if (isset($_POST["confirme"])) :
@@ -26,11 +53,15 @@ if (isset($_POST["confirme"])) :
 endif;
 
 if (isset($_POST["confirmeMod"])) :
-    if ($_POST["confirmeMod"] == "OK") : 
-        $_POST["id"] = $_SESSION["modification"]["categorie_id"];
-        ModifierCategorie($conn, $_POST);
-        unset($_SESSION["modification"]);
-        header("Location: index.php");
+    if ($_POST["confirmeMod"] == "OK") :
+        if (count($erreurs['nouveau_nom']) === 0) :
+            $_POST["id"] = $_SESSION["modification"]["categorie_id"];
+            ModifierCategorie($conn, $_POST);
+            unset($_SESSION["modification"]);
+            header("Location: index.php");
+        else :
+            $retSQL = "<p class='erreur'>Modification non effectuée.</p>";
+        endif;
     elseif ($_POST["confirmeMod"] == "NON") :
         echo "<p class='erreur'>modification non effectuée !</p>";
         unset($_SESSION["modification"]);
@@ -48,6 +79,7 @@ endif;
 </head>
 
 <body>
+    <?= isset($retSQL) ? $retSQL : ""  ?>
     <h1>Liste des catégories</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
@@ -65,6 +97,7 @@ endif;
             <label>Ajouter une catégorie : </label>
             <input type="text" name="categorie">
             <input type="submit" value="Ajouter">
+            <?= isset($erreurs['categorie']) ? $erreurs['categorie'] : ""  ?>
         </fieldset>
     </form>
 
@@ -111,6 +144,7 @@ endif;
             <p>Nouveau nom : </p><input type="text" name="nouveau_nom"><br>
             <input type="submit" name="confirmeMod" value="OK">
             <input type="submit" name="confirmeMod" value="NON">
+            <?= isset($erreurs['nouveau_nom']) ? $erreurs['nouveau_nom'] : "" ?>
         </form>
     <?php endif; ?>
 

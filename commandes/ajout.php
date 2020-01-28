@@ -12,7 +12,6 @@ $liste = ListerProduits($conn, $recherche);
 $client_id = "";
 
 if (isset($_POST["envoi"])) :
-    $i = 0;
     $_SESSION["commande"]["info_client"] = array(
         "client_id" => $_POST["client_id"],
         "client_adresse" => $_POST["client_adresse"],
@@ -39,7 +38,7 @@ endif; ?>
 </head>
 
 <body>
-    <pre style="font-size: 1.2rem;"><?= isset($_SESSION["commande"]) ? var_dump($_SESSION["commande"]) : "" ?></pre>
+    <pre style="font-size: 1.2rem;"><?= isset($_SESSION["commande"]) ? print_r($_SESSION["commande"]) : "" ?></pre>
 
     <h1>Catalogue de ventes</h1>
     <h2>
@@ -58,6 +57,20 @@ endif; ?>
     </form>
 
     <form id="commande" action="" method="post">
+        <fieldset>
+            <legend>Informations livraison</legend>
+            <label for="client_id">ID client :
+                <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required></label>
+            <label for="client_adresse">Adresse :
+                <input name="client_adresse" id="client_adresse" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_adresse"] : "" ?>" required></label>
+            <label for="client_adresse2">Adresse2 :
+                <input name="client_adresse2" id="client_adresse2" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_adresse2"] : "" ?>"></label>
+            <label for="client_ville">Ville :
+                <input name="client_ville" id="client_ville" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_ville"] : "" ?>" required></label>
+            <label for="client_cp">Code postal :
+                <input name="client_cp" id="client_cp" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_cp"] : "" ?>" required></label><br>
+        </fieldset>
+
         <fieldset>
             <legend>Produits à commander</legend>
             <table>
@@ -89,23 +102,11 @@ endif; ?>
         </fieldset>
 
         <fieldset>
-            <legend>Informations livraison</legend>
-            <label for="client_id">ID client :
-                <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required></label>
-            <label for="client_adresse">Adresse :
-                <input name="client_adresse" id="client_adresse" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_adresse"] : "" ?>" required></label>
-            <label for="client_adresse2">Adresse2 :
-                <input name="client_adresse2" id="client_adresse2" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_adresse2"] : "" ?>"></label>
-            <label for="client_ville">Ville :
-                <input name="client_ville" id="client_ville" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_ville"] : "" ?>" required></label>
-            <label for="client_cp">Code postal :
-                <input name="client_cp" id="client_cp" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_cp"] : "" ?>" required></label><br>
-        </fieldset>
-        <fieldset>
             <legend>Information commande</legend>
             <label for="commande_commentaire">Commentaires : </label>
             <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10"><?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["commande_commentaires"] : "" ?></textarea>
         </fieldset>
+
         <button form="commande" type="submit" name="envoi">Commander</button>
     </form>
 
@@ -144,7 +145,7 @@ endif; ?>
                 <br>Total =
                 <?php
                 $total = $sous_total * 1.15;
-                echo round($total, 2 ) . " $";
+                echo round($total, 2) . " $";
                 ?>
             </p>
             <section>

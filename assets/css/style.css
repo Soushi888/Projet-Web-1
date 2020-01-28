@@ -68,6 +68,10 @@ th, td {
     margin-left: 20px;
 }
 
+.margin_top {
+    margin-top: 20px;
+}
+
 #main_menu fieldset > fieldset {
     margin-bottom: 0px;
 }
