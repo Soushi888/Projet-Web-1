@@ -83,3 +83,7 @@ th, td {
 #main_menu button a {
     padding-right: 0px;
 }
+
+#tableau-commande {
+    margin-left: 50%;
+}

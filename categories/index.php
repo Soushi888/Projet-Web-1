@@ -26,7 +26,7 @@ if (isset($_POST["categorie"])) {
         $erreurs['categorie'] = "<p class='erreur margin_lef'>Categorie incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
     }
 
-    if (count($erreurs['categorie']) === 0) {
+    if (!$erreurs['categorie']) {
         ajouterCategorie($conn, $categorie);
         $_POST["categorie"] = NULL;
         header("Location: index.php");
@@ -54,13 +54,13 @@ if (isset($_POST["confirmeMod"])) :
             $erreurs['nouveau_nom'] = "<p class='erreur'>Categorie incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
         }
 
-        if (count($erreurs['nouveau_nom']) === 0) :
+        if (!$erreurs['nouveau_nom']) :
             $_POST["id"] = $_SESSION["modification"]["categorie_id"];
             ModifierCategorie($conn, $_POST);
             unset($_SESSION["modification"]);
             header("Location: index.php");
         else :
-            $retSQL = "<p class='erreur'>Modification non effectuée.</p>";
+            $retSQL = "<p class='erreur'>Modification non effectuée. Veuillez utiliser seulement des lettre et traits d'union.</p>";
         endif;
     elseif ($_POST["confirmeMod"] == "NON") :
         echo "<p class='erreur'>modification non effectuée !</p>";

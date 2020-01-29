@@ -8,33 +8,33 @@ $categories = ListerCategories($conn);
 if (isset($_POST["envoi"])) {
 
     // contrôles des champs saisis
-    // ---------------------------
+
 
     $erreurs = array();
 
 
-    //-----------------Validation---Nom---------------
+    // validation nom
     $nom = trim($_POST['nom']);
-    if (!preg_match("/^[a-zA-Z1-9sàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð- ]+$/u", $nom)) {
+    if (!preg_match("/^^[ 0-9a-zA-Z\sàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]+$/u", $nom)) {
         $erreurs['nom'] = "<p class='erreur margin_left'>Nom incorrect. Veuillez utiliser seulement des lettre et traits d'union.</p>";
     }
 
-    //-----------------Validation---prix---------------
+    // validation prix
     $prix = trim($_POST['prix']);
-    if (!preg_match('/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/', $prix)) {
+    if (!preg_match('/^[\d]*\.?[\d]{0,2}$/', $prix)) {
         $erreurs['prix'] = "<p class='erreur margin_left'>prix incorrect.</p>";
     }
 
-    //-----------------Validation---quantité---------------
+    // validation quantité
     $quantite = trim($_POST['quantite']);
-    if (!preg_match('/^0-9{1-5}$/', $quantite)) {
-        $erreurs['quantite'] = "<p class='erreur margin_left'>La quantité doit un être un nombre entre 0 et 10 000.</p>";
+    if (!preg_match('/[0-9]{1,5}$/', $quantite)) {
+        $erreurs['quantite'] = "<p class='erreur margin_left'>La quantité doit un être un nombre entre 0 et 99 999.</p>";
     }
 
     // insertion dans la table produits si aucune erreur
     // -----------------------------------------------
 
-    if (count($erreurs) === 0) {
+    if (count($erreurs) == 0) {
         AjouterProduit($conn, $_POST);
         header("Location: index.php");
     }
@@ -70,7 +70,7 @@ if (isset($_POST["envoi"])) {
         <label for="nom">Nom : </label>
         <input type="text" name="nom" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?><br>
         <label for="description">Description : </label>
-        <textarea name="description" id="description" cols="50" rows="3"></textarea><?= isset($erreurs['description']) ? $erreurs['description'] : "" ?><br>
+        <textarea name="description" id="description" cols="50" rows="3" required></textarea><br>
         <label for="prix">Prix : </label>
         <input type="text" name="prix" required><?= isset($erreurs['prix']) ? $erreurs['prix'] : "" ?><br>
         <label for="quantite">Quantité : </label>

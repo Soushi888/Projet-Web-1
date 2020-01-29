@@ -3,10 +3,46 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$adresse2 = NULL;
+
 if (isset($_POST["envoi"])) :
-    ModifierCommande($conn, $_POST);
-    unset($_SESSION["modification"]);
-    header("Location: index.php");
+
+    // contrôles des champs saisis
+
+    $erreurs = array();
+
+
+    // Validation ID client
+    $client_id = trim($_POST['client_id']);
+    if (!is_numeric($client_id)) {
+        $erreurs['client_id'] = "<p class='erreur margin_left'>Le ID du client doit être un numéro.</p>";
+    }
+
+    // Validation adresse de livraison 1 et 2
+    $adresse = trim($_POST['adresse']);
+    if (!preg_match("/^[\d]{1,5} [a-zA-ZsàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]+ [a-zA-ZsàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð -]+$/", $adresse)) {
+        $erreurs['adresse'] = "<p class='erreur margin_left'>L'adresse doit être au format '[numero civique] [rue/avenue/boulevard] [nom de rue/avenue/boulevard]'.</p>";
+    }
+
+    $ville = trim($_POST['ville']);
+    if (!preg_match("/^[a-zA-ZsàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]*$/", $ville)) {
+        $erreurs['ville'] = "<p class='erreur margin_left'>La ville ne doit contenir que des lettres et des traits d'union.</p>";
+    }
+
+    $cp = trim($_POST['cp']);
+    if (!preg_match("/^[a-zA-Z][\d][a-zA-z] [\d][a-zA-z][\d]$/", $cp)) {
+        $erreurs['cp'] = "<p class='erreur margin_left'>Le code postal doit être au format 'X1Y 2Z3'.</p>";
+    }
+
+
+    $commentaires =  isset($_POST['commande_commentaires']) ? trim($_POST['commande_commentaires']) : NULL;
+
+    if (count($erreurs) == 0) :
+        if ($adresse2 == "")  $_POST['adresse2'] = NULL;
+        ModifierCommande($conn, $_POST);
+        unset($_SESSION["modification"]);
+        header("Location: index.php");
+    endif;
 endif;
 ?>
 
@@ -36,15 +72,15 @@ endif;
                 <legend>Informations livraison</legend>
                 <input type="hidden" name="id" value="<?= $_SESSION["modification"]["commande_id"] ?>">
                 <label for="client_id">ID client :
-                    <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= $_SESSION["modification"]["fk_client_id"] ?>" required></label>
+                    <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= $_SESSION["modification"]["fk_client_id"] ?>" required><?= isset($erreurs['client_id']) ? $erreurs['client_id'] : "" ?></label>
                 <label for="adresse">Adresse :
-                    <input name="adresse" id="adresse" type="text" value="<?= $_SESSION["modification"]["commande_adresse"] ?>" required></label>
+                    <input name="adresse" id="adresse" type="text" value="<?= $_SESSION["modification"]["commande_adresse"] ?>" required><?= isset($erreurs['adresse']) ? $erreurs['adresse'] : "" ?></label>
                 <label for="adresse2">Adresse2 :
-                    <input name="adresse2" id="adresse2" type="text" value="<?= $_SESSION["modification"]["commande_adresse2"] ?>"></label>
+                    <input name="adresse2" id="adresse2" type="text" value="<?= $_SESSION["modification"]["commande_adresse2"] ?>"><?= isset($erreurs['adresse2']) ? $erreurs['adresse2'] : "" ?></label>
                 <label for="ville">Ville :
-                    <input name="ville" id="ville" type="text" value="<?= $_SESSION["modification"]["commande_adresse_ville"] ?>" required></label>
+                    <input name="ville" id="ville" type="text" value="<?= $_SESSION["modification"]["commande_adresse_ville"] ?>" required><?= isset($erreurs['ville']) ? $erreurs['ville'] : "" ?></label>
                 <label for="cp">Code postal :
-                    <input name="cp" id="cp" type="text" value="<?= $_SESSION["modification"]["commande_adresse_cp"] ?>" required></label><br>
+                    <input name="cp" id="cp" type="text" value="<?= $_SESSION["modification"]["commande_adresse_cp"] ?>" required></label><?= isset($erreurs['cp']) ? $erreurs['cp'] : "" ?><br>
             </fieldset>
             <fieldset>
                 <legend>Information commande</legend>

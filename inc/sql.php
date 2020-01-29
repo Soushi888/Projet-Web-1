@@ -656,7 +656,7 @@ function EnregistrerCommande($conn, array $commande)
 
     $stmt = mysqli_prepare($conn, $req);
 
-    mysqli_stmt_bind_param($stmt, "isssss", $commande["info_client"]["client_id"], $commande["info_client"]["client_adresse"], $commande["info_client"]["client_adresse2"], $commande["info_client"]["client_ville"], $commande["info_client"]["client_cp"], $commande["info_client"]["commande_commentaires"]);
+    mysqli_stmt_bind_param($stmt, "isssss", $commande["info_client"]["client_id"], $commande["info_client"]["adresse_livraison"], $commande["info_client"]["adresse2_livraison"], $commande["info_client"]["ville_livraison"], $commande["info_client"]["cp_livraison"], $commande["info_client"]["commande_commentaires"]);
 
     if ($result = mysqli_stmt_execute($stmt)) {
         $row = mysqli_stmt_affected_rows($stmt);

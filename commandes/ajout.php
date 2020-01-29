@@ -3,29 +3,78 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
-unset($_SESSION["commande"]);
-
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
 $liste = ListerProduits($conn, $recherche);
 
-$client_id = "";
+$recapitulatif = false;
+
+$adresse2 = NULL;
 
 if (isset($_POST["envoi"])) :
+
+    // contrôles des champs saisis
+
+    $erreurs = array();
+
+
+    // Validation ID client
+    $client_id = trim($_POST['client_id']);
+    if (!is_numeric($client_id)) {
+        $erreurs['client_id'] = "<p class='erreur margin_left'>Le ID du client doit être un numéro.</p>";
+    }
+
+    // Validation adresse de livraison 1 et 2
+    $adresse = trim($_POST['adresse_livraison']);
+    if (!preg_match("/^[\d]{1,5} [a-zA-ZsàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]+ [a-zA-ZsàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð -]+$/", $adresse)) {
+        $erreurs['adresse_livraison'] = "<p class='erreur margin_left'>L'adresse doit être au format '[numero civique] [rue/avenue/boulevard] [nom de rue/avenue/boulevard]'.</p>";
+    }
+
+    $ville = trim($_POST['ville_livraison']);
+    if (!preg_match("/^[a-zA-ZsàáâäãåèéêëìíîïòóôöõøùúûüÿýñçčšžÀÁÂÄÃÅÈÉÊËÌÍÎÏÒÓÔÖÕØÙÚÛÜŸÝÑßÇŒÆČŠŽ∂ð-]*$/", $ville)) {
+        $erreurs['ville_livraison'] = "<p class='erreur margin_left'>La ville ne doit contenir que des lettres et des traits d'union.</p>";
+    }
+
+    $cp = trim($_POST['cp_livraison']);
+    if (!preg_match("/^[a-zA-Z][\d][a-zA-z] [\d][a-zA-z][\d]$/", $cp)) {
+        $erreurs['cp_livraison'] = "<p class='erreur margin_left'>Le code postal doit être au format 'X1Y 2Z3'.</p>";
+    }
+
+    $commentaires =  trim($_POST['commande_commentaires']);
+
     $_SESSION["commande"]["info_client"] = array(
-        "client_id" => $_POST["client_id"],
-        "client_adresse" => $_POST["client_adresse"],
-        "client_adresse2" => $_POST["client_adresse2"],
-        "client_ville" => $_POST["client_ville"],
-        "client_cp" => $_POST["client_cp"],
-        "commande_commentaires" => $_POST["commande_commentaires"]
+        "client_id" => $client_id,
+        "adresse_livraison" => $adresse,
+        "adresse2_livraison" => $adresse2,
+        "ville_livraison" => $ville,
+        "cp_livraison" => $cp,
+        "commande_commentaires" => $commentaires
     );
+
+
 
     foreach ($_POST as $produit => $quantite) {
         if ($quantite != "" && $quantite != 0 &&  is_numeric($produit)) {
             $_SESSION["commande"]["info_commande"][] = ["produit" => $produit, "quantité" => $quantite];
         }
     }
+
+    if (count($erreurs) == 0) :
+        $recapitulatif = true;
+    endif;
+endif;
+
+if (isset($_POST["confirme"])) : ?>
+    <?php if ($_POST["confirme"] == "OUI") :
+        if ($adresse2 == "")  $_POST['adresse2'] = NULL;
+        EnregistrerCommande($conn, $_SESSION["commande"]); ?>
+        <p class="succes">Commande effectuée avec succès !</p>
+    <?php unset($_SESSION["commande"]);
+
+    elseif ($_POST["confirme"] == "NON") : ?>
+        <p class="erreur">Commande non effectuée !</p>
+<?php unset($_SESSION["commande"]);
+    endif;
 endif; ?>
 
 <!DOCTYPE html>
@@ -38,7 +87,8 @@ endif; ?>
 </head>
 
 <body>
-    <pre style="font-size: 1.2rem;"><?= isset($_SESSION["commande"]) ? print_r($_SESSION["commande"]) : "" ?></pre>
+
+    <pre><?= isset($_SESSION['commande']) ? var_dump($_SESSION['commande']) : "" ?></pre>
 
     <h1>Catalogue de ventes</h1>
     <h2>
@@ -46,6 +96,60 @@ endif; ?>
     </h2>
 
     <?php include("../menu.php"); ?>
+
+    <!-- Tableau récapitulatif de la commande -->
+    <?php if ($recapitulatif && isset($_SESSION['commande']['info_commande'])) : ?>
+        <section id="tableau-commande">
+            <h2>Confirmez la commande ?</h2>
+            <table>
+                <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                </tr>
+                <?php
+                $i = 0;
+                foreach ($_SESSION["commande"]["info_commande"] as $commande) :
+                    $produit = LireProduit($conn, $commande["produit"]);
+                ?>
+                    <tr>
+                        <td><?= $produit["produit_nom"] ?></td>
+                        <td><?= $commande["quantité"] ?></td>
+                        <?php $prix[] = $commande["quantité"] * $produit["produit_prix"]; ?>
+                        <td><?= $prix[$i] ?> $</td>
+                    </tr>
+                <?php
+                    $i++;
+                endforeach; ?>
+            </table>
+            <p class="total">Sous-total =
+                <?php
+                $sous_total = 0;
+                for ($i = 0; $i < count($prix); ++$i) {
+                    $sous_total += $prix[$i];
+                }
+                echo $sous_total . " $"; ?>
+                <br>Total =
+                <?php
+                $total = $sous_total * 1.15;
+                echo $total . " $";
+                ?>
+            </p>
+            <section>
+                <form action="" method="post">
+                    <input type="submit" name="confirme" value="OUI">
+                    <input type="submit" name="confirme" value="NON">
+                </form>
+            </section>
+        </section>
+    <?php
+    elseif (isset($_SESSION["commande"]) && !isset($_SESSION["commande"]["info_commande"])) :
+        unset($_SESSION["commande"]); ?>
+        <p class="erreur">Veuillez selectionner au moins un produit.</p>
+    <?php else :
+        unset($_SESSION["commande"]);
+    endif;
+    ?>
 
     <form id="recherche_form" action="" method="get">
         <fieldset>
@@ -60,15 +164,15 @@ endif; ?>
         <fieldset>
             <legend>Informations livraison</legend>
             <label for="client_id">ID client :
-                <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required></label>
-            <label for="client_adresse">Adresse :
-                <input name="client_adresse" id="client_adresse" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_adresse"] : "" ?>" required></label>
-            <label for="client_adresse2">Adresse2 :
-                <input name="client_adresse2" id="client_adresse2" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_adresse2"] : "" ?>"></label>
-            <label for="client_ville">Ville :
-                <input name="client_ville" id="client_ville" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_ville"] : "" ?>" required></label>
-            <label for="client_cp">Code postal :
-                <input name="client_cp" id="client_cp" type="text" value="<?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["client_cp"] : "" ?>" required></label><br>
+                <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required><?= isset($erreurs['client_id']) ? $erreurs['client_id'] : "" ?></label>
+            <label for="adresse_livraison">Adresse :
+                <input name="adresse_livraison" id="adresse_livraison" type="text" placeholder="123 rue Masson" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse_livraison"] : "" ?>" required><?= isset($erreurs['adresse_livraison']) ? $erreurs['adresse_livraison'] : "" ?></label>
+            <label for="adresse2_livraison">Adresse2 :
+                <input name="adresse2_livraison" id="adresse2_livraison" type="text" placeholder="app. 12" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse2_livraison"] : "" ?>"></label>
+            <label for="ville_livraison">Ville :
+                <input name="ville_livraison" id="ville_livraison" type="text" placeholder="Montréal" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["ville_livraison"] : "" ?>" required><?= isset($erreurs['ville_livraison']) ? $erreurs['ville_livraison'] : "" ?></label>
+            <label for="cp_livraison">Code postal :
+                <input name="cp_livraison" id="cp_livraison" type="text" placeholder="X1Y 2Z3" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["cp_livraison"] : "" ?>" required><?= isset($erreurs['cp_livraison']) ? $erreurs['cp_livraison'] : "" ?></label><br>
         </fieldset>
 
         <fieldset>
@@ -106,74 +210,8 @@ endif; ?>
             <label for="commande_commentaire">Commentaires : </label>
             <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10"><?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["commande_commentaires"] : "" ?></textarea>
         </fieldset>
-
         <button form="commande" type="submit" name="envoi">Commander</button>
     </form>
-
-    <!-- Tableau récapitulatif de la commande -->
-    <?php if (isset($_SESSION["commande"]["info_commande"])) : ?>
-        <section class="tableau-commande">
-            <h2>Confirmez la commande ?</h2>
-            <table>
-                <tr>
-                    <th>Produit</th>
-                    <th>Quantité</th>
-                    <th>Prix</th>
-                </tr>
-                <?php
-                $i = 0;
-                foreach ($_SESSION["commande"]["info_commande"] as $commande) :
-                    $produit = LireProduit($conn, $commande["produit"]);
-                ?>
-                    <tr>
-                        <td><?= $produit["produit_nom"] ?></td>
-                        <td class="txtcenter"><?= $commande["quantité"] ?></td>
-                        <?php $prix[] = $commande["quantité"] * $produit["produit_prix"]; ?>
-                        <td><?= $prix[$i] ?> $</td>
-                    </tr>
-                <?php
-                    $i++;
-                endforeach; ?>
-            </table>
-            <p class="total">Sous-total =
-                <?php
-                $sous_total = 0;
-                for ($i = 0; $i < count($prix); ++$i) {
-                    $sous_total += $prix[$i];
-                }
-                echo $sous_total . " $"; ?>
-                <br>Total =
-                <?php
-                $total = $sous_total * 1.15;
-                echo round($total, 2) . " $";
-                ?>
-            </p>
-            <section>
-                <form action="" method="post">
-                    <input type="submit" name="confirme" value="OUI">
-                    <input type="submit" name="confirme" value="NON">
-                </form>
-            </section>
-        </section>
-        <?php
-        if (isset($_POST["confirme"])) : ?>
-            <?php if ($_POST["confirme"] == "OUI") :
-                EnregistrerCommande($conn, $_SESSION["commande"]); ?>
-                <p class="succes">Commande effectuée avec succès !</p>
-            <?php unset($_SESSION["commande"]);
-
-            elseif ($_POST["confirme"] == "NON") : ?>
-                <p class="erreur">Commande non effectuée !</p>
-        <?php unset($_SESSION["commande"]);
-            endif;
-        endif;
-    elseif (isset($_SESSION["commande"]) && !isset($_SESSION["commande"]["info_commande"])) :
-        unset($_SESSION["commande"]); ?>
-        <p class="erreur">Veuillez selectionner au moins un produit.</p>
-    <?php else :
-        unset($_SESSION["commande"]);
-    endif;
-    ?>
 
 </body>
 
