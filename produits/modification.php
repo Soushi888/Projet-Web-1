@@ -47,11 +47,10 @@ if (isset($_POST["envoi"])) {
 <head>
     <meta charset="UTF-8">
     <title>Modifier un produit</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 
 <body>
-    <pre><?= print_r($_POST) ?></pre>
     <h1>Modifier un produit</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
@@ -75,7 +74,7 @@ if (isset($_POST["envoi"])) {
             <label for="prix">Prix : </label>
             <input type="text" name="prix" value="<?= $_SESSION["modification"]["produit_prix"] ?>" required><?= isset($erreurs['prix']) ? $erreurs['prix'] : "" ?><br>
             <label for="quantite">Quantité : </label>
-            <input type="number" name="quantite" value="<?= $_SESSION["modification"]["produit_quantite"] ?>" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?><br>
+            <input type="number" name="quantite" max="99999" value="<?= $_SESSION["modification"]["produit_quantite"] ?>" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?><br>
             <table>
                 <?php if (count($categories) > 0) : ?>
                     <label>Categorie du produit</label>

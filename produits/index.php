@@ -30,7 +30,7 @@ endif;
 <head>
     <meta charset="UTF-8">
     <title>Catalogue de ventes</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 
 <body>

@@ -26,7 +26,7 @@ if (isset($_POST['envoi'])) {
     <meta charset="UTF-8">
     <meta name="description" content="Authentification">
     <title>Music Store&trade;</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
 <body>
@@ -34,7 +34,7 @@ if (isset($_POST['envoi'])) {
         <h1>Music Store&trade;</h1>
     </header>
     <main>
-        <p>Veuillez vous connecter pour pouvoir accéderà la plateforme : </p>
+        <p>Veuillez vous connecter pour pouvoir accéder à la plateforme : </p>
         <form id="authentification" action="" method="post">
             <fieldset>
                 <legend>Authentification</legend>

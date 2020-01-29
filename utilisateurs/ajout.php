@@ -62,7 +62,7 @@ if (isset($_POST["envoi"])) {
 <head>
     <meta charset="UTF-8">
     <title>Ajouter un utilisateur</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 
 <body>

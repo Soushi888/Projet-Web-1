@@ -27,7 +27,7 @@ if (isset($_POST["envoi"])) {
 
     // validation quantité
     $quantite = trim($_POST['quantite']);
-    if (!preg_match('/[0-9]{1,5}$/', $quantite)) {
+    if ($quantite > 99999) {
         $erreurs['quantite'] = "<p class='erreur margin_left'>La quantité doit un être un nombre entre 0 et 99 999.</p>";
     }
 
@@ -49,7 +49,7 @@ if (isset($_POST["envoi"])) {
 <head>
     <meta charset="UTF-8">
     <title>Ajouter un produit</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 
 <body>
@@ -74,7 +74,7 @@ if (isset($_POST["envoi"])) {
         <label for="prix">Prix : </label>
         <input type="text" name="prix" required><?= isset($erreurs['prix']) ? $erreurs['prix'] : "" ?><br>
         <label for="quantite">Quantité : </label>
-        <input type="number" name="quantite" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?><br>
+        <input type="number" name="quantite" max="99999" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?><br>
         <table>
             <?php if (count($categories) > 0) : ?>
                 <label>Categorie du produit</label>
