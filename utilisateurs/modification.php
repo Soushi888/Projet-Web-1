@@ -62,12 +62,10 @@ if (isset($_POST["envoi"])) {
     <meta charset="UTF-8">
     <title>Modifier un utilisateur</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/validation/validation_utilisateurs.js"></script>
 </head>
 
 <body>
-
-    <pre><?= print_r($_SESSION["modification"]) ?></pre>
-
     <h1>Modifier un utilisateur</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
@@ -84,16 +82,26 @@ if (isset($_POST["envoi"])) {
 
     <main>
         <form action="" method="post">
-            <label for="email">Email :</label>
-            <input type="text" id="email" name="email" value="<?= $_SESSION["modification"]["utilisateur_email"] ?>"><?= isset($erreurs['email']) ? $erreurs['email'] : "" ?><br>
             <label for="nom">Nom :</label>
-            <input type="text" id="nom" name="nom" value="<?= $_SESSION["modification"]["utilisateur_nom"] ?>" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?><br>
+            <input type="text" id="nom" name="nom" value="<?= $_SESSION["modification"]["utilisateur_nom"] ?>" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?>
+            <span class="erreur" id="errNom"></span><br>
+
             <label for="prenom">Prenom :</label>
-            <input type="text" id="prenom" name="prenom" value="<?= $_SESSION["modification"]["utilisateur_prenom"] ?>" required><?= isset($erreurs['prenom']) ? $erreurs['prenom'] : "" ?><br>
+            <input type="text" id="prenom" name="prenom" value="<?= $_SESSION["modification"]["utilisateur_prenom"] ?>" required><?= isset($erreurs['prenom']) ? $erreurs['prenom'] : "" ?>
+            <span class="erreur" id="errPrenom"></span><br>
+
+            <label for="email">Email :</label>
+            <input type="text" id="email" name="email" value="<?= $_SESSION["modification"]["utilisateur_email"] ?>"><?= isset($erreurs['email']) ? $erreurs['email'] : "" ?>
+            <span class="erreur" id="errEmail"></span><br>
+
             <label for="mdp">Mot de passe :</label>
-            <input type="password" id="mdp" name="mdp" required><?= isset($erreurs['mdp']) ? $erreurs['mdp'] : "" ?><br>
+            <input type="password" id="mdp" name="mdp" required><?= isset($erreurs['mdp']) ? $erreurs['mdp'] : "" ?>
+            <span class="erreur" id="errMdp"></span><br>
+
             <label for="mdp_confirm">Confirmer mot de passe :</label>
-            <input type="password" id="mdp_confirm" name="mdp_confirm" required><?= isset($erreurs['mdp_confirm']) ? $erreurs['mdp_confirm'] : "" ?><br>
+            <input type="password" id="mdp_confirm" name="mdp_confirm" required><?= isset($erreurs['mdp_confirm']) ? $erreurs['mdp_confirm'] : "" ?>
+            <span class="erreur" id="errConfMdp"></span><br>
+
             <label for="type">Type :</label>
             <select type="text" id="type" name="type" required>
                 <option value="vendeur" <?= $_SESSION["modification"]["utilisateur_type"] == "vendeur" ? "selected" : "" ?>>Vendeur</option>

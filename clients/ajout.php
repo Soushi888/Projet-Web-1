@@ -87,9 +87,6 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-
-<!-- <pre><?= print_r($liste) ?></pre> -->
-
     <h1>Ajout d'un client</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
