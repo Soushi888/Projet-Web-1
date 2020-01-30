@@ -21,14 +21,14 @@ if (isset($_POST["envoi"])) {
 
     // validation prix
     $prix = trim($_POST['prix']);
-    if (!preg_match('/^[\d]*\.?[\d]{0,2}$/', $prix)) {
+    if (!preg_match('//', $prix)) {
         $erreurs['prix'] = "<p class='erreur margin_left'>prix incorrect.</p>";
     }
 
     // validation quantité
     $quantite = trim($_POST['quantite']);
     if ($quantite > 99999) {
-        $erreurs['quantite'] = "<p class='erreur margin_left'>La quantité doit un être un nombre entre 0 et 99 999.</p>";
+        $erreurs['quantite'] = "<p class='erreur margin_left'></p>";
     }
 
     // insertion dans la table produits si aucune erreur
@@ -50,6 +50,7 @@ if (isset($_POST["envoi"])) {
     <meta charset="UTF-8">
     <title>Ajouter un produit</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/validation/validation_produits.js"></script>
 </head>
 
 <body>
@@ -68,13 +69,22 @@ if (isset($_POST["envoi"])) {
 
     <form action="" method="post">
         <label for="nom">Nom : </label>
-        <input type="text" name="nom" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?><br>
+        <input type="text" name="nom" id="nom" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?>
+        <span class="erreur" id="errNom"></span><br>
+
         <label for="description">Description : </label>
-        <textarea name="description" id="description" cols="50" rows="3" required></textarea><br>
+        <textarea name="description" id="description" cols="50" rows="3" required></textarea>
+        <span class="erreur" id="errDescription"></span><br>
+
+
         <label for="prix">Prix : </label>
-        <input type="text" name="prix" required><?= isset($erreurs['prix']) ? $erreurs['prix'] : "" ?><br>
+        <input type="text" name="prix" id="prix" required><?= isset($erreurs['prix']) ? $erreurs['prix'] : "" ?>
+        <span class="erreur" id="errPrix"></span><br>
+
         <label for="quantite">Quantité : </label>
-        <input type="number" name="quantite" max="99999" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?><br>
+        <input type="number" name="quantite" id="quantite" max="99999" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?>
+        <span class="erreur" id="errQuantite"></span><br>
+
         <table>
             <?php if (count($categories) > 0) : ?>
                 <label>Categorie du produit</label>
@@ -88,7 +98,7 @@ if (isset($_POST["envoi"])) {
         <p class="erreur">Aucune categorie trouvé.</p>
     <?php endif; ?>
 
-    <input type="submit" name="envoi" value="Ajouter !">
+    <input type="submit" name="envoi" id="envoi" value="Ajouter !">
     </form>
 </body>
 

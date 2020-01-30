@@ -76,6 +76,7 @@ endif;
     <meta charset="UTF-8">
     <title>Listes des catégories</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/validation/validation_categories"></script>
 </head>
 
 <body>
@@ -96,7 +97,8 @@ endif;
         <fieldset>
             <label>Ajouter une catégorie : </label>
             <input type="text" id="categorie" name="categorie">
-            <input type="submit" value="Ajouter">
+            <input type="submit" id="envoi" value="Ajouter">
+            <span class="erreur" id="errCategorie"></span>
             <?= isset($erreurs['categorie']) ? $erreurs['categorie'] : ""  ?>
         </fieldset>
     </form>
@@ -104,11 +106,13 @@ endif;
     <?php if (isset($_POST["modifier"])) :
         $_SESSION["modification"] = LireCategorie($conn, $_POST["modifier"]); ?>
         <form action="" method="post">
-            <h2>Modification de la catégorie <?= $_SESSION["modification"]["categorie_id"] . " - " . $_SESSION["modification"]["categorie_nom"] ?></h2>
-            <p>Nouveau nom : </p><input type="text" id="categorie" name="nouveau_nom"><br>
-            <input type="submit" name="confirmeMod" value="OK">
-            <input type="submit" name="confirmeMod" value="NON">
-            <?= isset($erreurs['nouveau_nom']) ? $erreurs['nouveau_nom'] : "" ?>
+            <fieldset>
+                <h2>Modification de la catégorie <?= $_SESSION["modification"]["categorie_id"] . " - " . $_SESSION["modification"]["categorie_nom"] ?></h2>
+                <label for="nouveau_nom">Nouveau nom : </label><input type="text" id="nouveau_nom" name="nouveau_nom">
+                <span class="erreur" id="errNouveau_nom"></span>
+                <input type="submit" id="envoiMod" name="confirmeMod" value="OK">
+                <?= isset($erreurs['nouveau_nom']) ? $erreurs['nouveau_nom'] : "" ?>
+            </fieldset>
         </form>
     <?php endif; ?>
 
@@ -148,7 +152,7 @@ endif;
             <input type="submit" name="confirme" value="NON">
         </form>
     <?php endif; ?>
-    
+
 </body>
 
 </html>

@@ -84,6 +84,7 @@ endif; ?>
     <meta charset="UTF-8">
     <title>Catalogue de ventes</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/validation/validation_commandes.js"></script>
 </head>
 
 <body>
@@ -164,15 +165,15 @@ endif; ?>
         <fieldset>
             <legend>Informations livraison</legend>
             <label for="client_id">ID client :
-                <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required><?= isset($erreurs['client_id']) ? $erreurs['client_id'] : "" ?></label>
+                <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required><?= isset($erreurs['client_id']) ? $erreurs['client_id'] : "" ?></label><span class="erreur" id="errID"></span>
             <label for="adresse_livraison">Adresse :
-                <input name="adresse_livraison" id="adresse_livraison" type="text" placeholder="123 rue Masson" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse_livraison"] : "" ?>" required><?= isset($erreurs['adresse_livraison']) ? $erreurs['adresse_livraison'] : "" ?></label>
+                <input name="adresse_livraison" id="adresse_livraison" type="text" placeholder="123 rue Masson" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse_livraison"] : "" ?>" required><?= isset($erreurs['adresse_livraison']) ? $erreurs['adresse_livraison'] : "" ?></label><span class="erreur" id="errAdresse"></span>
             <label for="adresse2_livraison">Adresse2 :
                 <input name="adresse2_livraison" id="adresse2_livraison" type="text" placeholder="app. 12" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse2_livraison"] : "" ?>"></label>
             <label for="ville_livraison">Ville :
-                <input name="ville_livraison" id="ville_livraison" type="text" placeholder="Montréal" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["ville_livraison"] : "" ?>" required><?= isset($erreurs['ville_livraison']) ? $erreurs['ville_livraison'] : "" ?></label>
+                <input name="ville_livraison" id="ville_livraison" type="text" placeholder="Montréal" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["ville_livraison"] : "" ?>" required><?= isset($erreurs['ville_livraison']) ? $erreurs['ville_livraison'] : "" ?></label><span class="erreur" id="errVille"></span>
             <label for="cp_livraison">Code postal :
-                <input name="cp_livraison" id="cp_livraison" type="text" placeholder="X1Y 2Z3" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["cp_livraison"] : "" ?>" required><?= isset($erreurs['cp_livraison']) ? $erreurs['cp_livraison'] : "" ?></label><br>
+                <input name="cp_livraison" id="cp_livraison" type="text" placeholder="X1Y 2Z3" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["cp_livraison"] : "" ?>" required><?= isset($erreurs['cp_livraison']) ? $erreurs['cp_livraison'] : "" ?></label><span class="erreur" id="errCP"></span>
         </fieldset>
 
         <fieldset>
@@ -209,8 +210,8 @@ endif; ?>
             <legend>Information commande</legend>
             <label for="commande_commentaire">Commentaires : </label>
             <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10"><?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["commande_commentaires"] : "" ?></textarea>
-        </fieldset>
-        <button form="commande" type="submit" name="envoi">Commander</button>
+        </fieldset><br>
+        <button form="commande" type="submit" id="envoi" name="envoi">Commander</button>
     </form>
 
 </body>

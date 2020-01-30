@@ -48,6 +48,7 @@ if (isset($_POST["envoi"])) {
     <meta charset="UTF-8">
     <title>Modifier un produit</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/validation/validation_produits.js"></script>
 </head>
 
 <body>
@@ -68,13 +69,22 @@ if (isset($_POST["envoi"])) {
         <form action="" method="post">
             <input type="hidden" name="id" value="<?= $_SESSION["modification"]["produit_id"] ?>">
             <label for="nom">Nom : </label>
-            <input type="text" name="nom" value="<?= $_SESSION["modification"]["produit_nom"] ?>" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?><br>
+
+            <input type="text" name="nom" id="nom" value="<?= $_SESSION["modification"]["produit_nom"] ?>" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?>
+            <span class="erreur" id="errNom"></span><br>
+
             <label for="description">Description : </label>
-            <textarea name="description" id="description" cols="50" rows="3"><?= $_SESSION["modification"]["produit_description"] ?></textarea><br>
+            <textarea name="description" id="description" cols="50" rows="3"><?= $_SESSION["modification"]["produit_description"] ?></textarea>
+            <span class="erreur" id="errDescription"></span><br>
+
             <label for="prix">Prix : </label>
-            <input type="text" name="prix" value="<?= $_SESSION["modification"]["produit_prix"] ?>" required><?= isset($erreurs['prix']) ? $erreurs['prix'] : "" ?><br>
+            <input type="text" name="prix" id="prix" value="<?= $_SESSION["modification"]["produit_prix"] ?>" required><?= isset($erreurs['prix']) ? $erreurs['prix'] : "" ?>
+            <span class="erreur" id="errPrix"></span><br>
+
             <label for="quantite">Quantité : </label>
-            <input type="number" name="quantite" max="99999" value="<?= $_SESSION["modification"]["produit_quantite"] ?>" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?><br>
+            <input type="number" name="quantite" id="quantite" max="99999" value="<?= $_SESSION["modification"]["produit_quantite"] ?>" required><?= isset($erreurs['quantite']) ? $erreurs['quantite'] : "" ?>
+            <span class="erreur" id="errQuantite"></span><br>
+
             <table>
                 <?php if (count($categories) > 0) : ?>
                     <label>Categorie du produit</label>
@@ -88,7 +98,7 @@ if (isset($_POST["envoi"])) {
             <p class="erreur">Aucune categorie trouvé.</p>
         <?php endif; ?>
 
-        <input type="submit" name="envoi" value="Modifier !">
+        <input type="submit" name="envoi" id="envoi" value="Modifier !">
         </form>
     </main>
 
