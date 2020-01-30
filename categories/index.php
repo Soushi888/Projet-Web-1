@@ -95,11 +95,22 @@ endif;
     <form id="ajout_categorie" action="" method="post">
         <fieldset>
             <label>Ajouter une catégorie : </label>
-            <input type="text" name="categorie">
+            <input type="text" id="categorie" name="categorie">
             <input type="submit" value="Ajouter">
             <?= isset($erreurs['categorie']) ? $erreurs['categorie'] : ""  ?>
         </fieldset>
     </form>
+
+    <?php if (isset($_POST["modifier"])) :
+        $_SESSION["modification"] = LireCategorie($conn, $_POST["modifier"]); ?>
+        <form action="" method="post">
+            <h2>Modification de la catégorie <?= $_SESSION["modification"]["categorie_id"] . " - " . $_SESSION["modification"]["categorie_nom"] ?></h2>
+            <p>Nouveau nom : </p><input type="text" id="categorie" name="nouveau_nom"><br>
+            <input type="submit" name="confirmeMod" value="OK">
+            <input type="submit" name="confirmeMod" value="NON">
+            <?= isset($erreurs['nouveau_nom']) ? $erreurs['nouveau_nom'] : "" ?>
+        </form>
+    <?php endif; ?>
 
     <table>
         <tr>
@@ -136,18 +147,8 @@ endif;
             <input type="submit" name="confirme" value="OUI">
             <input type="submit" name="confirme" value="NON">
         </form>
-    <?php endif;
-    if (isset($_POST["modifier"])) :
-        $_SESSION["modification"] = LireCategorie($conn, $_POST["modifier"]); ?>
-        <form action="" method="post">
-            <h2>Modification de la catégorie <?= $_SESSION["modification"]["categorie_id"] . " - " . $_SESSION["modification"]["categorie_nom"] ?></h2>
-            <p>Nouveau nom : </p><input type="text" name="nouveau_nom"><br>
-            <input type="submit" name="confirmeMod" value="OK">
-            <input type="submit" name="confirmeMod" value="NON">
-            <?= isset($erreurs['nouveau_nom']) ? $erreurs['nouveau_nom'] : "" ?>
-        </form>
     <?php endif; ?>
-
+    
 </body>
 
 </html>

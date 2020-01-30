@@ -72,7 +72,7 @@ endif;
             <tr>
                 <td style="text-align: center;"><?= $row["commande_id"] ?></td>
                 <td><?= $row["commande_client"] ?></td>
-                <td><?= $row["commande_date"] ?></td>
+                <td><?= $row["commande_date"] . "<br>" . $row["commande_heure"] ?></td>
                 <td><?= implode("<br>", $row["commande_produit"]) ?></td>
                 <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_prix"]) ?></td>
                 <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_quantite"]) ?></td>

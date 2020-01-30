@@ -255,6 +255,7 @@ function ListerCommandes($conn, $recherche = "")
     C.commande_id as 'commande_id',
     CONCAT(CL.client_prenom, ' ', CL.client_nom) as 'client_nom',
     SUBSTRING(C.commande_date, 1, 10) as 'date',
+    SUBSTRING(C.commande_date, 12, 8) as 'heure',
     P.produit_nom as 'produit',
     CP.commande_produit_quantite as 'quantite',
     P.produit_prix as 'prix',
@@ -284,6 +285,7 @@ function ListerCommandes($conn, $recherche = "")
             $commande_id = "";
             $commande_client = "";
             $commande_date = "";
+            $commande_heure = "";
             $commande_produit = "";
             $commande_produit_quantite = "";
             $commande_produit_prix = "";
@@ -302,6 +304,7 @@ function ListerCommandes($conn, $recherche = "")
                             'commande_id' => $commande_id,
                             'commande_client' => $commande_client,
                             'commande_date' => $commande_date,
+                            'commande_heure' => $commande_heure,
                             'commande_produit' => $commande_produit,
                             'commande_produit_quantite' => $commande_produit_quantite,
                             'commande_produit_prix' => $commande_produit_prix,
@@ -318,6 +321,7 @@ function ListerCommandes($conn, $recherche = "")
                     $commande_id = $row['commande_id'];
                     $commande_client = $row['client_nom'];
                     $commande_date = $row['date'];
+                    $commande_heure = $row['heure'];
                     $commande_produit = [];
                     $commande_produit_prix = [];
                     $commande_produit_quantite = [];
@@ -347,6 +351,7 @@ function ListerCommandes($conn, $recherche = "")
                 'commande_id' => $commande_id,
                 'commande_client' => $commande_client,
                 'commande_date' => $commande_date,
+                'commande_heure' => $commande_heure,
                 'commande_produit' => $commande_produit,
                 'commande_produit_prix' => $commande_produit_prix,
                 'commande_produit_quantite' => $commande_produit_quantite,

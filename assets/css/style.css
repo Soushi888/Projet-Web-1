@@ -52,12 +52,12 @@ th, td {
 .erreur {
     display: inline;
     padding: 3px;
-    background-color: darkred;
+    color: red;
 }
 
 .succes {
     display: inline;
-    background-color: darkgreen;
+    color: darkgreen;
 }
 
 .txtcenter {
