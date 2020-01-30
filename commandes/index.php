@@ -6,7 +6,9 @@ require_once("../inc/connectSession.php");
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
 $liste = ListerCommandes($conn, $recherche);
-
+?>
+ 
+<?php
 if (isset($_POST["confirme"])) :
     if ($_POST["confirme"] == "OUI") :
         SupprimerCommande($conn, $_SESSION["suppression"]["commande_id"]);
@@ -22,7 +24,6 @@ if (isset($_POST["modifier"])) :
     $_SESSION["modification"] = LireCommande($conn, $_POST["modifier"]);
     header("Location: modification.php");
 endif;
-
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +45,7 @@ endif;
 
     <form id="recherche" action="" method="post">
         <fieldset>
-            <label>Recherche par ID commande, nom client ou état commande : </label>
+            <label>Recherche commande : </label>
             <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="ID, nom ou état">
             <input type="submit" value="Recherchez">
             <button class="ajout"><a href="ajout.php">Ajouter</a></button>
@@ -67,7 +68,9 @@ endif;
             <th>Actions</th>
         </tr>
 
-        <?php foreach ($liste as $row) :
+        <?php 
+              
+        foreach ($liste as $row) :
         ?>
             <tr>
                 <td style="text-align: center;"><?= $row["commande_id"] ?></td>
@@ -82,6 +85,7 @@ endif;
                     echo isset($row["commande_adresse2"]) ? "<br>" . $row["commande_adresse2"] : "";
                     echo "<br>" . $row["commande_adresse_ville"] . ", " . $row["commande_adresse_cp"] .
                         "<br>Québec, Canada" ?></td>
+
                 <td><?= $row["commande_commentaires"] ?></td>
                 <td><?= $row["commande_etat"] ?></td>
                 <td>

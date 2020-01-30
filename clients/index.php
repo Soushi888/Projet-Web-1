@@ -44,7 +44,7 @@ endif;
 
     <form id="recherche" action="" method="post">
         <fieldset>
-            <label>Recherche nom client ou prénom du client : </label>
+            <label>Recherche client : </label>
             <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="nom ou prenom">
             <input type="submit" value="Recherchez">
             <button class="ajout"><a href="ajout.php">Ajouter</a></button>

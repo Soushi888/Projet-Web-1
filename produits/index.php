@@ -3,9 +3,22 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
-$recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
+$recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
 $liste = listerProduits($conn, $recherche);
+
+
+// Pagination
+$nombre_par_page = 10;
+$nombreProduits = NombreProduits($conn);
+$nombrePages = round($nombreProduits / 10, 0, PHP_ROUND_HALF_UP);
+
+if (isset($_GET['page_no']) && $_GET['page_no'] != "") {
+    $page_no = $_GET['page_no'];
+} else {
+    $page_no = 1;
+}
+
 
 if (isset($_POST["confirme"])) :
     if ($_POST["confirme"] == "OUI") :
@@ -34,6 +47,9 @@ endif;
 </head>
 
 <body>
+
+    <pre><?= $nombrePages ?></pre>
+
     <h1>Catalogue du vendeur</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
@@ -46,10 +62,10 @@ endif;
     <?php exit;
     endif; ?>
 
-    <form id="recherche" action="" method="post">
+    <form id="recherche" action="" method="get">
         <fieldset>
             <label>Recherche produit : </label>
-            <input type="text" name="recherche" value="<?= $recherche ?>">
+            <input type="text" name="recherche" value="<?= $recherche ?>" placeholder="Nom ou catégorie">
             <input type="submit" value="Recherchez">
             <button class="ajout"><a href="ajout.php">Ajouter</a></button>
         </fieldset>

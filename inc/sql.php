@@ -358,9 +358,9 @@ function ListerCommandes($conn, $recherche = "")
                 'commande_total_ht' => $commande_total_HT,
                 'commande_total_ttc' => $commande_total_TTC,
                 'commande_adresse' => $commande_adresse,
-                'commande_adresse2' => $commande_adresse,
-                'commande_adresse_ville' => $commande_adresse,
-                'commande_adresse_cp' => $commande_adresse,
+                'commande_adresse2' => $commande_adresse2,
+                'commande_adresse_ville' => $commande_adresse_ville,
+                'commande_adresse_cp' => $commande_adresse_cp,
                 'commande_commentaires' => $commande_commentaires,
                 'commande_etat' => $commande_etat
             );
@@ -422,13 +422,15 @@ function ListerClients($conn, $recherche = "")
  * Date     : 17-01-2020,
  * But      : Récupérer la liste des categories,
  * Input    : $conn = contexte de connexion,
+ *            $trie = Colonne de référence pour le trie,
+ *            $sens = Sens dans lequel sera trier la colonne,
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerCategories($conn)
+function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC")
 {
     $req = "SELECT
             C.*,
-            COUNT(P.produit_id) AS 'Nombre de produits'
+            COUNT(P.produit_id) AS 'Nombre_de_produits'
             FROM
                 categories AS C
             LEFT JOIN 
@@ -436,7 +438,9 @@ function ListerCategories($conn)
             ON
                 P.fk_categorie_id = C.categorie_id
             GROUP BY
-                C.categorie_id";
+                C.categorie_id
+            ORDER BY
+                $trie $sens";
 
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
@@ -454,6 +458,7 @@ function ListerCategories($conn)
         exit;
     }
 }
+
 
 /**
  * Fonction ListerProduits,
@@ -479,7 +484,7 @@ function ListerProduits($conn, $recherche = "")
             ON
                 CO.fk_produit_id = P.produit_id
             WHERE
-                (P.produit_nom LIKE ?) OR(C.categorie_nom LIKE ?)
+                (P.produit_nom LIKE ?) OR (C.categorie_nom LIKE ?)
             GROUP BY P.produit_id";
 
     $stmt = mysqli_prepare($conn, $req);
@@ -520,7 +525,8 @@ function ListerUtilisateurs($conn, $recherche = "")
 	            U.*
             FROM
                 utilisateurs as U
-            WHERE (U.utilisateur_nom LIKE ?) OR (U.utilisateur_prenom LIKE ?)";
+            WHERE (U.utilisateur_nom LIKE ?) OR (U.utilisateur_prenom LIKE ?)
+            ORDER BY utilisateur_type";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . $recherche . "%";
@@ -539,6 +545,32 @@ function ListerUtilisateurs($conn, $recherche = "")
         }
         mysqli_free_result($result);
         return $liste;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/** 
+ * Fonction NombreProduits
+ * Auteur : Soushi888,
+ * Date   : 2020-01-30,
+ * But    : Retourne le nombre total de produits,
+ * Arguments en entrée : $conn = contexte de connexion,
+ * Valeurs de retour   : $nombreProduits = nombre total de produits.                       
+ */
+function NombreProduits($conn) {
+    $req = "SELECT COUNT(produit_id) AS 'nombre' FROM produits";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $nombre = $row["nombre"];
+        }
+        mysqli_free_result($result);
+        return $nombre;
     } else {
         errSQL($conn);
         exit;

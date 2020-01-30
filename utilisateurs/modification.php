@@ -95,11 +95,11 @@ if (isset($_POST["envoi"])) {
             <span class="erreur" id="errEmail"></span><br>
 
             <label for="mdp">Mot de passe :</label>
-            <input type="password" id="mdp" name="mdp" required><?= isset($erreurs['mdp']) ? $erreurs['mdp'] : "" ?>
+            <input type="password" id="mdp" name="mdp" value="<?= $_SESSION["modification"]["utilisateur_mdp"] ?>" required><?= isset($erreurs['mdp']) ? $erreurs['mdp'] : "" ?>
             <span class="erreur" id="errMdp"></span><br>
 
             <label for="mdp_confirm">Confirmer mot de passe :</label>
-            <input type="password" id="mdp_confirm" name="mdp_confirm" required><?= isset($erreurs['mdp_confirm']) ? $erreurs['mdp_confirm'] : "" ?>
+            <input type="password" id="mdp_confirm" name="mdp_confirm" value="<?= $_SESSION["modification"]["utilisateur_mdp"] ?>" required><?= isset($erreurs['mdp_confirm']) ? $erreurs['mdp_confirm'] : "" ?>
             <span class="erreur" id="errConfMdp"></span><br>
 
             <label for="type">Type :</label>

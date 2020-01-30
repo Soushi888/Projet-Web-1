@@ -62,7 +62,6 @@ endif;
         <tr>
             <th>ID</th>
             <th>Nom</th>
-            <th>Prénom</th>
             <th>Email</th>
             <th>Type</th>
             <th>Actions</th>
@@ -72,8 +71,7 @@ endif;
         ?>
             <tr>
                 <td style="text-align: center;"><?= $row["utilisateur_id"] ?></td>
-                <td><?= $row["utilisateur_nom"] ?></td>
-                <td><?= $row["utilisateur_prenom"] ?></td>
+                <td><?= $row["utilisateur_nom"] . ", " . $row["utilisateur_prenom"] ?></td>
                 <td><?= $row["utilisateur_email"] ?></td>
                 <td><?= $row["utilisateur_type"] ?></td>
                 <td>
