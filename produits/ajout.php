@@ -99,7 +99,11 @@ if (isset($_POST["envoi"])) {
 
         <input type="submit" name="envoi" id="envoi" value="Ajouter !">
         </form>
+
+        <?php include('../footer.php'); ?>
+
     </main>
 </body>
+
 
 </html>

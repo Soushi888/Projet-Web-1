@@ -10,3 +10,10 @@ nav button {
     margin: auto;
     margin-top: 10px;
 }
+
+@media screen and (max-width: 710px) {
+    nav fieldset {
+        float: none;
+        flex-direction: row;
+    }
+}

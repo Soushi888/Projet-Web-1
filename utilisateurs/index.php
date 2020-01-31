@@ -51,6 +51,7 @@ endif;
     <meta charset="UTF-8">
     <title>Listes des utilisateurs</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://code.iconify.design/1/1.0.3/iconify.min.js"></script>
 </head>
 
 <body>
@@ -60,7 +61,7 @@ endif;
     include("../menu.php"); // Menu de navigation
 
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
-        <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
+        <section><p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p></section>
     <?php exit;
     endif; ?>
 
@@ -69,7 +70,7 @@ endif;
             <fieldset>
                 <label>Recherche utilisateur : </label>
                 <input type="text" name="recherche" value="<?= $recherche ?>">
-                <input type="submit" value="Recherchez">
+                <input type="submit" value="rechercher">
                 <button class="ajout"><a href="ajout.php">Ajouter</a></button>
             </fieldset>
         </form>
@@ -94,16 +95,16 @@ endif;
                     <td><?= $row["utilisateur_nom"] . ", " . $row["utilisateur_prenom"] ?></td>
                     <td><?= $row["utilisateur_email"] ?></td>
                     <td><?= $row["utilisateur_type"] ?></td>
-                    <td>
+                    <td class="actions">
                         <form action="" method="post">
                             <input type="hidden" name="supprimer" value="<?= $row["utilisateur_id"] ?>">
                             <input type="hidden" name="email" value="<?= $row["utilisateur_email"] ?>">
-                            <input type="submit" value="Supprimer">
+                            <input type="submit" value="supprimer">
                         </form>
                         <form action="" method="post">
                             <input type="hidden" name="modifier" value="<?= $row["utilisateur_id"] ?>">
                             <input type="hidden" name="email" value="<?= $row["utilisateur_email"] ?>">
-                            <input type="submit" value="Modifier">
+                            <input type="submit" value="modifier">
                         </form>
                     </td>
                 </tr>
@@ -132,6 +133,9 @@ endif;
         }
         ?>
     </h3>
+
+    <?php include('../footer.php'); ?>
+
 </body>
 
 </html>

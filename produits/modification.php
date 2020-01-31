@@ -60,7 +60,7 @@ if (isset($_POST["envoi"])) {
     include("../menu.php");
 
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur" && ($_SESSION["utilisateur"]["utilisateur_type"] !== "gestionnaire")) : ?>
-        <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
+        <section><p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p></section>
     <?php exit;
     endif; ?>
 
@@ -100,6 +100,8 @@ if (isset($_POST["envoi"])) {
         <input type="submit" name="envoi" id="envoi" value="Modifier !">
         </form>
     </main>
+
+    <?php include('../footer.php'); ?>
 
 </body>
 

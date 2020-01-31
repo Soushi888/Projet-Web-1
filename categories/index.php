@@ -106,6 +106,7 @@ endif;
     <title>Listes des catégories</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="../assets/js/validation/validation_categories"></script>
+    <script src="https://code.iconify.design/1/1.0.3/iconify.min.js"></script>
 </head>
 
 <body>
@@ -225,6 +226,8 @@ endif;
         }
         ?>
     </h3>
+
+    <?php include('../footer.php'); ?>
 
 </body>
 

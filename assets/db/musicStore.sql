@@ -158,6 +158,9 @@ VALUES
   ("Claviers"),
   ("Guitares"),
   ("Batteries");
+  ("Bass");
+  ("Accordéons");
+  ("Violons");
 
 -- -----------------------------------------------------
 -- Insertion de données dans la table "produits"
@@ -200,6 +203,9 @@ VALUES
   ("Boulet", "Pierre", "450-392-3611", "boulet.pierre@gmail.com", "3 rue Lanuit", "app.306", "Montréal", "H2J 9B6"),
   ("Viget", "Roxane", "514-223-4596", "roxane.viget@gmail.com", "1 rue du Manoir", NULL, "Montréal", "V9E 8L2"),
   ("Testitos", "Jean", "514-853-6596", "jean.testitos@gmail.com", "2 rue de la Beauté", NULL, "Longueuil", "V9L 6N2");
+  ("Testitos", "Jean", "514-853-6596", "jean.testitos@gmailo.com", "2 rue de la Beauté", NULL, "Longueuil", "V9L 6N2");
+  ("Testitos", "Jean", "514-853-6596", "jean.testitos@gmaila.com", "2 rue de la Beauté", NULL, "Longueuil", "V9L 6N2");
+  ("Testitos", "Jean", "514-853-6596", "jean.testitos@gmailu.com", "2 rue de la Beauté", NULL, "Longueuil", "V9L 6N2");
 
 -- -----------------------------------------------------
 -- Insertion de données dans la table "Commandes"

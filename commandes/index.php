@@ -34,7 +34,7 @@ for ($i = 0; $i < 10; ++$i) {
 
 $nbrParPage =  $nombres_de_produits_pour_dix_commandes;
 
-$offset = ($pageActuelle - 1) * $nombres_de_produits_pour_dix_commandes;
+$offset = ($pageActuelle - 1) * 10;
 
 
 $liste = ListerCommandes($conn, $recherche, $offset, $nbrParPage);
@@ -67,6 +67,7 @@ endif;
     <meta charset="UTF-8">
     <title>Listes de commandes</title>
     <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="https://code.iconify.design/1/1.0.3/iconify.min.js"></script>
 </head>
 
 <body>
@@ -170,6 +171,7 @@ endif;
     </h3>
 
     <?php include('../footer.php'); ?>
+
 </body>
 
 </html>

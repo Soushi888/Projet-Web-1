@@ -82,7 +82,7 @@ if (isset($_POST["envoi"])) {
 
     // Bloquer l'accès si l'utilisateur n'a pas les bons privilèges
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
-        <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>
+       <section><p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p></section>
     <?php exit;
     endif; ?>
 
@@ -118,6 +118,9 @@ if (isset($_POST["envoi"])) {
             <input type="submit" id="envoi" name="envoi" value="Ajouter !">
         </form>
     </main>
+
+    <?php include('../footer.php'); ?>
+
 </body>
 
 </html>
