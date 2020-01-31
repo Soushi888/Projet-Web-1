@@ -72,7 +72,7 @@ endif;
         </fieldset>
     </form>
 
-    <p><?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreCommandes ? $nombreCommandes : (($offset + 1) + 9) ?> / <?= $nombreCommandes ?> commandes affichés</p>
+    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreCommandes ? $nombreCommandes : (($offset + 1) + 9) ?>] / <?= $nombreCommandes ?> commandes affichés</p>
 
     <table>
         <tr>

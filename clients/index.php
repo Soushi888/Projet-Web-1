@@ -6,6 +6,22 @@ require_once("../inc/connectSession.php");
 
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
+// Pagination
+$nombreClients = NombreClients($conn);
+$nombrePages = ceil($nombreClients / 10);
+
+$pageActuelle = 1;
+
+if (isset($_GET['page'])) {
+    $pageActuelle = $_GET['page'];
+} elseif ($pageActuelle > $nombrePages) {
+    $pageActuelle = $nombrePages;
+} else {
+    $pageActuelle = 1;
+}
+
+$offset = ($pageActuelle - 1) * 10;
+
 $liste = ListerClients($conn, $recherche);
 
 if (isset($_POST["confirme"])) :
@@ -53,6 +69,8 @@ endif;
 
     <p><i>* Seuls les clients qui n'ont pas encore commandé peuvent être supprimé.<br><span class="margin_left">Veuillez supprimer les commandes associées à un client pour pouvoir le supprimer.</span></i></p>
 
+    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreClients ? $nombreClients : (($offset + 1) + 9) ?>] / <?= $nombreClients ?> catégories affichés</p>
+
     <table>
         <tr>
             <th>ID</th>
@@ -98,6 +116,19 @@ endif;
             <input type="submit" name="confirme" value="NON">
         </form>
     <?php endif; ?>
+
+    <h3 class="pagination">Nombre de page :
+        <?php
+        for ($i = 1; $i <= $nombrePages; ++$i) {
+            if ($i == $pageActuelle) {
+                echo "[" . $i . "] ";
+            } else {
+                echo "<a href=index.php?page=" . $i . ">" . $i . "</a> ";
+            }
+        }
+        ?>
+    </h3>
+
 </body>
 
 </html>

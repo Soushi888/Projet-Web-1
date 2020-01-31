@@ -6,6 +6,22 @@ require_once("../inc/connectSession.php");
 
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
+// Pagination
+$nombreUtilisateurs = NombreUtilisateurs($conn);
+$nombrePages = ceil($nombreUtilisateurs / 10);
+
+$pageActuelle = 1;
+
+if (isset($_GET['page'])) {
+    $pageActuelle = $_GET['page'];
+} elseif ($pageActuelle > $nombrePages) {
+    $pageActuelle = $nombrePages;
+} else {
+    $pageActuelle = 1;
+}
+
+$offset = ($pageActuelle - 1) * 10;
+
 $liste = ListerUtilisateurs($conn, $recherche);
 
 if (isset($_POST["confirme"])) :
@@ -58,6 +74,8 @@ endif;
         </fieldset>
     </form>
 
+    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreUtilisateurs ? $nombreUtilisateurs : (($offset + 1) + 9) ?>] / <?= $nombreUtilisateurs ?> catégories affichés</p>
+
     <table>
         <tr>
             <th>ID</th>
@@ -98,9 +116,19 @@ endif;
             <input type="submit" name="confirme" value="OUI">
             <input type="submit" name="confirme" value="NON">
         </form>
-
     <?php endif; ?>
 
+    <h3 class="pagination">Nombre de page :
+        <?php
+        for ($i = 1; $i <= $nombrePages; ++$i) {
+            if ($i == $pageActuelle) {
+                echo "[" . $i . "] ";
+            } else {
+                echo "<a href=index.php?page=" . $i . ">" . $i . "</a> ";
+            }
+        }
+        ?>
+    </h3>
 </body>
 
 </html>

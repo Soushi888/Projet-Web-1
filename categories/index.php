@@ -165,7 +165,7 @@ endif;
         </form>
     <?php endif; ?>
 
-    <p><?= $offset + 1 ?>-<?= (($offset + 1) + 10) > $nombreCategories ? $nombreCategories : (($offset + 1) + 10) ?> / <?= $nombreCategories ?> catégories affichés</p>
+    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreCategories ? $nombreCategories : (($offset + 1) + 9) ?>] / <?= $nombreCategories ?> catégories affichés</p>
 
     <table>
         <tr>

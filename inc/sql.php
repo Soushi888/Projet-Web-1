@@ -428,6 +428,33 @@ function ListerCommandes($conn, $recherche = "", $offset, $nbrParPage)
 }
 
 /**
+ * Fonction NombreClients,
+ * Auteur   : Soushi888,
+ * Date     : 30-01-2020,
+ * But      : Récupérer le nombre total de lignes de la table clients,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $nombre = nombre total de lignes de la table clients.
+ */
+function NombreClients($conn)
+{
+    $req = "SELECT COUNT(client_id) AS 'nombre' FROM clients";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $nombre = $row["nombre"];
+        }
+        mysqli_free_result($result);
+        return $nombre;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
  * Fonction ListerClients,
  * Auteur   : Soushi888,,
  * Date     : 17-01-2020,
@@ -617,6 +644,33 @@ function ListerProduits($conn, $recherche = "", $offset, $nbrParPage)
         }
         mysqli_free_result($result);
         return $liste;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction NombreUtilisateurs,
+ * Auteur   : Soushi888,
+ * Date     : 30-01-2020,
+ * But      : Récupérer le nombre total de lignes de la table utilisateurs,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $nombre = nombre total de lignes de la table utilisateurs.
+ */
+function NombreUtilisateurs($conn)
+{
+    $req = "SELECT COUNT(utilisateur_id) AS 'nombre' FROM utilisateurs";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $nombre = $row["nombre"];
+        }
+        mysqli_free_result($result);
+        return $nombre;
     } else {
         errSQL($conn);
         exit;

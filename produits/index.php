@@ -75,7 +75,7 @@ endif;
 
     <p><i>* Seuls les clients qui n'ont pas encore commandé peuvent être supprimé.<br><span class="margin_left">Veuillez supprimer les commandes associées à un produit pour pouvoir le supprimer.</span></i></p>
 
-    <p><?= $offset + 1 ?>-<?= (($offset + 1) + 10) > $nombreProduits ? $nombreProduits : (($offset + 1) + 10) ?> / <?= $nombreProduits ?> produits affichés</p>
+    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreProduits ? $nombreProduits : (($offset + 1) + 9) ?>] / <?= $nombreProduits ?> produits affichés</p>
 
     <table>
         <tr>
