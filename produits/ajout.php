@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Ajouter un produit";
+
 $categories = ListerCategories($conn);
 
 if (isset($_POST["envoi"])) {
@@ -54,13 +56,11 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <?= isset($retSQL) ? $retSQL : "" ?>
-    <h1>Ajout d'un produit</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
+    <?= isset($retSQL) ? $retSQL : "";
 
-    <?php include("../menu.php");
+
+    include("../header.php");
+    include("../menu.php");
 
     if (($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") && ($_SESSION["utilisateur"]["utilisateur_type"] !== "gestionnaire")) : ?>
         <p class='erreur'>Accès refusé, vous devez être gestionnaire ou administrateur pour gérer les produits.</p><br>

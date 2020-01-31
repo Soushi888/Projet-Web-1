@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Liste des commandes";
+
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
 // Pagination
@@ -71,12 +73,11 @@ endif;
 
     <!-- <pre><?= print_r($produitsParCommandes) ?></pre> -->
 
-    <h1>Liste des commandes</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
+    
 
-    <?php include("../menu.php"); ?>
+    <?php 
+    include("../header.php");
+    include("../menu.php"); ?>
 
     <form id="recherche" action="" method="post">
         <fieldset>

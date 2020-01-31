@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Ajouter un client";
+
 $liste = ListerClients($conn);
 
 
@@ -87,12 +89,9 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <h1>Ajout d'un client</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
-
-    <?php include("../menu.php"); ?>
+    <?php 
+    include("../header.php");
+    include("../menu.php"); ?>
 
     <form action="" method="post">
         <label for="nom">Nom : </label>

@@ -3,6 +3,7 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Liste des utilisateurs";
 
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
@@ -22,7 +23,7 @@ if (isset($_GET['page'])) {
 
 $offset = ($pageActuelle - 1) * 10;
 
-$liste = ListerUtilisateurs($conn, $recherche);
+$liste = ListerUtilisateurs($conn, $recherche, $offset, 10);
 
 
 if (isset($_POST["confirme"])) :
@@ -53,12 +54,9 @@ endif;
 </head>
 
 <body>
-    <h1>Liste des utilisateurs</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
     <?= isset($_SESSION["message"]) ? $_SESSION["message"] : "";
 
+    include("../header.php"); // Entête
     include("../menu.php"); // Menu de navigation
 
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>

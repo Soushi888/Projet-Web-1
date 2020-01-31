@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Catalogue des produits";
+
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
 // Pagination
@@ -47,17 +49,14 @@ endif;
 
 <head>
     <meta charset="UTF-8">
-    <title>Catalogue de ventes</title>
+    <title>Catalogue des produits</title>
     <link rel="stylesheet" href="../assets/css/main.css">
 </head>
 
 <body>
-    <h1>Catalogue du vendeur</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
 
-    <?php include("../menu.php");
+    <?php include("../header.php");
+    include("../menu.php");
 
     if (($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") && ($_SESSION["utilisateur"]["utilisateur_type"] !== "gestionnaire")) : ?>
         <p class='erreur'>Accès refusé, vous devez être gestionnaire ou administrateur pour gérer les produits.</p><br>

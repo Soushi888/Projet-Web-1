@@ -464,20 +464,20 @@ function NombreClients($conn)
  *            $recherche = chaîne de caractères pour la recherche de clients (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerClients($conn, $recherche = "")
+function ListerClients($conn, $recherche = "", $offset = "", $nbrParPage = 10000)
 {
     $req = "SELECT CL.*, COUNT(CO.commande_id) AS 'nbr_commandes'
     FROM clients AS CL
     LEFT JOIN
         commandes AS CO ON CL.client_id = CO.fk_client_id
     WHERE (CL.client_nom LIKE ?) OR (CL.client_prenom LIKE ?)
-    GROUP BY
-        CL.client_id";
+    GROUP BY CL.client_id
+    LIMIT ?, ?";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . trim($recherche) . "%";
 
-    mysqli_stmt_bind_param($stmt, "ss", $recherche, $recherche);
+    mysqli_stmt_bind_param($stmt, "ssss", $recherche, $recherche, $offset, $nbrParPage);
 
     if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);
@@ -533,7 +533,7 @@ function NombreCategories($conn)
  *            $sens = Sens dans lequel sera trier la colonne,
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC", $offset, $nbrParPage)
+function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC", $offset = "0", $nbrParPage = 10000)
 {
     $req = "SELECT
             C.*,
@@ -606,7 +606,7 @@ function NombreProduits($conn)
  *            $recherche = chaîne de caractères pour la recherche de produits (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerProduits($conn, $recherche = "", $offset, $nbrParPage)
+function ListerProduits($conn, $recherche = "", $offset = "", $nbrParPage = 10000)
 {
     $req = "SELECT
                 P.*,
@@ -683,19 +683,20 @@ function NombreUtilisateurs($conn)
  *            $recherche = chaîne de caractères pour la recherche de utilisateur (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerUtilisateurs($conn, $recherche = "")
+function ListerUtilisateurs($conn, $recherche = "", $offset = 0, $nbrParPage = 10000)
 {
     $req = "SELECT
 	            U.*
             FROM
                 utilisateurs as U
             WHERE (U.utilisateur_nom LIKE ?) OR (U.utilisateur_prenom LIKE ?)
-            ORDER BY utilisateur_type";
+            ORDER BY utilisateur_type
+            LIMIT ?, ?";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . $recherche . "%";
 
-    mysqli_stmt_bind_param($stmt, "ss", $recherche, $recherche);
+    mysqli_stmt_bind_param($stmt, "ssss", $recherche, $recherche, $offset, $nbrParPage);
 
     if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);

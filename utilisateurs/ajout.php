@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Ajouter un utilisateur";
+
 $liste = ListerUtilisateurs($conn);
 
 if (isset($_POST["envoi"])) {
@@ -74,14 +76,9 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <header>
-        <h1>Ajout d'un utilisateur</h1>
-        <h2>
-            <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-        </h2>
-    </header>
-
-    <?php include("../menu.php"); // Menu de navigation
+    <?php 
+    include("../header.php"); // Entête
+    include("../menu.php"); // Menu de navigation
 
     // Bloquer l'accès si l'utilisateur n'a pas les bons privilèges
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>

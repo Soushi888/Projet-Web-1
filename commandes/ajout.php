@@ -3,9 +3,27 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Enregistrer une commande";
+
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
-$liste = ListerProduits($conn, $recherche);
+// Pagination
+$nombreProduits = NombreProduits($conn);
+$nombrePages = ceil($nombreProduits / 10);
+
+$pageActuelle = 1;
+
+if (isset($_GET['page'])) {
+    $pageActuelle = $_GET['page'];
+} elseif ($pageActuelle > $nombrePages) {
+    $pageActuelle = $nombrePages;
+} else {
+    $pageActuelle = 1;
+}
+
+$offset = ($pageActuelle - 1) * 10;
+
+$liste = listerProduits($conn, $recherche, $offset, 10);
 
 $recapitulatif = false;
 
@@ -91,12 +109,9 @@ endif; ?>
 
     <pre><?= isset($_SESSION['commande']) ? var_dump($_SESSION['commande']) : "" ?></pre>
 
-    <h1>Catalogue de ventes</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
-
-    <?php include("../menu.php"); ?>
+    <?php 
+    include("../header.php");
+    include("../menu.php"); ?>
 
     <!-- Tableau récapitulatif de la commande -->
     <?php if ($recapitulatif && isset($_SESSION['commande']['info_commande'])) : ?>
@@ -176,6 +191,8 @@ endif; ?>
                 <input name="cp_livraison" id="cp_livraison" type="text" placeholder="X1Y 2Z3" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["cp_livraison"] : "" ?>" required><?= isset($erreurs['cp_livraison']) ? $erreurs['cp_livraison'] : "" ?></label><span class="erreur" id="errCP"></span>
         </fieldset>
 
+        <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreProduits ? $nombreProduits : (($offset + 1) + 9) ?>] / <?= $nombreProduits ?> produits affichés</p>
+
         <fieldset>
             <legend>Produits à commander</legend>
             <table>
@@ -205,6 +222,18 @@ endif; ?>
                 <?php endforeach; ?>
             </table>
         </fieldset>
+
+        <h3 class="pagination">Nombre de page :
+        <?php
+        for ($i = 1; $i <= $nombrePages; ++$i) {
+            if ($i == $pageActuelle) {
+                echo "[" . $i . "] ";
+            } else {
+                echo "<a href=ajout.php?page=" . $i . ">" . $i . "</a> ";
+            }
+        }
+        ?>
+    </h3>
 
         <fieldset>
             <legend>Information commande</legend>

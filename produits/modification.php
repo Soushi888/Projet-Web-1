@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Modifier un produit";
+
 $categories = ListerCategories($conn);
 
 if (isset($_POST["envoi"])) {
@@ -52,12 +54,9 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <h1>Modifier un produit</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
     <?= isset($_SESSION["message"]) ? $_SESSION["message"] : "";
 
+    include("../header.php");
     include("../menu.php");
 
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur" && ($_SESSION["utilisateur"]["utilisateur_type"] !== "gestionnaire")) : ?>

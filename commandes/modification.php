@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Modifier une commande";
+
 $adresse2 = NULL;
 
 if (isset($_POST["envoi"])) :
@@ -55,18 +57,14 @@ endif;
 
 <head>
     <meta charset="UTF-8">
-    <title>Modifier un utilisateur</title>
+    <title>Modifier une commande</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="../assets/js/validation/validation_commandes.js"></script>
 </head>
 
 <body>
-    <h1>Modifier un utilisateur</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
     <?= isset($_SESSION["message"]) ? $_SESSION["message"] : "";
-
+    include("../header.php");
     include("../menu.php");
     ?>
 

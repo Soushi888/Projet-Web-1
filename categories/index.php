@@ -3,6 +3,8 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+$titre = "Liste des catégories";
+
 // Pagination
 $nombreCategories = NombreCategories($conn);
 $nombrePages = ceil($nombreCategories / 10);
@@ -107,12 +109,8 @@ endif;
 </head>
 
 <body>
-    <h1>Liste des catégories</h1>
-    <h2>
-        <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
-    </h2>
-
-    <?php include("../menu.php");
+    <?php include("../header.php");
+    include("../menu.php");
 
     if (($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") && ($_SESSION["utilisateur"]["utilisateur_type"] !== "gestionnaire")) : ?>
         <p class='erreur'>Accès refusé, vous devez être gestionnaire ou administrateur pour gérer les catégories.</p><br>
