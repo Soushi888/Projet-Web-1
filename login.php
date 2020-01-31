@@ -29,19 +29,20 @@ if (isset($_POST['envoi'])) {
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
-<body>
+<body id="login">
     <header>
-        <h1>Music Store&trade;</h1>
+        <img src="assets/img/logo.png" alt="Logo de MusicStore" class="logo">
+        <h1 class="titre">Music Store&trade;</h1>
     </header>
     <main>
         <p>Veuillez vous connecter pour pouvoir accéder à la plateforme : </p>
         <form id="authentification" action="" method="post">
-            <fieldset>
+            <fieldset id="Authentification">
                 <legend>Authentification</legend>
-            <label for="email">Adresse courriel : </label>
-                        <input type="text" id="email" name="email" value="" required><br>
-            <label>Mot de passe : </label>
-                        <input type="password" id="mpd" name="mdp" value="" required><br>
+                <div><label for="email">Adresse courriel : </label>
+                    <input type="text" id="email" name="email" value="" required></div><br>
+                <div><label>Mot de passe : </label>
+                    <input type="password" id="mpd" name="mdp" value="" required></div><br>
                 <input type="submit" name="envoi" value="Se connecter">
             </fieldset>
         </form>

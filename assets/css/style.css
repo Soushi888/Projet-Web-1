@@ -1,8 +1,7 @@
 body {
     background-color: #181a1b;
     color: white;
-    padding-bottom: 200px;
-    width: 1080px;
+    width: 100%;
     margin: auto;
 }
 
@@ -14,8 +13,16 @@ a {
     color: #0066a4;
 }
 
+a:hover {
+    color: #F7941D;
+}
+
 a:visited {
     color: #9c09a1;
+}
+
+a:visited:hover {
+    color: #F7941D;
 }
 
 button a {
@@ -49,6 +56,18 @@ table,th, td {
 
 th, td {
     padding: 5px;
+}
+
+section, main {
+    width: max-content;
+    display: block;
+    margin: auto;
+}
+
+.logo {
+    display: block;
+    width: 150px;
+    margin: auto;
 }
 
 .erreur {
@@ -91,5 +110,7 @@ th, td {
 }
 
 #tableau-commande {
-    margin-left: 50%;
+    border: solid #F7941D 2px;
+    padding: 10px;
+    margin-bottom: 10px;
 }

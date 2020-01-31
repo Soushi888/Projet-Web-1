@@ -35,7 +35,7 @@ if (isset($_POST["envoi"])) {
     }
 
     // Vérification que l'adresse email n'est pas déjà utilisée
-    foreach($liste as $clients) {
+    foreach ($liste as $clients) {
         if ($email == $clients["client_email"]) {
             $erreurs["email"] = "<p class='erreur margin_left'>Adresse email déjà utilisée.</p>";
         }
@@ -55,7 +55,7 @@ if (isset($_POST["envoi"])) {
 
     $_POST["adresse2"] = trim($_POST["adresse2"]);
     // Si il n'y a pas d'adresse 2, alors adresse 2 est NULL
-    if ($_POST["adresse2"] == "") { 
+    if ($_POST["adresse2"] == "") {
         $_POST["adresse2"] = NULL;
     }
 
@@ -89,44 +89,46 @@ if (isset($_POST["envoi"])) {
 </head>
 
 <body>
-    <?php 
+    <?php
     include("../header.php");
     include("../menu.php"); ?>
 
-    <form action="" method="post">
-        <label for="nom">Nom : </label>
-        <input type="text" id="nom" name="nom" value="<?= isset($_POST['nom']) ? $_POST['nom'] : "" ?>" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?>
-        <span class="erreur" id="errNom"></span><br>
+    <main>
+        <form action="" method="post">
+            <label for="nom">Nom : </label>
+            <input type="text" id="nom" name="nom" value="<?= isset($_POST['nom']) ? $_POST['nom'] : "" ?>" required><?= isset($erreurs['nom']) ? $erreurs['nom'] : "" ?>
+            <span class="erreur" id="errNom"></span><br>
 
-        <label for="prenom">Prénom : </label>
-        <input type="text" id="prenom" name="prenom" value="<?= isset($_POST['prenom']) ? $_POST['prenom'] : "" ?>" required><?= isset($erreurs['prenom']) ? $erreurs['prenom'] : "" ?>
-        <span class="erreur" id="errPrenom"></span><br>
+            <label for="prenom">Prénom : </label>
+            <input type="text" id="prenom" name="prenom" value="<?= isset($_POST['prenom']) ? $_POST['prenom'] : "" ?>" required><?= isset($erreurs['prenom']) ? $erreurs['prenom'] : "" ?>
+            <span class="erreur" id="errPrenom"></span><br>
 
-        <label for="email">Email : </label>
-        <input type="text" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : "" ?>" required><?= isset($erreurs['email']) ? $erreurs['email'] : "" ?>
-        <span class="erreur" id="errEmail"></span><br>
+            <label for="email">Email : </label>
+            <input type="text" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : "" ?>" required><?= isset($erreurs['email']) ? $erreurs['email'] : "" ?>
+            <span class="erreur" id="errEmail"></span><br>
 
-        <label for="telephone">Téléphone : </label>
-        <input type="text" id="telephone" name="telephone" value="<?= isset($_POST['telephone']) ? $_POST['telephone'] : "" ?>" required><?= isset($erreurs['telephone']) ? $erreurs['telephone'] : "" ?>
-        <span class="erreur" id="errTelephone"></span><br>
+            <label for="telephone">Téléphone : </label>
+            <input type="text" id="telephone" name="telephone" value="<?= isset($_POST['telephone']) ? $_POST['telephone'] : "" ?>" required><?= isset($erreurs['telephone']) ? $erreurs['telephone'] : "" ?>
+            <span class="erreur" id="errTelephone"></span><br>
 
-        <label for="adresse">Adresse : </label>
-        <input type="text" id="adresse" name="adresse" value="<?= isset($_POST['adresse']) ? $_POST['adresse'] : "" ?>" required><?= isset($erreurs['adresse']) ? $erreurs['adresse'] : "" ?>
-        <span class="erreur" id="errAdresse"></span><br>
+            <label for="adresse">Adresse : </label>
+            <input type="text" id="adresse" name="adresse" value="<?= isset($_POST['adresse']) ? $_POST['adresse'] : "" ?>" required><?= isset($erreurs['adresse']) ? $erreurs['adresse'] : "" ?>
+            <span class="erreur" id="errAdresse"></span><br>
 
-        <label for="adresse2">Adresse 2 (optionnel) :</label>
-        <input type="text" id="adresse2" name="adresse2"><br>
+            <label for="adresse2">Adresse 2 (optionnel) :</label>
+            <input type="text" id="adresse2" name="adresse2"><br>
 
-        <label for="ville">Ville : </label>
-        <input type="text" id="ville" name="ville" value="<?= isset($_POST['ville']) ? $_POST['ville'] : "" ?>" required><?= isset($erreurs['ville']) ? $erreurs['ville'] : "" ?>
-        <span class="erreur" id="errVille"></span><br>
+            <label for="ville">Ville : </label>
+            <input type="text" id="ville" name="ville" value="<?= isset($_POST['ville']) ? $_POST['ville'] : "" ?>" required><?= isset($erreurs['ville']) ? $erreurs['ville'] : "" ?>
+            <span class="erreur" id="errVille"></span><br>
 
-        <label for="cp">Code Postal : </label>
-        <input type="text" id="cp" name="cp" value="<?= isset($_POST['cp']) ? $_POST['cp'] : "" ?>" required><?= isset($erreurs['cp']) ? $erreurs['cp'] : "" ?>
-        <span class="erreur" id="errCP"></span><br>
+            <label for="cp">Code Postal : </label>
+            <input type="text" id="cp" name="cp" value="<?= isset($_POST['cp']) ? $_POST['cp'] : "" ?>" required><?= isset($erreurs['cp']) ? $erreurs['cp'] : "" ?>
+            <span class="erreur" id="errCP"></span><br>
 
-        <input type="submit" name="envoi" id="envoi" value="Ajouter !">
-    </form>
+            <input type="submit" name="envoi" id="envoi" value="Ajouter !">
+        </form>
+    </main>
 </body>
 
 </html>

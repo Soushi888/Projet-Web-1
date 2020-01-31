@@ -1,0 +1,33 @@
+#login {
+    display: inline-block;
+    border: #F7941D 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    width: max-content;
+    margin-left: 38%;
+    margin-top: 10%;
+}
+
+#authentification {
+    display: flex;
+    flex-direction: column;
+}
+
+#authentification legend {
+    display: block;
+    margin: auto;
+    color: #F7941D;
+}
+
+
+#authentification div { 
+    display: flex;
+    justify-content: space-around ;
+}
+
+
+#authentification input[type="submit"] {
+    text-align: center;
+    display: block;
+    margin: auto;
+}

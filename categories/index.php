@@ -117,89 +117,101 @@ endif;
     <?php exit;
     endif; ?>
 
-    <form action="" method="get">
-        <fieldset>
-            <legend>Trie</legend>
+    <section>
+        <form action="" method="get">
             <fieldset>
-                <legend>Colonne</legend>
-                <label for="ID_produits">ID :</label>
-                <input type="radio" id="ID_produits" name="colonne" value="categorie_ID" <?= (isset($_GET['colonne']) && $_GET['colonne'] == 'categorie_ID') ? "checked" : "" ?>><br>
-                <label for="noms_produits">Nom :</label>
-                <input type="radio" id="noms_produits" name="colonne" value="categorie_nom" <?= (isset($_GET['colonne']) && $_GET['colonne'] == 'categorie_nom') ? "checked" : "" ?>><br>
-                <label for="nombre_produits">Nombre : </label>
-                <input type="radio" id="nombre_produits" name="colonne" value="Nombre_de_produits" <?= (isset($_GET['colonne']) && $_GET['colonne'] == "Nombre_de_produits") ? "checked" : "" ?>>
+                <legend>Trie</legend>
+                <fieldset>
+                    <legend>Colonne</legend>
+                    <label for="ID_produits">ID :</label>
+                    <input type="radio" id="ID_produits" name="colonne" value="categorie_ID" <?= (isset($_GET['colonne']) && $_GET['colonne'] == 'categorie_ID') ? "checked" : "" ?>><br>
+                    <label for="noms_produits">Nom :</label>
+                    <input type="radio" id="noms_produits" name="colonne" value="categorie_nom" <?= (isset($_GET['colonne']) && $_GET['colonne'] == 'categorie_nom') ? "checked" : "" ?>><br>
+                    <label for="nombre_produits">Nombre : </label>
+                    <input type="radio" id="nombre_produits" name="colonne" value="Nombre_de_produits" <?= (isset($_GET['colonne']) && $_GET['colonne'] == "Nombre_de_produits") ? "checked" : "" ?>>
+                </fieldset>
+                <fieldset>
+                    <legend>Sens</legend>
+                    <label for="">Ascendant</label>
+                    <input type="radio" name="sens" id="ASC" value="ASC" <?= (isset($_GET['sens']) && $_GET['sens'] == 'ASC') ? "checked" : "" ?>><br>
+                    <label for="">Descendant</label>
+                    <input type="radio" name="sens" id="DESC" value="DESC" <?= isset($_GET['sens']) && $_GET['sens'] == 'DESC' ? "checked" : "" ?>>
+                </fieldset>
+                <input type="submit" name="trie" value="Trier"><br><?= isset($erreurs['trie']) ? $erreurs['trie'] : "" ?>
             </fieldset>
-            <fieldset>
-                <legend>Sens</legend>
-                <label for="">Ascendant</label>
-                <input type="radio" name="sens" id="ASC" value="ASC" <?= (isset($_GET['sens']) && $_GET['sens'] == 'ASC') ? "checked" : "" ?>><br>
-                <label for="">Descendant</label>
-                <input type="radio" name="sens" id="DESC" value="DESC" <?= isset($_GET['sens']) && $_GET['sens'] == 'DESC' ? "checked" : "" ?>>
-            </fieldset>
-            <input type="submit" name="trie" value="Trier"><br><?= isset($erreurs['trie']) ? $erreurs['trie'] : "" ?>
-        </fieldset>
-    </form>
+        </form>
+    </section>
 
-    <form id="ajout_categorie" action="" method="post">
-        <fieldset>
-            <label>Ajouter une catégorie : </label>
-            <input type="text" id="categorie" name="categorie">
-            <input type="submit" id="envoi" value="Ajouter">
-            <span class="erreur" id="errCategorie"></span>
-            <?= isset($erreurs['categorie']) ? $erreurs['categorie'] : ""  ?>
-        </fieldset>
-    </form>
+    <section>
+        <form id="ajout_categorie" action="" method="post">
+            <fieldset>
+                <label>Ajouter une catégorie : </label>
+                <input type="text" id="categorie" name="categorie">
+                <input type="submit" id="envoi" value="Ajouter">
+                <span class="erreur" id="errCategorie"></span>
+                <?= isset($erreurs['categorie']) ? $erreurs['categorie'] : ""  ?>
+            </fieldset>
+        </form>
+    </section>
 
     <?php if (isset($_POST["modifier"])) :
         $_SESSION["modification"] = LireCategorie($conn, $_POST["modifier"]); ?>
-        <form action="" method="post">
-            <fieldset>
-                <h2>Modification de la catégorie <?= $_SESSION["modification"]["categorie_id"] . " - " . $_SESSION["modification"]["categorie_nom"] ?></h2>
-                <label for="nouveau_nom">Nouveau nom : </label><input type="text" id="nouveau_nom" name="nouveau_nom">
-                <span class="erreur" id="errNouveau_nom"></span>
-                <input type="submit" id="envoiMod" name="confirmeMod" value="OK">
-                <?= isset($erreurs['nouveau_nom']) ? $erreurs['nouveau_nom'] : "" ?>
-            </fieldset>
-        </form>
+        <section>
+            <form action="" method="post">
+                <fieldset>
+                    <h2>Modification de la catégorie <?= $_SESSION["modification"]["categorie_id"] . " - " . $_SESSION["modification"]["categorie_nom"] ?></h2>
+                    <label for="nouveau_nom">Nouveau nom : </label><input type="text" id="nouveau_nom" name="nouveau_nom">
+                    <span class="erreur" id="errNouveau_nom"></span>
+                    <input type="submit" id="envoiMod" name="confirmeMod" value="OK">
+                    <?= isset($erreurs['nouveau_nom']) ? $erreurs['nouveau_nom'] : "" ?>
+                </fieldset>
+            </form>
+        </section>
     <?php endif; ?>
 
-    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreCategories ? $nombreCategories : (($offset + 1) + 9) ?>] / <?= $nombreCategories ?> catégories affichés</p>
+    <main>
+        <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreCategories ? $nombreCategories : (($offset + 1) + 9) ?>] / <?= $nombreCategories ?> catégories affichés</p>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nom de la catégorie</th>
-            <th>Nombre de produits</th>
-            <th>Actions</th>
-        </tr>
-
-        <?php foreach ($liste as $row) :
-        ?>
+        <table>
             <tr>
-                <td style="text-align: center;"><?= $row["categorie_id"] ?></td>
-                <td><?= $row["categorie_nom"] ?></td>
-                <td class="txtcenter"><?= $row["Nombre_de_produits"] ?></td>
-                <td>
-                    <form action="" method="post">
-                        <input type="hidden" name="supprimer" value="<?= $row["categorie_id"] ?>">
-                        <input type="submit" value="Supprimer">
-                    </form>
-
-                    <form action="" method="post">
-                        <input type="hidden" name="modifier" value="<?= $row["categorie_id"] ?>">
-                        <input type="submit" value="Modifier">
-                    </form>
-                </td>
+                <th>ID</th>
+                <th>Nom de la catégorie</th>
+                <th>Nombre de produits</th>
+                <th>Actions</th>
             </tr>
-        <?php endforeach; ?>
-    </table>
+
+            <?php foreach ($liste as $row) :
+            ?>
+                <tr>
+                    <td style="text-align: center;"><?= $row["categorie_id"] ?></td>
+                    <td><?= $row["categorie_nom"] ?></td>
+                    <td class="txtcenter"><?= $row["Nombre_de_produits"] ?></td>
+                    <td>
+                        <form action="" method="post">
+                            <input type="hidden" name="supprimer" value="<?= $row["categorie_id"] ?>">
+                            <input type="submit" value="Supprimer">
+                        </form>
+
+                        <form action="" method="post">
+                            <input type="hidden" name="modifier" value="<?= $row["categorie_id"] ?>">
+                            <input type="submit" value="Modifier">
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </main>
     <?php if (isset($_POST["supprimer"])) :
         $_SESSION["suppression"] = LireCategorie($conn, $_POST["supprimer"]); ?>
-        <form action="" method="post">
-            <h2>Confirmer la suppression de la catégorie numéro <?= $_SESSION["suppression"]["categorie_id"] . " - " . $_SESSION["suppression"]["categorie_nom"] ?> ?</h2>
-            <input type="submit" name="confirme" value="OUI">
-            <input type="submit" name="confirme" value="NON">
-        </form>
+        <section>
+            <form action="" method="post">
+                <h2>Confirmer la suppression de la catégorie numéro <?= $_SESSION["suppression"]["categorie_id"] . " - " . $_SESSION["suppression"]["categorie_nom"] ?> ?</h2>
+                <section>
+                    <input type="submit" name="confirme" value="OUI">
+                    <input type="submit" name="confirme" value="NON">
+                </section>
+            </form>
+        </section>
     <?php endif; ?>
 
     <h3 class="pagination">Nombre de page :

@@ -93,6 +93,7 @@ endif;
                     <input name="cp" id="cp_livraison" type="text" value="<?= $_SESSION["modification"]["commande_adresse_cp"] ?>" required></label><?= isset($erreurs['cp']) ? $erreurs['cp'] : "" ?>
                 <span class="erreur" id="errCP"></span>
             </fieldset>
+
             <fieldset>
                 <legend>Information commande</legend>
 
@@ -109,7 +110,7 @@ endif;
 
                 <label for="commande_commentaire">Commentaires : </label>
                 <textarea name="commentaires" id="commande_commentaires" cols="100" rows="10"><?= $_SESSION["modification"]["commande_commentaires"] ?></textarea>
-            </fieldset>
+            </fieldset><br>
             <input type="submit" name="envoi" id="envoi" value="Modifier !">
         </form>
     </main>

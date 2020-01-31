@@ -106,10 +106,7 @@ endif; ?>
 </head>
 
 <body>
-
-    <pre><?= isset($_SESSION['commande']) ? var_dump($_SESSION['commande']) : "" ?></pre>
-
-    <?php 
+    <?php
     include("../header.php");
     include("../menu.php"); ?>
 
@@ -167,30 +164,35 @@ endif; ?>
     endif;
     ?>
 
-    <form id="recherche_form" action="" method="get">
-        <fieldset>
-            <legend>Recherche</legend>
-            <label for="recherche">Recherche produit : </label>
-            <input type="text" name="recherche" id="recherche" value="<?= $recherche ?>">
-            <input type="submit" value="Recherchez">
-        </fieldset>
-    </form>
+    <section>
+        <form id="recherche_form" action="" method="get">
+            <fieldset>
+                <legend>Recherche</legend>
+                <label for="recherche">Recherche produit : </label>
+                <input type="text" name="recherche" id="recherche" value="<?= $recherche ?>">
+                <input type="submit" value="Recherchez">
+            </fieldset>
+        </form>
+    </section>
 
-    <form id="commande" action="" method="post">
-        <fieldset>
-            <legend>Informations livraison</legend>
-            <label for="client_id">ID client :
-                <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required><?= isset($erreurs['client_id']) ? $erreurs['client_id'] : "" ?></label><span class="erreur" id="errID"></span>
-            <label for="adresse_livraison">Adresse :
-                <input name="adresse_livraison" id="adresse_livraison" type="text" placeholder="123 rue Masson" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse_livraison"] : "" ?>" required><?= isset($erreurs['adresse_livraison']) ? $erreurs['adresse_livraison'] : "" ?></label><span class="erreur" id="errAdresse"></span>
-            <label for="adresse2_livraison">Adresse2 :
-                <input name="adresse2_livraison" id="adresse2_livraison" type="text" placeholder="app. 12" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse2_livraison"] : "" ?>"></label>
-            <label for="ville_livraison">Ville :
-                <input name="ville_livraison" id="ville_livraison" type="text" placeholder="Montréal" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["ville_livraison"] : "" ?>" required><?= isset($erreurs['ville_livraison']) ? $erreurs['ville_livraison'] : "" ?></label><span class="erreur" id="errVille"></span>
-            <label for="cp_livraison">Code postal :
-                <input name="cp_livraison" id="cp_livraison" type="text" placeholder="X1Y 2Z3" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["cp_livraison"] : "" ?>" required><?= isset($erreurs['cp_livraison']) ? $erreurs['cp_livraison'] : "" ?></label><span class="erreur" id="errCP"></span>
-        </fieldset>
+    <section>
+        <form id="commande" action="" method="post">
+            <fieldset>
+                <legend>Informations livraison</legend>
+                <label for="client_id">ID client :
+                    <input name="client_id" id="client_id" type="number" placeholder="ID" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["client_id"] : "" ?>" required><?= isset($erreurs['client_id']) ? $erreurs['client_id'] : "" ?></label><span class="erreur" id="errID"></span>
+                <label for="adresse_livraison">Adresse :
+                    <input name="adresse_livraison" id="adresse_livraison" type="text" placeholder="123 rue Masson" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse_livraison"] : "" ?>" required><?= isset($erreurs['adresse_livraison']) ? $erreurs['adresse_livraison'] : "" ?></label><span class="erreur" id="errAdresse"></span>
+                <label for="adresse2_livraison">Adresse2 :
+                    <input name="adresse2_livraison" id="adresse2_livraison" type="text" placeholder="app. 12" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["adresse2_livraison"] : "" ?>"></label>
+                <label for="ville_livraison">Ville :
+                    <input name="ville_livraison" id="ville_livraison" type="text" placeholder="Montréal" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["ville_livraison"] : "" ?>" required><?= isset($erreurs['ville_livraison']) ? $erreurs['ville_livraison'] : "" ?></label><span class="erreur" id="errVille"></span>
+                <label for="cp_livraison">Code postal :
+                    <input name="cp_livraison" id="cp_livraison" type="text" placeholder="X1Y 2Z3" value="<?= isset($_SESSION["commande"]["info_client"]) ? $_SESSION["commande"]["info_client"]["cp_livraison"] : "" ?>" required><?= isset($erreurs['cp_livraison']) ? $erreurs['cp_livraison'] : "" ?></label><span class="erreur" id="errCP"></span>
+            </fieldset>
+    </section>
 
+    <main>
         <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreProduits ? $nombreProduits : (($offset + 1) + 9) ?>] / <?= $nombreProduits ?> produits affichés</p>
 
         <fieldset>
@@ -222,8 +224,9 @@ endif; ?>
                 <?php endforeach; ?>
             </table>
         </fieldset>
+    </main>
 
-        <h3 class="pagination">Nombre de page :
+    <h3 class="pagination">Nombre de page :
         <?php
         for ($i = 1; $i <= $nombrePages; ++$i) {
             if ($i == $pageActuelle) {
@@ -235,13 +238,15 @@ endif; ?>
         ?>
     </h3>
 
+    <section>
         <fieldset>
             <legend>Information commande</legend>
             <label for="commande_commentaire">Commentaires : </label>
             <textarea name="commande_commentaires" id="commande_commentaires" cols="100" rows="10"><?= isset($_SESSION["commande"]) ? $_SESSION["commande"]["info_client"]["commande_commentaires"] : "" ?></textarea>
         </fieldset><br>
         <button form="commande" type="submit" id="envoi" name="envoi">Commander</button>
-    </form>
+        </form>
+    </section>
 
 </body>
 

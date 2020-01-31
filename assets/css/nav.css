@@ -1,0 +1,12 @@
+nav fieldset {
+    display: inline-flex;
+    flex-direction: column;
+    float: left;
+    margin-right: 10px;
+}
+
+nav button {
+    width: max-content;
+    margin: auto;
+    margin-top: 10px;
+}

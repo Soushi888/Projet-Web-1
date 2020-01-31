@@ -64,48 +64,52 @@ endif;
     <?php exit;
     endif; ?>
 
-    <form id="recherche" action="" method="post">
-        <fieldset>
-            <label>Recherche utilisateur : </label>
-            <input type="text" name="recherche" value="<?= $recherche ?>">
-            <input type="submit" value="Recherchez">
-            <button class="ajout"><a href="ajout.php">Ajouter</a></button>
-        </fieldset>
-    </form>
+    <section>
+        <form id="recherche" action="" method="post">
+            <fieldset>
+                <label>Recherche utilisateur : </label>
+                <input type="text" name="recherche" value="<?= $recherche ?>">
+                <input type="submit" value="Recherchez">
+                <button class="ajout"><a href="ajout.php">Ajouter</a></button>
+            </fieldset>
+        </form>
+    </section>
 
-    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreUtilisateurs ? $nombreUtilisateurs : (($offset + 1) + 9) ?>] / <?= $nombreUtilisateurs ?> catégories affichés</p>
+    <main>
+        <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreUtilisateurs ? $nombreUtilisateurs : (($offset + 1) + 9) ?>] / <?= $nombreUtilisateurs ?> catégories affichés</p>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Type</th>
-            <th>Actions</th>
-        </tr>
-
-        <?php foreach ($liste as $row) :
-        ?>
+        <table>
             <tr>
-                <td style="text-align: center;"><?= $row["utilisateur_id"] ?></td>
-                <td><?= $row["utilisateur_nom"] . ", " . $row["utilisateur_prenom"] ?></td>
-                <td><?= $row["utilisateur_email"] ?></td>
-                <td><?= $row["utilisateur_type"] ?></td>
-                <td>
-                    <form action="" method="post">
-                        <input type="hidden" name="supprimer" value="<?= $row["utilisateur_id"] ?>">
-                        <input type="hidden" name="email" value="<?= $row["utilisateur_email"] ?>">
-                        <input type="submit" value="Supprimer">
-                    </form>
-                    <form action="" method="post">
-                        <input type="hidden" name="modifier" value="<?= $row["utilisateur_id"] ?>">
-                        <input type="hidden" name="email" value="<?= $row["utilisateur_email"] ?>">
-                        <input type="submit" value="Modifier">
-                    </form>
-                </td>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Actions</th>
             </tr>
-        <?php endforeach; ?>
-    </table>
+
+            <?php foreach ($liste as $row) :
+            ?>
+                <tr>
+                    <td style="text-align: center;"><?= $row["utilisateur_id"] ?></td>
+                    <td><?= $row["utilisateur_nom"] . ", " . $row["utilisateur_prenom"] ?></td>
+                    <td><?= $row["utilisateur_email"] ?></td>
+                    <td><?= $row["utilisateur_type"] ?></td>
+                    <td>
+                        <form action="" method="post">
+                            <input type="hidden" name="supprimer" value="<?= $row["utilisateur_id"] ?>">
+                            <input type="hidden" name="email" value="<?= $row["utilisateur_email"] ?>">
+                            <input type="submit" value="Supprimer">
+                        </form>
+                        <form action="" method="post">
+                            <input type="hidden" name="modifier" value="<?= $row["utilisateur_id"] ?>">
+                            <input type="hidden" name="email" value="<?= $row["utilisateur_email"] ?>">
+                            <input type="submit" value="Modifier">
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </main>
     <?php if (isset($_POST["supprimer"])) :
         $_SESSION["suppression"] = $_POST["supprimer"];
         $utilisateur_supression = LireUtilisateur($conn, $_POST["email"]);
