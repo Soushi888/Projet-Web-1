@@ -21,7 +21,7 @@ $offset = ($pageActuelle - 1) * 10;
 
 $liste = ListerCategories($conn, "categorie_id", "ASC", $offset, 10);
 
-
+// Système de trie
 if (isset($_GET['trie'])) {
 
     $erreurs = array();

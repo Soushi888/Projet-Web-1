@@ -24,6 +24,7 @@ $offset = ($pageActuelle - 1) * 10;
 
 $liste = ListerUtilisateurs($conn, $recherche);
 
+
 if (isset($_POST["confirme"])) :
     if ($_POST["confirme"] == "OUI") :
         SupprimerUtilisateur($conn, $_SESSION["suppression"]);
@@ -58,7 +59,7 @@ endif;
     </h2>
     <?= isset($_SESSION["message"]) ? $_SESSION["message"] : "";
 
-    include("../menu.php");
+    include("../menu.php"); // Menu de navigation
 
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
         <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p><br>

@@ -19,16 +19,27 @@ if (isset($_GET['page'])) {
     $pageActuelle = 1;
 }
 
-$offset = ($pageActuelle - 1) * 10;
+
+// calcule du nombre de lignes de la tabble commandes_produit pour arriver à 10 commandes complètes à partir d'un offset donné
 
 $produitsParCommandes = NombreProduitsParCommandes($conn);
 
-$nbrParPage =  
+$nombres_de_produits_pour_dix_commandes = 0;
 
-$liste = ListerCommandes($conn, $recherche, $offset, 10); // ?
+for ($i = 0; $i < 10; ++$i) {
+    $nombres_de_produits_pour_dix_commandes += $produitsParCommandes[$i]['nombre_de_produits'];
+}
+
+$nbrParPage =  $nombres_de_produits_pour_dix_commandes;
+
+$offset = ($pageActuelle - 1) * $nombres_de_produits_pour_dix_commandes;
+
+
+$liste = ListerCommandes($conn, $recherche, $offset, $nbrParPage);
 ?>
  
 <?php
+// Confirmation de Suppresion
 if (isset($_POST["confirme"])) :
     if ($_POST["confirme"] == "OUI") :
         SupprimerCommande($conn, $_SESSION["suppression"]["commande_id"]);
@@ -40,6 +51,7 @@ if (isset($_POST["confirme"])) :
     endif;
 endif;
 
+// Redirection vers la page de modification avec les informations du produit à modifier
 if (isset($_POST["modifier"])) :
     $_SESSION["modification"] = LireCommande($conn, $_POST["modifier"]);
     header("Location: modification.php");
@@ -56,6 +68,9 @@ endif;
 </head>
 
 <body>
+
+    <!-- <pre><?= print_r($produitsParCommandes) ?></pre> -->
+
     <h1>Liste des commandes</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
@@ -72,7 +87,7 @@ endif;
         </fieldset>
     </form>
 
-    <p>[<?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreCommandes ? $nombreCommandes : (($offset + 1) + 9) ?>] / <?= $nombreCommandes ?> commandes affichés</p>
+    <p>[<?= $offset ?>-<?= ($offset + 10) > $nombreCommandes ? $nombreCommandes : ($offset + 10) ?>] / <?= $nombreCommandes ?> commandes affichés</p>
 
     <table>
         <tr>

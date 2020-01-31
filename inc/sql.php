@@ -248,17 +248,19 @@ function CategorieLastId($conn)
  */
 function NombreProduitsParCommandes($conn)
 {
-    $req = "SELECT COUNT(fk_produit_id) AS 'nombre_de_produits', fk_commande_id FROM commandes_produits GROUP BY fk_commande_id ";
+    $req = "SELECT fk_commande_id, COUNT(fk_produit_id) AS 'nombre_de_produits' FROM commandes_produits GROUP BY fk_commande_id";
 
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
+        $liste = array();
         if ($nbResult) {
             mysqli_data_seek($result, 0);
-            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            $nombre = $row["nombre_de_produits"];
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                $liste[] = $row;
+            }
         }
         mysqli_free_result($result);
-        return $nombre;
+        return $liste;
     } else {
         errSQL($conn);
         exit;
@@ -330,7 +332,7 @@ function ListerCommandes($conn, $recherche = "", $offset, $nbrParPage)
     WHERE (CL.client_prenom LIKE '$recherche') OR (CL.client_nom LIKE '$recherche') OR (C.commande_id LIKE '$recherche') OR (C.commande_etat LIKE '$recherche')
     ORDER BY `commande_id` ASC
     LIMIT $offset, $nbrParPage";
-
+    // die($req);
     if ($result = mysqli_query($conn, $req, MYSQLI_STORE_RESULT)) {
         $nbResult = mysqli_num_rows($result);
         $liste = array();
@@ -421,8 +423,7 @@ function ListerCommandes($conn, $recherche = "", $offset, $nbrParPage)
             mysqli_free_result($result);
             return $liste;
         } else {
-            errSQL($conn);
-            exit;
+            return $liste;
         }
     }
 }
@@ -491,9 +492,7 @@ function ListerClients($conn, $recherche = "")
         mysqli_free_result($result);
         return $liste;
     } else {
-        errSQL($conn);
-        // die($req);
-        exit;
+        return $liste;
     }
 }
 
@@ -564,8 +563,7 @@ function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC", $offset,
         mysqli_free_result($result);
         return $liste;
     } else {
-        errSQL($conn);
-        exit;
+        return $liste;
     }
 }
 
@@ -645,8 +643,7 @@ function ListerProduits($conn, $recherche = "", $offset, $nbrParPage)
         mysqli_free_result($result);
         return $liste;
     } else {
-        errSQL($conn);
-        exit;
+        return $liste;
     }
 }
 
