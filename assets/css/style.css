@@ -72,6 +72,10 @@ th, td {
     margin-top: 20px;
 }
 
+.pagination {
+    text-align: center;
+}
+
 #main_menu fieldset > fieldset {
     margin-bottom: 0px;
 }

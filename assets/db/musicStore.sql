@@ -214,7 +214,21 @@ VALUES
   (3, "2019-06-15", "22 avenue Magrin", NULL, "Saint-Hubert", "C3F 6A5","en cours", NULL),
   (7, "2019-12-21", "1 avenue du Manoir", NULL, "Montréal", "H3G 5V4","en cours", NULL),
   (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
-  (1, "2019-08-10", "16 avenue Drôle", NULL, "Brossard", "H2J 9B6", "annulée", "Erreur de livraison");
+  (1, "2019-08-10", "16 avenue Drôle", NULL, "Brossard", "H2J 9B6", "annulée", "Erreur de livraison"),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (3, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (2, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (1, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (5, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (6, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL),
+  (4, "2019-11-13", "3 rue Lanuit", "app.306", "Verdun", "H4G 3J4","complète", NULL);
 
 -- -----------------------------------------------------
 -- Insertion de données dans la table "Commandes-Produits"
@@ -233,8 +247,20 @@ VALUES
   (3, 3, 1),
   (4, 2, 1),
   (5, 14, 1),
-  (6, 1, 1),
   (6, 3, 1),
   (7, 12, 1),
   (8, 19, 1),
-  (8, 3, 1);
+  (9, 19, 1),
+  (10, 19, 1),
+  (11, 19, 1),
+  (12, 19, 1),
+  (13, 19, 1),
+  (14, 19, 1),
+  (15, 19, 1),  
+  (16, 19, 1),
+  (17, 19, 1),
+  (18, 19, 1),
+  (19, 19, 1),
+  (20, 19, 1),
+  (21, 19, 1),
+  (22, 3, 1);

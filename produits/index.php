@@ -5,21 +5,26 @@ require_once("../inc/connectSession.php");
 
 $recherche = isset($_GET['recherche']) ? trim($_GET['recherche']) : "";
 
-$liste = listerProduits($conn, $recherche);
-
-
 // Pagination
-$nombre_par_page = 10;
 $nombreProduits = NombreProduits($conn);
-$nombrePages = round($nombreProduits / 10, 0, PHP_ROUND_HALF_UP);
+$nombrePages = ceil($nombreProduits / 10);
 
-if (isset($_GET['page_no']) && $_GET['page_no'] != "") {
-    $page_no = $_GET['page_no'];
+$pageActuelle = 1;
+
+if (isset($_GET['page'])) {
+    $pageActuelle = $_GET['page'];
+} elseif ($pageActuelle > $nombrePages) {
+    $pageActuelle = $nombrePages;
 } else {
-    $page_no = 1;
+    $pageActuelle = 1;
 }
 
+$offset = ($pageActuelle - 1) * 10;
 
+$liste = listerProduits($conn, $recherche, $offset, 10);
+
+
+// Supression produit
 if (isset($_POST["confirme"])) :
     if ($_POST["confirme"] == "OUI") :
         SupprimerProduit($conn, $_SESSION["suppression"]["produit_id"]);
@@ -47,9 +52,6 @@ endif;
 </head>
 
 <body>
-
-    <pre><?= $nombrePages ?></pre>
-
     <h1>Catalogue du vendeur</h1>
     <h2>
         <pre><?= $_SESSION['utilisateur']["utilisateur_nom"] . ", " . $_SESSION['utilisateur']["utilisateur_prenom"] . " : " . $_SESSION['utilisateur']["utilisateur_type"] ?></pre>
@@ -72,6 +74,8 @@ endif;
     </form>
 
     <p><i>* Seuls les clients qui n'ont pas encore commandé peuvent être supprimé.<br><span class="margin_left">Veuillez supprimer les commandes associées à un produit pour pouvoir le supprimer.</span></i></p>
+
+    <p><?= $offset + 1 ?>-<?= (($offset + 1) + 10) > $nombreProduits ? $nombreProduits : (($offset + 1) + 10) ?> / <?= $nombreProduits ?> produits affichés</p>
 
     <table>
         <tr>
@@ -117,6 +121,18 @@ endif;
             <input type="submit" name="confirme" value="NON">
         </form>
     <?php endif; ?>
+
+    <h3 class="pagination">Nombre de page :
+        <?php
+        for ($i = 1; $i <= $nombrePages; ++$i) {
+            if ($i == $pageActuelle) {
+                echo "[" . $i . "] ";
+            } else {
+                echo "<a href=index.php?page=" . $i . ">" . $i . "</a> ";
+            }
+        }
+        ?>
+    </h3>
 </body>
 
 </html>

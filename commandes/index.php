@@ -5,7 +5,27 @@ require_once("../inc/connectSession.php");
 
 $recherche = isset($_POST['recherche']) ? trim($_POST['recherche']) : "";
 
-$liste = ListerCommandes($conn, $recherche);
+// Pagination
+$nombreCommandes = NombreCommandes($conn);
+$nombrePages = ceil($nombreCommandes / 10);
+
+$pageActuelle = 1;
+
+if (isset($_GET['page'])) {
+    $pageActuelle = $_GET['page'];
+} elseif ($pageActuelle > $nombrePages) {
+    $pageActuelle = $nombrePages;
+} else {
+    $pageActuelle = 1;
+}
+
+$offset = ($pageActuelle - 1) * 10;
+
+$produitsParCommandes = NombreProduitsParCommandes($conn);
+
+$nbrParPage =  
+
+$liste = ListerCommandes($conn, $recherche, $offset, 10); // ?
 ?>
  
 <?php
@@ -51,6 +71,8 @@ endif;
             <button class="ajout"><a href="ajout.php">Ajouter</a></button>
         </fieldset>
     </form>
+
+    <p><?= $offset + 1 ?>-<?= (($offset + 1) + 9) > $nombreCommandes ? $nombreCommandes : (($offset + 1) + 9) ?> / <?= $nombreCommandes ?> commandes affichés</p>
 
     <table>
         <tr>
@@ -109,6 +131,18 @@ endif;
             <input type="submit" name="confirme" value="NON">
         </form>
     <?php endif; ?>
+
+    <h3 class="pagination">Nombre de page :
+        <?php
+        for ($i = 1; $i <= $nombrePages; ++$i) {
+            if ($i == $pageActuelle) {
+                echo "[" . $i . "] ";
+            } else {
+                echo "<a href=index.php?page=" . $i . ">" . $i . "</a> ";
+            }
+        }
+        ?>
+    </h3>
 </body>
 
 </html>

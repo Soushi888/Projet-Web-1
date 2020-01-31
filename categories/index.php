@@ -3,9 +3,23 @@ require_once("../inc/connectDB.php");
 require_once("../inc/sql.php");
 require_once("../inc/connectSession.php");
 
+// Pagination
+$nombreCategories = NombreCategories($conn);
+$nombrePages = ceil($nombreCategories / 10);
 
+$pageActuelle = 1;
 
-$liste = ListerCategories($conn);
+if (isset($_GET['page'])) {
+    $pageActuelle = $_GET['page'];
+} elseif ($pageActuelle > $nombrePages) {
+    $pageActuelle = $nombrePages;
+} else {
+    $pageActuelle = 1;
+}
+
+$offset = ($pageActuelle - 1) * 10;
+
+$liste = ListerCategories($conn, "categorie_id", "ASC", $offset, 10);
 
 
 if (isset($_GET['trie'])) {
@@ -19,9 +33,9 @@ if (isset($_GET['trie'])) {
         $colonne = trim($_GET['colonne']);
         $sens = trim($_GET['sens']);
 
-        $liste = ListerCategories($conn, $colonne, $sens);
+        $liste = ListerCategories($conn, $colonne, $sens, $offset, 10);
     } else {
-        $liste = ListerCategories($conn);
+        $liste = ListerCategories($conn, "categorie_id", "ASC", $offset, 10);
     }
 }
 
@@ -151,6 +165,8 @@ endif;
         </form>
     <?php endif; ?>
 
+    <p><?= $offset + 1 ?>-<?= (($offset + 1) + 10) > $nombreCategories ? $nombreCategories : (($offset + 1) + 10) ?> / <?= $nombreCategories ?> catégories affichés</p>
+
     <table>
         <tr>
             <th>ID</th>
@@ -187,6 +203,18 @@ endif;
             <input type="submit" name="confirme" value="NON">
         </form>
     <?php endif; ?>
+
+    <h3 class="pagination">Nombre de page :
+        <?php
+        for ($i = 1; $i <= $nombrePages; ++$i) {
+            if ($i == $pageActuelle) {
+                echo "[" . $i . "] ";
+            } else {
+                echo "<a href=index.php?page=" . $i . ">" . $i . "</a> ";
+            }
+        }
+        ?>
+    </h3>
 
 </body>
 

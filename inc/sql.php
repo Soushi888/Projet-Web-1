@@ -238,6 +238,60 @@ function CategorieLastId($conn)
     }
 }
 
+/**
+ * Fonction NombreProduitsParCommandes,
+ * Auteur   : Soushi888,
+ * Date     : 30-01-2020,
+ * But      : Récupérer le nombre total de lignes de la table commandes,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $nombre = nombre total de lignes de la table commandes.
+ */
+function NombreProduitsParCommandes($conn)
+{
+    $req = "SELECT COUNT(fk_produit_id) AS 'nombre_de_produits', fk_commande_id FROM commandes_produits GROUP BY fk_commande_id ";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $nombre = $row["nombre_de_produits"];
+        }
+        mysqli_free_result($result);
+        return $nombre;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
+ * Fonction NombreCommandes,
+ * Auteur   : Soushi888,
+ * Date     : 30-01-2020,
+ * But      : Récupérer le nombre total de lignes de la table commandes,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $nombre = nombre total de lignes de la table commandes.
+ */
+function NombreCommandes($conn)
+{
+    $req = "SELECT COUNT(commande_id) AS 'nombre' FROM commandes";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $nombre = $row["nombre"];
+        }
+        mysqli_free_result($result);
+        return $nombre;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
 /** 
  * Fonction ListerCommandes,
  * Auteur   : Soushi888,
@@ -247,7 +301,7 @@ function CategorieLastId($conn)
  *            $recherche = chaîne de caractères pour la recherche de commande par nom ou prénom de client, id de commande, nom ded produit ou date (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerCommandes($conn, $recherche = "")
+function ListerCommandes($conn, $recherche = "", $offset, $nbrParPage)
 {
     $recherche = "%" . $recherche . "%";
 
@@ -274,8 +328,8 @@ function ListerCommandes($conn, $recherche = "")
     INNER JOIN
         clients as CL on CL.client_id = C.fk_client_id 
     WHERE (CL.client_prenom LIKE '$recherche') OR (CL.client_nom LIKE '$recherche') OR (C.commande_id LIKE '$recherche') OR (C.commande_etat LIKE '$recherche')
-    ORDER BY `commande_id` ASC";
-    // die($req); 
+    ORDER BY `commande_id` ASC
+    LIMIT $offset, $nbrParPage";
 
     if ($result = mysqli_query($conn, $req, MYSQLI_STORE_RESULT)) {
         $nbResult = mysqli_num_rows($result);
@@ -417,6 +471,33 @@ function ListerClients($conn, $recherche = "")
 }
 
 /**
+ * Fonction NombreCategories,
+ * Auteur   : Soushi888,
+ * Date     : 30-01-2020,
+ * But      : Récupérer le nombre total de lignes de la table categories,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $nombre = nombre total de lignes de la table categories.
+ */
+function NombreCategories($conn)
+{
+    $req = "SELECT COUNT(categorie_id) AS 'nombre' FROM categories";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $nombre = $row["nombre"];
+        }
+        mysqli_free_result($result);
+        return $nombre;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+/**
  * Fonction ListerCategories,
  * Auteur   : Soushi888,,
  * Date     : 17-01-2020,
@@ -426,7 +507,7 @@ function ListerClients($conn, $recherche = "")
  *            $sens = Sens dans lequel sera trier la colonne,
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC")
+function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC", $offset, $nbrParPage)
 {
     $req = "SELECT
             C.*,
@@ -440,7 +521,9 @@ function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC")
             GROUP BY
                 C.categorie_id
             ORDER BY
-                $trie $sens";
+                $trie $sens
+            LIMIT
+                $offset, $nbrParPage";
 
     if ($result = mysqli_query($conn, $req)) {
         $nbResult = mysqli_num_rows($result);
@@ -460,16 +543,45 @@ function ListerCategories($conn, $trie = "categorie_id", $sens = "ASC")
 }
 
 
+
+/**
+ * Fonction NombreProduits,
+ * Auteur   : Soushi888,
+ * Date     : 30-01-2020,
+ * But      : Récupérer le nombre total de lignes de la table produit,
+ * Input    : $conn = contexte de connexion,
+ * Output   : $nombre = nombre total de lignes de la table produit.
+ */
+function NombreProduits($conn)
+{
+    $req = "SELECT COUNT(produit_id) AS 'nombre' FROM produits";
+
+    if ($result = mysqli_query($conn, $req)) {
+        $nbResult = mysqli_num_rows($result);
+        if ($nbResult) {
+            mysqli_data_seek($result, 0);
+            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $nombre = $row["nombre"];
+        }
+        mysqli_free_result($result);
+        return $nombre;
+    } else {
+        errSQL($conn);
+        exit;
+    }
+}
+
+
 /**
  * Fonction ListerProduits,
- * Auteur   : Soushi888,,
+ * Auteur   : Soushi888,
  * Date     : 17-01-2020,
  * But      : Récupérer les produits et les données associées,
  * Input    : $conn = contexte de connexion,
  *            $recherche = chaîne de caractères pour la recherche de produits (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerProduits($conn, $recherche = "")
+function ListerProduits($conn, $recherche = "", $offset, $nbrParPage)
 {
     $req = "SELECT
                 P.*,
@@ -485,12 +597,13 @@ function ListerProduits($conn, $recherche = "")
                 CO.fk_produit_id = P.produit_id
             WHERE
                 (P.produit_nom LIKE ?) OR (C.categorie_nom LIKE ?)
-            GROUP BY P.produit_id";
+            GROUP BY P.produit_id
+            LIMIT ?, ?";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . $recherche . "%";
 
-    mysqli_stmt_bind_param($stmt, "ss", $recherche, $recherche);
+    mysqli_stmt_bind_param($stmt, "ssii", $recherche, $recherche,  $offset, $nbrParPage);
 
     if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);
@@ -545,32 +658,6 @@ function ListerUtilisateurs($conn, $recherche = "")
         }
         mysqli_free_result($result);
         return $liste;
-    } else {
-        errSQL($conn);
-        exit;
-    }
-}
-
-/** 
- * Fonction NombreProduits
- * Auteur : Soushi888,
- * Date   : 2020-01-30,
- * But    : Retourne le nombre total de produits,
- * Arguments en entrée : $conn = contexte de connexion,
- * Valeurs de retour   : $nombreProduits = nombre total de produits.                       
- */
-function NombreProduits($conn) {
-    $req = "SELECT COUNT(produit_id) AS 'nombre' FROM produits";
-
-    if ($result = mysqli_query($conn, $req)) {
-        $nbResult = mysqli_num_rows($result);
-        if ($nbResult) {
-            mysqli_data_seek($result, 0);
-            $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            $nombre = $row["nombre"];
-        }
-        mysqli_free_result($result);
-        return $nombre;
     } else {
         errSQL($conn);
         exit;
