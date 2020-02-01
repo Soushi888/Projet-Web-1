@@ -470,14 +470,14 @@ function ListerClients($conn, $recherche = "", $offset = "", $nbrParPage = 10000
     FROM clients AS CL
     LEFT JOIN
         commandes AS CO ON CL.client_id = CO.fk_client_id
-    WHERE (CL.client_nom LIKE ?) OR (CL.client_prenom LIKE ?)
+    WHERE (CL.client_nom LIKE ?) OR (CL.client_prenom LIKE ?) OR (CL.client_telephone LIKE ?)
     GROUP BY CL.client_id
     LIMIT ?, ?";
 
     $stmt = mysqli_prepare($conn, $req);
     $recherche = "%" . trim($recherche) . "%";
 
-    mysqli_stmt_bind_param($stmt, "ssss", $recherche, $recherche, $offset, $nbrParPage);
+    mysqli_stmt_bind_param($stmt, "sssss", $recherche, $recherche, $recherche, $offset, $nbrParPage);
 
     if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);

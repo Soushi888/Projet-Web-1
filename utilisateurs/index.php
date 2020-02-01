@@ -61,7 +61,9 @@ endif;
     include("../menu.php"); // Menu de navigation
 
     if ($_SESSION["utilisateur"]["utilisateur_type"] !== "administrateur") : ?>
-        <section><p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p></section>
+        <section>
+            <p class='erreur'>Accès refusé, vous devez être administrateur pour gérer les utilisateurs.</p>
+        </section>
     <?php exit;
     endif; ?>
 
@@ -115,11 +117,15 @@ endif;
         $_SESSION["suppression"] = $_POST["supprimer"];
         $utilisateur_supression = LireUtilisateur($conn, $_POST["email"]);
     ?>
-        <form action="" method="post">
-            <h2>Confirmer suppression de l'utilisateur <?= $utilisateur_supression["utilisateur_nom"] . " " . $utilisateur_supression["utilisateur_prenom"] . " de type " . $utilisateur_supression["utilisateur_type"] ?> ?</h2>
-            <input type="submit" name="confirme" value="OUI">
-            <input type="submit" name="confirme" value="NON">
-        </form>
+        <section>
+            <form action="" method="post">
+                <h2>Confirmer suppression de l'utilisateur <?= $utilisateur_supression["utilisateur_nom"] . " " . $utilisateur_supression["utilisateur_prenom"] . " de type " . $utilisateur_supression["utilisateur_type"] ?> ?</h2>
+                <section>
+                    <input type="submit" name="confirme" value="OUI">
+                    <input type="submit" name="confirme" value="NON">
+                </section>
+            </form>
+        </section>
     <?php endif; ?>
 
     <h3 class="pagination">Nombre de page :

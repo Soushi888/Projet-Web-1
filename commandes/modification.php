@@ -94,24 +94,26 @@ endif;
                 <span class="erreur" id="errCP"></span>
             </fieldset>
 
-            <fieldset>
-                <legend>Information commande</legend>
+            <section>
+                <fieldset>
+                    <legend>Information commande</legend>
 
-                <label for="commande_date">Date (au format "YYYY-MM-DD hh:mm:ss")</label>
-                <input type="text" id="commande_date" name="date" value="<?= $_SESSION["modification"]["commande_date"] ?>"><?= isset($erreurs['date']) ? $erreurs['date'] : "" ?>
-                <span class="erreur" id="errDate"></span>
+                    <label for="commande_date">Date (au format "YYYY-MM-DD hh:mm:ss")</label>
+                    <input type="text" id="commande_date" name="date" value="<?= $_SESSION["modification"]["commande_date"] ?>"><?= isset($erreurs['date']) ? $erreurs['date'] : "" ?>
+                    <span class="erreur" id="errDate"></span>
 
-                <label for="commande_etat">État de la commande</label>
-                <select name="etat" id="commande_etat">
-                    <option value="en cours">En cours</option>
-                    <option value="complète">Complète</option>
-                    <option value="annulée">Annulée</option>
-                </select><br>
+                    <label for="commande_etat">État de la commande</label>
+                    <select name="etat" id="commande_etat">
+                        <option value="en cours">En cours</option>
+                        <option value="complète">Complète</option>
+                        <option value="annulée">Annulée</option>
+                    </select><br>
 
-                <label for="commande_commentaire">Commentaires : </label>
-                <textarea name="commentaires" id="commande_commentaires" cols="100" rows="10"><?= $_SESSION["modification"]["commande_commentaires"] ?></textarea>
-            </fieldset><br>
-            <input type="submit" name="envoi" id="envoi" value="Modifier !">
+                    <label for="commande_commentaire">Commentaires : </label>
+                    <textarea name="commentaires" id="commande_commentaires" cols="100" rows="10"><?= $_SESSION["modification"]["commande_commentaires"] ?></textarea>
+                </fieldset><br>
+                <input type="submit" name="envoi" id="envoi" value="Modifier !">
+            </section>
         </form>
     </main>
 
