@@ -24,20 +24,20 @@ if (isset($_GET['page'])) {
 
 // calcule du nombre de lignes de la tabble commandes_produit pour arriver à 10 commandes complètes à partir d'un offset donné
 
-$produitsParCommandes = NombreProduitsParCommandes($conn);
+// $produitsParCommandes = NombreProduitsParCommandes($conn);
 
-$nombres_de_produits_pour_dix_commandes = 0;
+// $nombres_de_produits_pour_dix_commandes = 0;
 
-for ($i = 0; $i < 10; ++$i) {
-    $nombres_de_produits_pour_dix_commandes += $produitsParCommandes[$i]['nombre_de_produits'];
-}
+// for ($i = 0; $i < 10; ++$i) {
+//     $nombres_de_produits_pour_dix_commandes += $produitsParCommandes[$i]['nombre_de_produits'];
+// }
 
-$nbrParPage =  $nombres_de_produits_pour_dix_commandes;
+$nbrParPage =  10;
 
-$offset = ($pageActuelle - 1) * 10;
+$offset = ($pageActuelle - 1) * $nbrParPage;
 
 
-$liste = ListerCommandes($conn, $recherche, $offset, $nbrParPage);
+$liste = ListerCommandes($conn, $recherche);
 ?>
 
 <?php
@@ -72,7 +72,7 @@ endif;
 
 <body>
 
-    <!-- <pre><?= print_r($produitsParCommandes) ?></pre> -->
+    <!-- <pre><?= print_r($liste) ?></pre> -->
 
 
 
@@ -111,37 +111,40 @@ endif;
             </tr>
 
             <?php
-
-            foreach ($liste as $row) :
+            
+            // foreach ($liste as $row) :
+            for ($i = $offset; $i < ($offset + 9); ++$i) :
+                // if ($i == $liste[$i]["commande_id"]) :
             ?>
-                <tr>
-                    <td style="text-align: center;"><?= $row["commande_id"] ?></td>
-                    <td><?= $row["commande_client"] ?></td>
-                    <td><?= $row["commande_date"] . "<br>" . $row["commande_heure"] ?></td>
-                    <td><?= implode("<br>", $row["commande_produit"]) ?></td>
-                    <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_prix"]) ?></td>
-                    <td style="text-align: center;"><?= implode("<br>", $row["commande_produit_quantite"]) ?></td>
-                    <td><?= $row["commande_total_ht"] ?></td>
-                    <td><?= $row["commande_total_ttc"] ?></td>
-                    <td><?php echo $row["commande_adresse"];
-                        echo isset($row["commande_adresse2"]) ? "<br>" . $row["commande_adresse2"] : "";
-                        echo "<br>" . $row["commande_adresse_ville"] . ", " . $row["commande_adresse_cp"] .
-                            "<br>Québec, Canada" ?></td>
+                    <tr>
+                        <td style="text-align: center;"><?= $liste[$i]["commande_id"] ?></td>
+                        <td><?= $liste[$i]["commande_client"] ?></td>
+                        <td><?= $liste[$i]["commande_date"] . "<br>" . $liste[$i]["commande_heure"] ?></td>
+                        <td><?= implode("<br>", $liste[$i]["commande_produit"]) ?></td>
+                        <td style="text-align: center;"><?= implode("<br>", $liste[$i]["commande_produit_prix"]) ?></td>
+                        <td style="text-align: center;"><?= implode("<br>", $liste[$i]["commande_produit_quantite"]) ?></td>
+                        <td><?= $liste[$i]["commande_total_ht"] ?></td>
+                        <td><?= $liste[$i]["commande_total_ttc"] ?></td>
+                        <td><?php echo $liste[$i]["commande_adresse"];
+                            echo isset($liste[$i]["commande_adresse2"]) ? "<br>" . $liste[$i]["commande_adresse2"] : "";
+                            echo "<br>" . $liste[$i]["commande_adresse_ville"] . ", " . $liste[$i]["commande_adresse_cp"] .
+                                "<br>Québec, Canada" ?></td>
 
-                    <td><?= $row["commande_commentaires"] ?></td>
-                    <td><?= $row["commande_etat"] ?></td>
-                    <td>
-                        <form action="" method="post">
-                            <input type="hidden" name="supprimer" value="<?= $row["commande_id"] ?>">
-                            <input type="submit" value="Supprimer">
-                        </form>
-                        <form action="" method="post">
-                            <input type="hidden" name="modifier" value="<?= $row["commande_id"] ?>">
-                            <input type="submit" value="Modifier">
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+                        <td><?= $liste[$i]["commande_commentaires"] ?></td>
+                        <td><?= $liste[$i]["commande_etat"] ?></td>
+                        <td>
+                            <form action="" method="post">
+                                <input type="hidden" name="supprimer" value="<?= $liste[$i]["commande_id"] ?>">
+                                <input type="submit" value="Supprimer">
+                            </form>
+                            <form action="" method="post">
+                                <input type="hidden" name="modifier" value="<?= $liste[$i]["commande_id"] ?>">
+                                <input type="submit" value="Modifier">
+                            </form>
+                        </td>
+                    </tr>
+            <?php // endif;
+            endfor; ?>
         </table>
 
         <?php if (isset($_POST["supprimer"])) :

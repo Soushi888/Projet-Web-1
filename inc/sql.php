@@ -303,7 +303,7 @@ function NombreCommandes($conn)
  *            $recherche = chaîne de caractères pour la recherche de commande par nom ou prénom de client, id de commande, nom ded produit ou date (optionnel),
  * Output   : $liste = tableau des lignes de la commande SELECT.
  */
-function ListerCommandes($conn, $recherche = "", $offset, $nbrParPage)
+function ListerCommandes($conn, $recherche = "")
 {
     $recherche = "%" . $recherche . "%";
 
@@ -330,8 +330,7 @@ function ListerCommandes($conn, $recherche = "", $offset, $nbrParPage)
     INNER JOIN
         clients as CL on CL.client_id = C.fk_client_id 
     WHERE (CL.client_prenom LIKE '$recherche') OR (CL.client_nom LIKE '$recherche') OR (C.commande_id LIKE '$recherche') OR (C.commande_etat LIKE '$recherche')
-    ORDER BY `commande_id` ASC
-    LIMIT $offset, $nbrParPage";
+    ORDER BY `commande_id` ASC";
     // die($req);
     if ($result = mysqli_query($conn, $req, MYSQLI_STORE_RESULT)) {
         $nbResult = mysqli_num_rows($result);
